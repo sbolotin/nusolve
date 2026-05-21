@@ -1,0 +1,48 @@
+                           ----------------------
+                           CENTRAL BUREAU OF IERS
+                           ----------------------
+
+         FORMAT FOR TRANSMITTING SETS OF RADIOSOURCE COORDINATES
+                      TO THE IERS CENTRAL BUREAU.
+
+
+Field           Contents  all fields separated by one blank (1)
+
+  1                     IAU name
+  2                     Alternate name
+  3                     hours of right ascension (2)
+  4                     minutes of right ascension (2)
+  5                     seconds of right ascension (2)
+  6                     degrees of declination (3)
+  7                     minutes of declination (3)
+  8                     seconds of declination (3)
+  9                     uncertainty on right ascension (s)
+ 10                     uncertainty on declination (")
+ 11                     correlation : right ascension, declination
+ 12                     weighted mean observation date (MJD) (4)
+ 13                     date of first observation (MJD)
+ 14                     date of last observation (MJD)
+ 15                     number of sessions
+ 16                     number of delays
+ 17                     number of delay rates
+ (5)
+
+
+Notes
+
+1 - All the 17 fields should be filled (with 0 when the information is 
+    lacking).
+
+2 - These three fields can be replaced by one field, giving the right 
+    ascensions in degrees and decimal fraction (from 0. to 360.)
+
+3 - These three fields can be replaced by one field, giving the declination 
+    in degrees and decimal fraction (from -90. to +90.).
+
+4 - The epoch of the catalog should be given in the general description of 
+    the analysis.
+
+5 - Any additional parameter(s) you feel appropriate to the description of
+    the result.
+
+.............................................................................

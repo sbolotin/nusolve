@@ -1,0 +1,52 @@
+#!/bin/bash
+# A part of libGPGeo tests suite.
+#
+#
+# Just to be sure about messages (if somebody has added translation into other languages):
+export LC_ALL=C LANG=C
+
+
+# Comment out the string or set the environmental variable if in debug mode:
+#ISDEBUG="1"
+
+#
+# The "standard" test: run executable and compare its output with an already checked one.
+runATest()
+{
+ # Get a proper name from the argument:
+ local TestName=`echo "$1" | sed -e 's/.\///' | sed -e 's/Test_//'`
+
+ # Define file names of executable, its output and an expected output:
+ Executable="$TestName""_app"
+ TestOutput="$Executable.out"
+ GoodOutput="$Executable.ok"
+ DiffOutput="$Executable.diff"
+
+ # Write what is doing:
+ if [ -n "$ISDEBUG" ]
+ then
+     echo "----> Running test: $TestName."
+ fi
+ #
+ # Make a tested output (commented out lines are not considered):
+ ./$Executable 2>&1 | grep -v "^#" > $TestOutput
+
+ # Compare already checked output with the tested one:
+ diff -u $GoodOutput $TestOutput > $DiffOutput
+ result=$?
+
+ # Speak if asked:
+ if [ -n "$ISDEBUG" ]
+ then
+     echo "----> The result is $result"
+     cat $DiffOutput
+ else
+     if [ "$result" == "0" ] # remove if the test has been passed:
+     then
+         rm -fr $TestOutput $DiffOutput
+     fi
+ fi
+ # Tell the Makefile about results of comarison:
+ exit $result
+}
+

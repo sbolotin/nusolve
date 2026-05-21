@@ -1,0 +1,34 @@
+Pass one: Checking the interface of the object.
+Vector v3 is: (1, 1, 1) and vector v2 is: (41, -3.3, 17)
+Makeing a copy of Y-coordinate from v2 to v3.
+Vector v3 is: (1, -3.3, 1) and vector v2 is: (41, -3.3, 17)
+Makeing an assignment of a unit vector (predefined constant) to the vector v3
+Vector v3 is: (1, 1, 1)
+End of the pass one.
+
+Pass two: Checking basic functions of the object.
+The length of the vector v3 is: 1.73205
+The latitude and the longitude of the vector v3, (1, 1, 1), are: 35.2644 and 45 degrees
+The unit vector corresponding to v3 is: (0.57735, 0.57735, 0.57735)
+The length of (unify() - unit()) is: 0
+End of the pass two.
+
+Pass three: Checking basic vector oparations.
+Incremented vector (1, 1, 1) by the vector (41, -3.3, 17) is: (42, -2.3, 18)
+Decremented vector (1, 1, 1) by the vector (41, -3.3, 17) is: (-40, 4.3, -16)
+The vector (1, 1, 1) multiplied by the scalar 4 is (4, 4, 4)
+The vector (1, 1, 1) divided by the scalar 4 is (0.25, 0.25, 0.25)
+The vector (1, 7, 8.5) and the reverted one (-1, -7, -8.5)
+The sum of the vector (1, 7, 8.5) and the vector (41, -3.3, 17) is: (42, 3.7, 25.5)
+The difference of the vector (1, 7, 8.5) and the vector (41, -3.3, 17) is: (-40, 10.3, -8.5)
+The vector (41, -3.3, 17) divided by the scalar 4 is: (10.25, -0.825, 4.25)
+The product of the scalar 4 and the vector  (1, 7, 8.5) is: (4, 28, 34)
+The product of the vector (1, 7, 8.5) and the scalar 4 is: (4, 28, 34)
+The scalar product of the vector (1, 7, 8.5) and the vector (41, -3.3, 17) is: 162.4
+The vector product of the vector (1, 7, 8.5) and the vector (41, -3.3, 17) is: (147.05, 331.5, -290.3)
+Vectors (1, 7, 8.5) and (1, 1, 1) are not equal
+Vectors (1, 1, 1) and (1, 1, 1) are equal
+Vectors (1, 7, 8.5) and (41, -3.3, 17) are not equal
+Vectors (1, 1, 1) and (1, 1, 1) are equal
+End of the pass three.
+

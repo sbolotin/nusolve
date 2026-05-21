@@ -1,0 +1,260 @@
+## IVS Master file format version 2.0                         2022.10.12 CAD&CCT
+
+IVS Master File Format Definition
+=================================
+Master files are used by the IVS community to record the VLBI sessions
+that are planned and have been observed. Master files exist for each
+year, beginning with 1979. Through 1991, the files contain both 24-hour
+and Intensive sessions. From 1992 onward, the 24-hour and Intensive
+sessions are listed in their own separate files.
+
+Master file names are of the form masteryyyy.txt, 
+masteryyyy-int.txt, or mediamasteryyyy.txt, where "yyyy" is the 4-digit
+year.
+
+    masteryyyy.txt      Master files for 24-hr sessions, 1992-present,
+                        and for both 24-hr and Intensive sessions,
+                        1979-1991
+    masteryyyy-int.txt  Master files for Intensive sessions,
+                        1992-present
+    mediamasteryyyy.txt Master files describing which type of recording
+                        media will be used by each station in each
+                        session, 2003-present
+
+This file defines the format of each session line. The master files
+have one line per observing session. The field descriptions and codes,
+except for station codes, are in this file. Station codes are in the
+file ns-codes.txt. Other codes are in this file in sections that begin
+with "xxx CODES" alone on a line, followed by the code lines,
+terminated with a line that has "end xxx CODES". Each code line has the
+code field followed by the explanation on the rest of the line.
+
+Each session line begins with a "|" character. Non-session lines may
+begin with any character except "|". The first and last lines of the
+master file begin with a "#" character and identify the format version
+number.
+
+The session lines in the master file have fields which are delimited by
+the "|" (vertical bar) character. Each field consists of characters
+with no embedded spaces.
+
+There may be leading or trailing blanks in a field, and these should
+be ignored. Fields are not restricted to a particular width nor to
+particular columns on the line. The line should be parsed using the 
+"|" character as delimiter and removing trailing and leading blanks.
+
+Fields that are mandatory to be filled in are those with headings: 
+SESSION TYPE, DATE, SESSION CODE, DOY, STATIONS, SKED, CORR, and SUBM.
+Other fields may be blank; see below for more details.
+
+Fields are defined by number, that is, the order in which they appear 
+on the session line.  If new fields are added at the end of a session 
+line, this should not cause software reading the master files to fail
+There are 13 fields currently specified.
+
+
+Field   Title     Description
+1       SESSION   The observing program to which this session belongs.
+        TYPE      The contents of this field may be up to 12 characters
+                  in length. Type names are limited to uppercase 
+                  alphabetical characters, digits, and the '-', '.',
+                  and '&' symbols. Any new session types must be
+                  arranged with the IVS Coordinating Center, which 
+                  maintains the list of valid session types. 
+
+2       DATE      The start date of the session. Date format is
+                  YYYYMMDD, where YYYY is the 4-digit year, MM is the
+                  2-digit month, and DD is the 2-digit day of the month.
+                  This date format is the same as for the vgosDB name
+                  and is intended to be used verbatim in the creation
+                  of the vgosDB name.
+
+3       SESSION   The official code name for the session. The code is
+        CODE      assigned by the IVS Coordinating Center. Codes are
+                  limited to 12 lower case alphabetical characters or
+                  digits (i.e., abcdefghijklmnopqrstuvwxyz0123456789).
+                  The session code is the unique identifier of sessions.
+                  Thus, every session from 1979 onward has a unique
+                  code. The session code is intended to be used verbatim
+                  (with whitespace trimmed) in the creation of the vgosDB
+                  name.
+
+4       DOY       The day of year corresponding to the date of 
+                  the session.
+
+5       TIME      The start time of the session in Coordinated
+                  Universal Time (UTC), in the format hh:mm with all
+                  all five characters present. This field is blank
+                  until 1993.
+
+6       DUR       The scheduled duration of the session, in the format
+                  hh:mm. If the duration is less than 10 hours, use
+                  only a single character in the hour sub-field. Both
+                  characters of the minute sub-field must be supplied.
+                  This field may be blank until 1993.
+
+7       STATIONS  The stations in this session. Each station is
+                  represented by its 2-letter code. Refer to the
+                  file ns-codes.txt for the full station name. The
+                  order of station codes in this list is arbitrary.
+                  Station codes are listed in a single long string,
+                  with no separation character. A station is not
+                  removed from this list if it was scheduled to
+                  participate in the session but did not participate
+                  for some reason. Non-participating stations are 
+                  separated into a sub-field that begins with "-".
+                  Example:
+                        GcKkWzMcWfTc     original network
+                        GcMcWfTc -KkWz   actual network
+
+8       SKED      The code (maximum 4-characters) for the IVS Operation
+                  Center or other agency responsible for making the
+                  schedule file for this session.
+                  SKED CODES
+                    BONN  University of Bonn, Germany
+                    CANA  Canada
+                    CHIN  Shanghai Observatory, China
+                    CRL   Communications Research Laboratory, Japan
+                    DACH
+                    DSN
+                    GSI   Geodetic Survey Institute, Japan
+                    HAYS  MIT Haystack Observatory, USA
+                    JARE  Japanese Antartic Research Expedition, Japan
+                    JPL 
+                    NASA  NASA Goddard Space Flight Center, USA
+                    NOAA
+                    NRL
+                    SHAO  Shanghai Astronomical Observatory, China
+                    OSO   Onsala Space Observatory, Sweden
+                    USNO  U. S. Naval Observatory, USA
+                    UTAS  University of Tasmania, Australia
+                    VLBA  Very Long Baseline Array, USA  
+                  end SKED CODES
+
+9       CORR      The IVS Correlator or other correlator where the 
+                  session is scheduled to be processed. The correlator 
+                  is normally also responsible for submitting the 
+                  level 1 and 2 data to the IVS Data Centers.
+                  CORR CODES
+                    ATNF  Australia Telescope National Foundation, Australia
+                    BONN  Max-Planck-Institute for Radio Astronmy, Germany
+                    CRL   Key Stone Project Koganei Correlator, Japan
+                    GSI   Geodetic Survey Institute, Japan
+                    HAYS  MIT Haystack Observatory, USA
+                    JPL   Jet Propulsion Laboratory, USA
+                    MITA  Mitaka Correlator, Japan
+                    PENT  Penticton, Canada
+                    SHAO  Shanghai Astronomical Observatory, China
+                    TSUK  Tsukuba, Japan
+                    UTAS  University of Tasmania, Australia
+                    VIEN  Vienna Technical University, Austria
+                    VLBA  Very Long Baseline Array, USA
+                    WASH  Washington Correlator, USA
+                    WETZ  Wettzell Geodetic Observatory, Germany
+                    YEBS  Yebes Observatory, Spain 
+                  end CORR CODES
+
+10      STATUS    The status of the session at the correlator. This field
+                  may be blank until 1997 for the 24-hour sessions, and may
+                  be blank for any Intensive sessions.
+                  STATUS CODES
+                    Wt_med    Waiting on media           
+                    Wt_set    Waiting to be set-up
+                    Wt_pre    Waiting to be prepassed    
+                    Ready     Ready for processing
+                    In_prog   In progress                
+                    Re-Proc   Re-Processing
+                    Re-FRIN   Re-FRINGing                
+                    Cleanup   Clean-up
+                    YYYYMMDD  session release or export date, in the
+                              same format as the DATE field
+                  end STATUS CODES
+
+11      DBC       This field may be left blank starting in 2023, with
+        CODE      no database codes assigned, because they will not be used
+                  in the creation of the vgosDB name. In master files from
+                  1979-2022, the database code is retained for backward
+                  compatability and to facilitate conversion between
+                  file name conventions.
+                  The database code is the 2-letter identifier for a 
+                  database. The first character nominally describes the
+                  observing band of the session, with the higher
+                  frequency band used for those sessions with more than
+                  one observed band (e.g., 'X' for S/X observations). On
+                  occasion, the first character did not represent the 
+                  observing band. The second character differentiates
+                  session types with the same first character and those
+                  observed on the same day. The data base code is
+                  assigned by the IVS Coordinating Center. The list
+                  below shows commonly used codes and the types of
+                  sessions that used the code.
+                  DBC CODES 
+                    D   DSN                   
+                    DD  DSN                   
+                    DO  GSI                   
+                    DX  GSI, CRL, CDP         
+                    LL  CDP                   
+                    MV  CRL                   
+                    RR  CDP                   
+                    SL  VLBA                  
+                    SV  VLBA                  
+                    VX  GSI                   
+                    X   CDP, POLA, MOBL, IRIS-A, NRL, GERMAN, EUR, NGS 
+                    XM  MOBL, EURMOB, IRIS-A 
+                    X2  VLBA
+                    X5  SGP                  
+                    XA  SGP, POLA, CDP, MOBL, IRIS-A, NGS, EUR, VLBA
+                    XB  POLA, IRIS-A, SGP, EUR, VLBA
+                    XC  SGP, EUR           
+                    XD  SGP                  
+                    XE  NEOS-A, NEOS-B, SGP
+                    XF  JADE
+                    XG  CDP
+                    XH  IRIS-S
+                    XI  IRIS-A
+                    XJ  MOBL, NAVINT, NAVEX
+                    XK  CDP, SGP       
+                    XL  VLBA      
+                    XM  NRL, IRIS-I
+                    XN  NRL, CRF
+                    XO  USNO, NAVNET, NAVEX, APT
+                    XP  POLA, IRIS-A, CDP, IRIS-P
+                    XQ  CDP, SGP
+                    XR  MOBL, IRIS-I, NRL, IRIS-A, NRL, GERMAN, 
+                    XS  NGS
+                    XT  MK1, CDP, VLBA, NEOS-I   
+                    XU  IRIS-I, NEOS-I
+                    XV  VLBA, CRF, NEOS-I
+                    XW  CDP, SGP
+                    XX  CDP, GERMAN, CRL, GSI, SYOWA
+                    XY  CRL
+                    ZZ  CDP
+                  end DBC CODES 
+
+12      SUBM      The IVS Operation Center or other agency that is responsible 
+                  for submitting the level 3 data to the IVS Data Center.
+                  SUBM CODES
+                    BKG   Bundesamt fuer Kartographie und Geodaesie, Germany
+                    BONN  
+                    CANA  Canada
+                    CRL   Communications Research Laboratory, Japan
+                    GSI   Geodetic Survey Institute, Japan
+                    NASA  NASA Goddard Space Flight Center, USA
+                    NIPR  National Institute of Polar Research, Japan
+                    USNO  U. S. Naval Observatory, USA
+                    UTAS  University of Tasmania, Australia
+                    VIEN  Vienna Technical University, Austria
+                  end SUBM CODES
+
+13      DEL       The time delay between data recording and availability for 
+                  analysis, in days. This is a measure of the efficiency 
+                  of the shipping and correlation processes. Time delay is 
+                  calculated as the time from the end of the observing session 
+                  to release of the data base by the correlator. This is the 
+                  number of days that it took to ship tapes, correlate, 
+                  re-process, and submit the level 2 data for the 
+                  session. The number in the time delay column will be negative 
+                  until the observation is completed, and then it will 
+                  continue to increase until the session is released.
+                  This field is blank until 2002 for 24-hour sessions, and may
+                  be blank for any Intensive sessions.

@@ -1,0 +1,157 @@
+Technical description of solution XXXXnnnn
+
+1.  Purpose of solution: e.g., session EOP
+
+2.  Analysis center: e.g., GSFC (XXXX, exactly 4 characters)
+    Solution code: e.g. 1120 (nnnn, exactly 4 characters)
+
+3.  Short narrative description of solution:
+
+4.  Estimated parameters:
+
+    a. celestial frame: e.g., right ascension, declination
+
+    b. terrestrial frame: e.g., X0, Y0, Z0, Xdot, Ydot, Zdot
+
+    c. Earth orientation: e.g., x, y, UT1-TAI, UT1dot, dpsi, deps
+
+    d. zenith troposphere: e.g., continuous piecewise linear, 20 min interval
+
+    e. troposphere gradient: e.g., east and north offset and rate
+    
+    f. station clocks: e.g., continuous piecewise linear with 1 hr interval
+
+    g. baseline clocks: e.g., usually
+
+    h. other: e.g., global antenna axis offsets 
+
+5.  Celestial reference frame:                
+
+    a. a priori source positions: e.g., ICRF
+
+    b. source positions adjusted in solution: yes/no
+
+    If yes,
+
+    c. definition of orientation: e.g., no-net-rotation tie to the
+       ICRF using only the ICRF defining sources.
+
+    d. source position estimation: e.g., all sources estimated globally
+
+    If no,
+
+    e. solution identification or reference:
+
+6 - Terrestrial reference frame:
+
+    a. a priori station positions: e.g., ITRF96
+
+    b. a priori station velocities:, e.g., NUVEL1A-NNR
+
+    c. reference epoch:
+
+    d. station positions/velocities adjusted in solution: yes/no
+
+    If yes,
+
+    e. definition of origin, orientation, and their time evolution: e.g.,
+       Evolution of the TRF is set by no-net-translation, no-net-rotation,
+       no-net-translation-rate and no-net-rotation-rate conditions on the
+       horizontal position and velocity adjustments of the following stations :
+
+       ALGOPARK BR-VLBA   DSS45     FD-VLBA  FORTLEZA  GILCREEK  HARTRAO  
+       ...
+
+    f. station parameter estimation: e.g., for most stations 
+       X0, Y0, Z0, Xdot, Ydot, Zdot
+
+    g. stations with constraints: e.g., 
+
+       The stations with insufficient data or time interval are constrained 
+       to move with NNR-NUVEL1A with uncertainties in vertical, east and
+       north rates of 0, 3, and 3 mm/yr, respectively.  These stations are:
+
+       AUSTINTX  AZORES    BERMUDA   BLOOMIND  BREST     
+       ...
+
+       Velocities of the following groups of sites are constrained to be identical:
+
+       DSS65     ROBLED32
+       ...
+
+    h. stations with discontinuous positions and date of discontinuity: e.g.,
+
+       YAKATAGA 871201
+       ...
+
+    i. stations with nonlinear velocities: e.g.,
+
+       The position of HRAS 085 is estimated as a piecewise-linear, continuous
+       function with 2-month segments.
+
+    j. relativity scale: e.g.,
+       LE    : local Earth in agreement with TCG (IUGG Resolution)
+
+    k. permanent tide correction: yes/no
+
+       "Yes" means that both the permanent and the periodic tides  have been
+       modeled, so that the output station position is for after the removal
+       of both the permanent and the periodic tidal effect.
+
+    If no,
+
+    l. solution identification or reference:
+
+7.  Earth orientation: 
+
+    a. a priori precession model: e.g., IAU(1976)
+
+    b. a priori nutation model: e.g., IAU(1980)
+
+    c. a priori short-period tidal variations in x, y, UT1: e.g., 
+
+       UT1 tidal terms  (microseconds)
+       
+        l  l' F  D Om  GST |   Cos  |   Sin   |
+                       +pi |        |         |
+       -----------------------------------------
+        2  0  2  0  2 -1      -.13     -1.24
+        ...
+       -----------------------------------------
+       
+       Polar motion tidal terms  (microarcseconds)
+       
+        l  l' F  D Om  GST |   Cos  |   Sin   |
+                       +pi |        |         |
+       -----------------------------------------
+       -2  0 -2  0 -2  1     -6.90      5.52
+        ...
+       -----------------------------------------
+
+    d. EOP estimation: e.g., x, y, UT1, UT1dot, deps, dpsi each day
+
+8.  A priori geophysical models:
+
+    a. troposphere: e.g., NMF mapping function
+
+    b. solid Earth tide: e.g., IERS Conventions
+
+    c. ocean loading: e.g., none
+
+    d. atmosphere loading: e.g., from VLBI data and weather model
+
+9.  Data type: e.g., delays
+
+10. Data editing: e.g., 7 deg elevation cutoff
+
+11. Data weighting: e.g., reweighting by site for each session
+
+12. Standard errors reported: e.g., all errors are derived solely from
+    data uncertainties and noise RSSed for each site for each session
+    to make the chisquare of individual session solutions unity.
+
+13  Software: e.g., CALC 8.2, SOLVE 5.0129
+
+14. Other information: e.g., URL for long tables
+
+

@@ -1,0 +1,715 @@
+nuSolve 0.8.3.1 (Apr 21, 2026)
+   Bug fixes/corrections:
+   * Corrected units for channel bandwidth.
+
+nuSolve 0.8.3 (Apr 10, 2026)
+   Improvements:
+   * Reading vgosDa format: added digesting of PIMA suppression codes.
+   * Channel bandwidth now is extracted from fourfit files (previously, it
+     was calculated form the sample rates).
+   * New variables were added to the channel info part of vgosDb format:
+     order of USB/LSB sidebands in the corresponding arrays and channel
+     bandwidth.
+   * GUI interface was added to the nuSolve Session Editor that displays
+     channel-dependent data for an observation.
+   * The format of ANTCAL output was upgraded to the version 2, the format
+     description is added to the distribution.
+   Bug fixes/corrections:
+   * A bug in calculation of effective ionosphere frequencies was fixed.
+   * The cable calibration sign that was extracted from a log file is not
+     applied to CDMS data.
+   * Fixed a bug in creation/update of vgosDb databases that generated
+     directories with duplicate names (e.g., Apriori/Apriori and so on).
+
+
+nuSolve 0.8.2.2 (May 25, 2023)
+   Bug fixes/corrections:
+   * Some of debug output was commented out.
+
+nuSolve 0.8.2.1 (May 19, 2023)
+   Bug fixes/corrections:
+   * A bug prevented compilation without support of HOPS libraries was
+     fixed (thanks to Timothy Morin, Haystack, MIT).
+
+nuSolve 0.8.2 (May 9, 2023)
+   Improvements:
+   * The configure script recognizes the old and new (3.24 and later)
+     versions of HOPS (Haystack has changed API of the libraries).
+   * log2ant: A suffix "_orig" is added to a default file name of ANTCAL
+     output (on request from Nlingi Habana).
+   * ECMAScript autoINT.js was improved.
+   * A user can edit extensions of masterfile names (on request of Chris
+     Dieck, USNO). This option is implemented for nuSolve and the all
+     vgosDb utilities.
+   * The Session Editor Window was modified:
+     - Origin of cable calibration corrections (FS log, CDMS or PCMT) is
+       displayed on the tab "Session (List)" tab.
+     - Number of good observations is added to Station and Baseline
+       lists.
+   Bug fixes/corrections:
+   * Import vgosDb to vgosDa format works with the new database naming
+     convention.
+   * Fixed a typo in unit names of clock polynomial terms in spoolfile
+     output (thanks to Willi Probst, BKG).
+   * log2ant:
+      - in the case when pcal setup is undefined the sky frequency of a pcal
+        sensor is set to the filler (thanks to Nlingi Habana, GSFC);
+      - content of a procedure declaration now is using by the parser as normal
+        input.
+   * Script vgosDxConvertor is aware about return codes (0 is ok, 1 is
+     an error).
+   * The vgosDb* and log2ant utilities now return on exit 0 in the case of
+     success and a value greater than zero in the case of error (thanks to
+     Anastasiia Walenta, BKG).
+
+nuSolve 0.8.1 (January 5, 2023)
+   Bug fixes/corrections:
+   * Spool file output keeps dollar sign at a database name in the case of old naming
+     convention (some postprocessing scripts are not ready to get rid of "$");
+   * A workaround for log files by Onsala (and, may be, other stations) is added: the
+     "/lo=" command does not contain a value of pcal spacing.
+
+nuSolve 0.8.0 (January 3, 2023)
+   New features:
+   * The software is going to switch from GPL to NASA Open Source Agreement (NOSA).
+     To fulfill the requirements, the sources of CALC and nuSolve are decoupled.
+     The sources of librarized version of CALC are available at
+                https://sourceforge.net/projects/libcalc/
+     The package libCalc need to be installed first before vgosDbCalc compilation.
+   * All external source codes (about a dozen of functions, external and derived
+     from SOLVE sources) were replaced with the the independent source code.
+   * Support of masterfile version 2 format and new database naming convention is
+     added. The utility vgosDbMake require a command line argument to use masterfile
+     ver 2 format, other utilities are aware about both versions of the format and
+     database name.
+   Improvements:
+   * log2ant/vgosDbProcLogs:
+      - The empty string filler was replaced from "n/a" to "DUMMY";
+      - The regular expressions of the key events (data_valid=on/off, source_on,
+        etc.) were updated to work with files where these key records are hidden
+        in a procedure command;
+      - extraction of dot2pps values and saving them in ANTCAL format is added;
+      - calculation and report of PCAL sensor frequencies is implemented.
+   Bug fixes/corrections:
+   * Verification of diffTEC dispersion for nan/inf (sometimes it happens) is added.
+
+nuSolve 0.7.6 (July 13, 2022)
+   Bug fixes/corrections:
+   * Configure script and some sources were updated to work with GCC 12.1 that
+     is shipping with modern Linux distributions (thanks to Leonid Petrov).
+   * Proper designation of CDMS cable calibration type is set when CDMS data are
+     extracted from FS log files (thanks to Arthur Niell).
+   * Name of vgosDb variable that accumulates cable calibration of different types
+     has changed, it will not interfere with Cal-Cable variable (thanks to Haystack
+     VLBI group).
+
+nuSolve 0.7.5 (June 23, 2022)
+   Improvements:
+   * A script "autoINT" was updated. The script is designed to process INT sessions
+     (S/X and VGOS) and store a new version of the database.
+   * vgosDbProcLogs:
+      - The utility collects all available cable calibration corrections from various
+        sources: FS log file, CDMS and PCMT. It accumulates these data in a separate
+        netCDF files.
+   * nuSolve:
+      - nuSolve is capable to perform parallel computations. For multi-core CPU that
+        reduces time of processing a session.
+      - GUI is added to plot all available cable calibration corrections. Also, a user
+        can control (GUI or script mode) what type of the correction should be used in
+        a solution. That is switchable for a whole session or on a per station basis.
+      - An attribute for a station "bad meteo parameters" is added. If it is set, then
+        "standard" temperature, pressure, and relative humidity is using in a solution.
+      - Calculation of water vapor pressure was modified.
+   Bug fixes/corrections:
+   * vgosDbMake:
+      - If a correlator name is not found in a masterfile and is not specified with
+        "-r" option, the utility will use analysis center abbreviated ID as a
+        correlator name (it will prevent creation of empty Head.nc file).
+      - The regular expression for a valid source name in the map for sources was
+        modified: a dot was added as a valid char in a source name.
+   * Sources of the plotter subsystem has been modified so the software can be
+     compiled with Qt5 version 5.12 or older.
+   * The spoolfile file output was updated: a name of reported database now does
+     not depend on a primary band (will work for databases with names like 22MAY16MH).
+   * Minor bug fixes, spellchecking and documentation update.
+
+
+nuSolve 0.7.4 (Feb 9, 2022)
+   Improvements:
+   * All utilities now use command line arguments parser ARGP from GNU C Library.
+   * log2ant/vgosDbProcLogs:
+      - Parsing of log files was improved.
+   * vgosDbMake:
+      - Processing of correlator name was reworked. If it is available from VEX
+        files and not "difx" or "sfxc", the software will use it. Otherwise, it will
+        use correlator name from a masterfile. A user can override the correlator
+        name with "-r" option. Previously, this option worked only in combination
+        with an alternative database name (option "-d").
+   * vgosDbProcLogs:
+      - A command line option ("-o") was added to set an order of meteorological
+        parameters in a log file (string "/wx/").
+      - parsing tsys records for legacy stations currently is disabled (log2ant should
+        be used instead).
+      - If a cable sign info was not found till the end of a session, the utility will
+        not stop at the end of a session and continue to search it.
+   * nuSolve:
+      - An ability to store a plot in a file in a raster format (JPG, PNG) is added.
+      - MTT mapping function is added to fly-by options (for test purposes).
+      - Reading a priori data: in addition to ".erp" format of the Earth rotation
+        parameters, two format were added: USNO and IERS EOP files (for test purposes).
+   Bug fixes:
+   * A bug that prevents reading a database by session name if only one wrapper file
+     exists (usually when vgosDbCalc is running) was found and fixed.
+   * A a bug in calculation of standard deviations of baseline components in local
+     system was fixed. The bug was reported by Minghui Xu (Metsahovi Observatory, Aalto
+     University, Finland).
+   * Workaround for a problem created by HOPS (it provides its own function "compress"
+     that shadows the standard one) is performed, saving a plot in PDF format now
+     works properly.
+   * A bug in calculation of water vapor pressure was found and fixed. The bug affected
+     a priori wet zenith delays.
+   * A bug was fixed in calculation of a posteriori values of dUT1 and polar motion, the
+     bug affected values by ~half of microsecond.
+   * Lost procedures for storing/reading a priori clock offsets and rates in vgosDb format
+     were restored. The bug was reported by Anastasiia Girdiuk (BKG, Germany).
+   * Output of "nuSolve_unused_observations_??" file was modified: if fourfit error
+     code is not present in a database, a char '.' will be printed in the corresponding
+     column instead of an empty string.
+   * A bug was fixed in checking for existing netCDF files; for files in a session
+     root directory (like Head.nc) it worked incorrectly.
+   * Minor bug fixes, spellchecking and documentation update.
+
+
+nuSolve 0.7.3 (June 22, 2021)
+   New features:
+   * A shell script "vgosDxConvert" is added to the distribution, it performs
+     conversion databases to/from vgosDa and vgosDb formats.
+   * A script "autoINT.js" is added to the distribution. The script analyzes
+     an INT session and stores new version of the database. Works on automatic
+     data processing are continuing, the script will be modified in the future.
+   Improvements:
+   * The "configure" script has been modified:
+      - the script was reworked to tests all necessary libraries from Qt5,
+        netCDF and HOPS software;
+      - a mandatory command line argument "--with-calc-datadir" is added, see
+        "nuSolve User Guide" for details.
+   * log2ant:
+      - extraction of SEFD evaluations from log files is added;
+      - processing DBBC3 dump files is implemented.
+   * vgosDbMake:
+      - checks scan names for duplicates and corrects them if found;
+      - import of observations from KOMB files (GSI correlator) have been
+        modified: group delays and rates are corrected for clock offset of a
+        reference station (with respect to UTC). The original values of delays
+        and rates are saved in separate netCDF files.
+   * vgosDbProcLogs:
+      - added a command line option to alter a path to input files (should be
+        useful to specify path to logs, PCMT, etc. files);
+      - checking for non-printable chars in a log file is added.
+   * nuSolve:
+      - saving and retrieving phase delay ambiguity multipliers to/from vgosDb
+        format are added (on request from Eskil Varenius, Chalmers University
+        of Technology);
+      - storing values of phase delays and their sigmas in vgosDb is implemented
+        (on request from Tobias Nilsson, Lantmäteriet, Sweden).
+   Bug fixes:
+   * A bug reported by Grzegorz Klopotek (ETH, Zurich) has been fixed. The bug
+     can cause seg.fault when processing an old database.
+   * Bugs in reading old databases produced by S2 correlator were fixed.
+   * Output in vgosDa format modified: if no channel dependent data available,
+     the corresponding vgosDa data are not put in the file (instead of using
+     dimensions with number of channels == 0).
+   * Verification of "observables" (group delay, rate, etc.) for NaN in KOMB
+     files is added.
+   * log2ant utility:
+      - the misspell in antcal file format output has been fixed:
+        "TS_SENSOR" => "TP_SENSOR";
+      - calculation of the central IF and sky frequency for VGOS setup has been
+        corrected.
+   * Minor bug fixes, some spell corrections, documentation update.
+
+
+nuSolve 0.7.2 (Nov 19, 2020)
+   New features:
+   * A new utility, log2ant, is added to the distribution. The utility extracts
+     various sensor reading (e.g., cable calibration, TSYS, phase calibrations,
+     etc.) from a field system log file and stores these data in a file in
+     ANTCAL format.
+   * vgosDbProcLogs extracts in addition tsys readings and stores them in vgosDb
+     files.
+   Improvements:
+   * The configure script has been modified to work with Qt5 of various Linux
+     distributions.
+   * Qt4 is not supported any more, the software needs Qt5.
+   * An option to generate a list of commands to refringe selected observations
+     is implemented.
+   * GUI support to configure using of observations with the fourfit error codes
+     "G" and 'H" is added.
+   * An option to print full date in a log is added.
+   Bug fixes:
+   * Minor bug fixes, some spell corrections, documentation update.
+
+
+nuSolve 0.7.1 (May 13, 2020)
+   New features:
+   * The software is use Qt5 as a default library. Configure and compilation
+     procedures are much simple now, see "nuSolve User Guide".
+   * A tab with plots with estimated intra session ERP are added to the Session
+     Editor (for test purposes).
+   Improvements:
+   * Script mode improvements:
+     - A repository with "standard" scripts has been added.
+     - Full support of VDA file format has been implemented in the script mode.
+       A simple script that converts a VLBI session in vgosDb format to the VDA
+       or in VDA format to the vgosDb one is added to the distribution.
+     - An ability in script to put user comments into a spool file is added.
+   Bug fixes:
+   * Minor bug fixes, some spell corrections.
+
+
+nuSolve 0.7.0 (March 3, 2020)
+   New features:
+   * A simple source structure model has been added to the software.
+   * New type of VLBI data format, VDA, is supported.
+   Improvements:
+   * A per source view is added to the plots.
+   * The spoolfile report generator update: a covariance matrix can be stored
+     in a separate ASCII file.
+   * Scripting mode: an interface for the source structure model has been added,
+     some methods were renamed, new ones were added.
+   * A dry mode has been added to vgosDbMake, vgosDbCalc and vgosDbProcLogs.
+     In this mode actual files are not be created, instead names of the files
+     are be printed.
+   * Minor improvements were made through the whole vgosDb I/O module.
+   Bug fixes:
+   * Minor bug fixes.
+
+
+nuSolve 0.6.4 (February 28, 2019)
+   Improvements:
+   * vgosDbMake by default now stores observations with all fringe error codes.
+     A command line option was added to mimic old/dbedit behavior, see the user
+     guide.
+   * A dialog window to provide a session name for vgosDb format was added. If a
+     user use this option, nuSolve will read a default wrapper file (see the
+     user guide for details).
+   Bug fixes:
+   * A bug reported by Minghui Xu (ShAO) was fixed: values of the geocentric
+     group delays and geocentric rates were swapped in the corresponding netCDF
+     file.
+
+
+nuSolve 0.6.3 (September 26, 2018)
+   Improvements:
+   * A number of total scans is added to the source list of the Session Edit
+     Window.
+   * The U/V coordinates were added to the baseline plots of the Session Edit
+     Window.
+   Bug fixes:
+   * A bug in PWL parameters processing has been found and fixed. The bug can
+     cause a segmentation fall in rare cases.
+   * A bug in composing wrapper files was found and fixed: a references to
+     UVFperAsec_b?.nc files were not written. A workaround for the bug was
+     added.
+   * A bug in composing Head.nc file was fixed. In rare cases when a source
+     observed only one time and this observation was discarded because of a
+     fringe error code, the source retained in a source list that was written
+     into Head.nc. The bug did not affect νSolve behavior, but would cause
+     problems for other software.
+
+
+nuSolve 0.6.2 (August 31, 2018)
+   Improvements:
+   * During creation of a wrapper file names an abbreviation of an analysis
+     center name (if available) now is used in “_i<Institution>” attribute by
+     default.
+   * All vgosDb* utilities: if $DISPLAY is not set, pop up windows with error
+     messages will not be called.
+   * nuSolve:
+     - A column that shows the applied cable calibration signs was added to the
+       station list.
+     - An ability to turn off weight correction adjustment for a particular
+       baseline was implemented.
+     - Initial and minimal auxiliary standard deviations (for reweighting) for
+       delay and delay rates were added.
+     - Output in ASCII files of estimation of stochastic parameters (EOP, wet
+       zenith delays and atmospheric gradients) as well as total zenith delays
+       has been implemented. This option is available in a script mode too.
+   * vgosDbProcLogs:
+     - On request from Arthur Niell the order of reading files was changed: now
+       the FS log files are read after CDMS, PCMT and meteorological data files.
+     - A problem with processing station log files of the sessions that were
+       scheduled by Vienna VLBI group (scan names mismatch) was resolved.
+     - Configuration of default cable calibration signs for a station has been
+       implemented. Now a user can set up a list of stations with their default
+       cable calibration signs. If the software cannot find "cablelong"
+       measurement in a log file, it will use the default sign. Previously, the
+       default sign “+” was hard-coded for WETTZELL station.
+     - Using of meteorological data from RINEX files has been implemented. Now
+       a user can set up a list of stations with their nearby GPS stations and
+       pressure offsets (if necessary). If the software cannot find
+       meteorological readings in a FS log file, it will try to use the
+       corresponding RINEX files.
+     - Checking for reasonable ranges of relative humidity readings extracted
+       from RINEX files was added. For r1853 session the relative humidity
+       from `ceeu' GPS station (the nearby station of FORTLEZA) are 110% in
+       maximum.
+     - The procedure of checking for rapid changes of meteorological parameters
+       in FS log files was added (e.g., latest YARRA12M's relative humidity
+       values are either 0 or 100). If such anomaly found, software will replace
+       data with default constant values.
+   * The user guides were updated to reflect the latest changes.
+   Bug fixes:
+   * A bug in reading files with external meteo data fixed: the relative
+     humidity data were not scaled by 0.01.
+   * A bug that can cause a segmentation fault if a scan name appeared again in
+     a log file (e.g., sessions/2017/aua034/aua034yg.log) was found and fixed.
+   * A bug in reading vgosDb data has been fixed: CALC (historically) provides
+     TAI-UT1 values for table of interpolation, therefore to obtain UT1-TAI data
+     these values should be taken with a reversed sign. Thanks to Takahiro
+     Wakasugi (GSI, Japan) for noting that.
+   * A bug in reading old sessions in vgosDb format has been found and fixed.
+     The bug caused νSolve treats data with missed information about numbers of
+     samples as observations without channel set up.
+   * A bug was found by Arthur Niell: a file with observations status was saved
+     in wrong directory; the bug has been fixed.
+   * Minor bug fixes.
+
+
+nuSolve 0.6.1 (June 12, 2018)
+   New features:
+   * System wide settings were added to all four utilities (vgosDbMake,
+     vgosDbCalc, vgosDbProcLogs and nuSolve).
+   Improvements:
+   * The utilities vgosDbMake, vgosDbCalc and vgosDbProcLogs will print their
+     configuration to the standard output if a user provide a command line option
+     "-p, print set up and exit".
+   * nuSolve improvements:
+     - nuSolve is aware of the LCode "MSLM ION" (GPS ionospheric contribution) in
+       a database. The contribution should be added by external software;
+     - a script proxy was added for the software set up;
+     - standard values of 100 fs/s for delay rates weight corrections are stored
+       in a database if the rates were not processed in a solution;
+     - nuSolve can write estimated source positions and station coordinates with
+       applied velocities in a format of the a priori files.
+   * The user guides were updated to reflect the latest changes.
+   * For FORTLEZA station vgosDbProcLogs will automatically collect meteorological
+     parameters from RINEX of the GPS station "CEEU" (the files are downloadable
+     from ftp://geoftp.ibge.gov.br/informacoes_sobre_posicionamento_geodesico/rbmc/dados/)
+     if they are in a directory with other log files.
+   Bug fixes:
+   * If only one band is available, nuSolve stored incorrect values for "UACSUP",
+     "ION CODE" and "ION_BITS" LCodes.
+   * Fixed a bug that caused segmentation fault in the case of a session with one
+     band.
+   * Regular expressions for database names were corrected.
+   * Configuration of estimated parameters for individual station clocks and
+     zenith delay were not properly set up.
+   * Estimated parameters for individual station clocks and zenith delay were not
+     correctly processed in the script mode.
+   * A bug that can cause a segmentation fault during loading a session without
+     a set of a priori Earth rotation parameters was fixed.
+   * The file Session/LeapSecond.nc was not created after run of vgosDbCalc.
+   * Permission of a wrapper file and directories in vgosDb data tree were set to
+     write access for user's group.
+   * Minor bug fixes.
+
+
+nuSolve 0.6.0 (March 28, 2018)
+   New features:
+   * nuSolve can execute scripts (written in ECMAScripts, see User Guide).
+   * vgosDbMake can translate source and station names. If fringe files contain
+     non-standard names for stations or/and sources, a user can provide a file
+     with a name map to overwrite the names.
+   * vgosDbProcLogs is capable to use external files with cable calibration or
+     meteorological parameters.
+   Improvements:
+   * The Observation Info window has been improved: statistics (number of total,
+     usable and processed observations, WRMS) for a baseline, a source and
+     stations were added.
+   * A user can mark/unmark all observations for a particular source on the plots
+     of nuSolve.
+   * The utility vgosDbMake has been modified to work with new naming convention
+     of the fringe files.
+   * The user guides were updated to reflect the latest changes.
+   Bug fixes:
+   * Minor bug fixes.
+
+
+nuSolve 0.5.2 (November 14, 2017)
+   Bug fixes:
+   * Several bugs in the implementation of vgosDb format were fixed:
+     - Names of common used dimensions are now in compliance with batch SOLVE.
+     - The variables Cal-FeedCorrection_b?.nc now written to a wrapper file.
+     - A typo in a name of the variable "vUserSup_" has been fixed.
+
+
+nuSolve 0.5.1 (November 1, 2017)
+   Improvements:
+   * The constraint statistics part of spool file output has been reworked:
+     the constraint shares are evaluated and reported, the WRMS and the
+     normalized WRMS are interactive SOLVE compatible.
+   * Calculation of the normalized residuals has been modified.
+   Bug fixes:
+   * A bug (reported by Minghui Xu, ShAO) in parsing a wrapper file name has
+     been fixed.
+
+
+nuSolve 0.5.0 (October 12, 2017)
+   New features:
+   * Processing of delay rates is added in this version.
+   * Option to downweight delays is implemented.
+   Improvements:
+   * The software (all four utilities) checks for "local" master files too.
+     This type of master files can be used for testing purposes or to process
+     a session that is not in the official IVS master files.
+   * A user can load only one database with some particular band or databases
+     which names do not follow standard IVS naming conventions.
+   * vgosDbMake extracts reference station clock offsets from KOMB files and
+     stores the data in vgosDb format.
+   * nuSolve can plot observations of the following scopes: "all", "usable"
+     and "good".
+   * A window with statuses of observations that are not in a solution has
+     been reworked.
+   * The user guides were updated to reflect the latest changes.
+   Bug fixes:
+   * A bug that causes segmentation fault of vgosDbCalc if it was compiled
+     using an old (at least 4.4.7 or older) GNU compiler is fixed.
+   * The configure script was modified to stop and complain if GNU FORTRAN
+     compiler was not found.
+   * A bug that causes a segfault if a user tried to generate a report for
+     the S-band was fixed.
+   * Minor bug fixes.
+
+
+nuSolve 0.4.3 (June 13, 2017)
+   New features:
+   * The distribution package can be configured to build vgosDbMake (and SgLib)
+     only using configure's option "--enable-vgosDbMake-only". In this case no
+     nuSolve, vgosDbCalc and vgosDbProcLogs executables will be created.
+   * An option to report into a file status of observations (unusable, excluded
+     or used in a solution) is added to the spool file output procedure.
+   * A command line option "-m" was added to nuSolve to force call the procedure
+     of automatic processing.
+   Improvements:
+   * On the tab "Baselines (List)" a click on a header "Est.Clk" sorts baselines
+     by normalized baseline clock offsets.
+   Bug fixes:
+   * A bug in configuration of automatic data processing has been fixed.
+
+
+nuSolve 0.4.2 (May 1, 2017)
+   New features:
+   * A command line mode has been added to nuSolve. In this mode the software
+     analyzes a session without interaction with a user. It is supposed to be
+     executed for the INT type of sessions only.
+   * Quadratic B-Splines were added as a model for continuous piece-wise
+     parameters.
+   * A post-save user command is introduced: nuSolve can execute a user
+     specified external command after saving a session in a database or vgosDb
+     files.
+   Improvements:
+   * The user guides were updated to reflect the latest changes.
+   * The spoolfile output of ERP reports total values even if the external file
+     with a priori data is outdated.
+   * Command line arguments were synchronized for all four utilities.
+   Bug fixes:
+   * A bug in the NGS format output has been fixed: the total phase value now
+     reports correctly.
+
+
+nuSolve 0.4.1 (March 6, 2017)
+   Improvements:
+   * A "Novice user" mode has been added. If it is "on" (General Config,
+     Ctrl-G), nuSolve will warn a user if he/she tries to save a session without
+     calculating the ionosphere corrections or reweighting.
+
+
+nuSolve 0.4.0 (February 27, 2017)
+   New features:
+   * The distribution includes vgosDbCalc utility. The utility is a replacement
+     of the legacy CALC utility. It possesses all CALC properties except the
+     input/output operations. Instead of database handlers it uses the new
+     vgosDb format.
+   Improvements:
+   * A report on baselines variations has been added to the spoolfile output.
+     The report is printed if station coordinates or baseline vectors were
+     estimated in the solution.
+   Bug fixes:
+   * A bug in calculation of standard deviation for latitude of baseline
+     section of the spoolfile output has been fixed.
+   * A bug in order of coordinates assigning for "NEU" type of eccentricities
+     was fixed.
+
+
+nuSolve 0.3.3 (September 13, 2016)
+   New features:
+   * The calculation and use of phase delays was added. The use of phase
+     delays as an "observable" is in a preliminary stage and should be
+     limited to short baselines.
+   Improvements:
+   * Effects of phase calibrations on the group and phase delays are evaluated
+     and added to the baseline's plots.
+   * The use of ionosphere corrections could be turned "on" or "off" for
+     individual baselines.
+
+
+nuSolve 0.3.2 (August 26, 2016)
+   Bug fixes:
+   * The spoolfile output was modified to be correct when only one band is
+     loaded.
+
+
+nuSolve 0.3.1 (August 23, 2016)
+   Bug fixes:
+   * A bug in determining "eligible" observation when only one band is loaded
+     was fixed.
+
+
+nuSolve 0.3.0 (August 9, 2016)
+   New features:
+   * The distribution contains vgosDbMake and vgosDbProcLog utilities. The
+     utility vgosDbMake extracts data from fringe files and stores it in vgosDb
+     format. The utility vgosDbProcLog analyzes stations log files, collects
+     meteorological parameters and cable calibration measurements and saves
+     the information in vgosDb format.
+   Improvements:
+   * The difference of total electron content (dTec) value and its standard
+     variation are extracted from fringe files (if available). The values are
+     also added to the baseline plot of nuSolve.
+   * The pushbuttons "IonoC" and "Iono0" are now enabled/disabled depending on
+     presence of ionosphere corrections. The pushbutton "Ambig" is set to 
+     `disabled' if a band does not have ambiguity spacings.
+   Bug fixes:
+   * A bug in sorting epochs of external a priori data was fixed.
+
+
+nuSolve 0.2.3 (April 21, 2016)
+   New features:
+   * The distribution contains development version of vgosDbProcLog utility.
+
+
+nuSolve 0.2.2 (December 1, 2015)
+   New features:
+   * The distribution contains development version of vgosDbMake utility. The
+     utility extracts data from fringe files and stores it in vgosDb format.
+     It is now in a development stage and should be used only if you want to
+     make a contribution to the software development.
+   * An "interactive SOLVE style" clock break model was added. A user can choose
+     a model for particular clock break, clock breaks with different models can
+     be combined in one solution.
+   Improvements:
+   * Calculation of the effective ionosphere frequencies was modified to take
+     into account width of channels.
+   * Output into a spoolfile format was changed to handle sessions with 1K+
+     observations at one baseline.
+   * Checking was added for a mixed channels setup, the software will issue a
+     warning message if it detects the mixed channels setup.
+   * Fringe error codes were added to the baselines plot. Also, a fringe error
+     code was added to the observation info window.
+   Bug fixes:
+   * A bug that caused a crash while saving a database with one band was fixed.
+   * Output of clock break events in the spoolfile format is sorted in time
+     order.
+
+
+nuSolve 0.2.1 (February 5, 2015)
+   New features:
+   * At the time of reading databases, nuSolve checks for values of standard
+     deviations of the observables. If one of the values is "bad" (NAN or INF),
+     a warning window will be shown. A user have to report the problem to the
+     correlator and the correlator have to resubmit the session, otherwise
+     global SOLVE will fail to process such databases.
+   Improvements:
+   * If a user selects observations for only one baseline (tab "Bands" of the
+     Session Edit window), an "alternative title name" is displaying: a baseline
+     name and ambiguities.
+   * A number of observations, a number of estimated parameters and a condition
+     number of working matrix are reported through the logging subsystem.
+   * The SNRs are added to the information displayed at the Observation Info
+     window (a double click on an observation).
+   * A number of estimated parameters and a number of applied constraints are
+     shown on the Session Edit window.
+   * The spoolfile output has been modified:
+      - if a station was deselected, it will not be in the report;
+      - polynomial and piecewise model of station clocks are synchronized, in
+        the report a sum of polynomial coefficients are reported;
+      - clock breaks are added to the spoolfile output;
+      - the applied a priori values of the Earth rotation parameters are
+        evaluated and reported in the output;
+      - a condition number of the working matrix is evaluated and printed in the
+        spoolfile.
+   Bug fixes:
+   * a bug in displaying of flags of estimation of station axis offset on tab
+     "Stations (List)" has been fixed.
+
+
+nuSolve 0.2.0 (December 22, 2014)
+   New features:
+   * An automated data analysis of INT-sessions have been added. This feature
+     is in development state now.
+   * An ability to reset all editing information was added.
+   * A support of multiple configurations for one user was added.
+   * A session-type dependent options of post import actions was added.
+   * An ability to list all potentially good but deselected observations was
+     added.
+   Improvements:
+   * A warning window is issued when a clock break is added for a station
+     that is a reference clock station. If you going to process the session
+     with global SOLVE, in this case you need to assign the attribute to
+     another station.
+   * A parsing of history records is performed after a session was imported.
+     Cable calibration flag for a station will be turned off if manual phase
+     calibration was applied for the station at a correlator.
+   * Display of value and standard deviations of baselines clock offsets
+     added to the baseline list window.
+   * A warning message window will appear if a session does not has any clock
+     reference station.
+   * Estimations of source coordinates and axis offsets were added to the
+     spoolfile output.
+   * The nuSolve User Guide has been updated to reflect the latest changes.
+   Bug fixes:
+   * The "Preferences" window did not use the field "Home Directory" and all
+     user's changes were discarded. The bug has been fixed, the software also
+     checks for the directory and creates it if it is necessary.
+   * The application will not crash if a user specifies an empty file name in
+     the preferences.
+
+
+nuSolve 0.1.6 (June 26, 2014)
+   Improvements:
+   * A procedure of notifying the CALC/SOLVE catalog system has been updated,
+     now it forms key and entry descriptions that are similar to SOLVE.
+
+
+nuSolve 0.1.5 (June 24, 2014)
+   Bug fixes:
+   * Some memory leaks were fixed.
+
+
+nuSolve 0.1.4 (June 12, 2014)
+   Bug fixes:
+   * Fixed a bug in the plot of station depended data.
+
+
+nuSolve 0.1.3 (June 3, 2014)
+   New features:
+   * An ability to save and restore parameterization and intermediate
+     results (autosave) for a session has been added.
+   * Now it is possible to set up PWL parameter of clocks and/or zenith
+     delays for individual station.
+   * The support for CALC-11 output has been added.
+   * The nuSolve User Guide has been added to the distribution.
+   Improvements:
+   * A procedure of ambiguity resolution adjusts deselected points too.
+   * A procedure of determination of clock breaks offsets takes into
+     account actual numbers of polynomial coefficients of the stations
+     clocks.
+   Bug fixes:
+   * Fixed a calculation of the nutation offsets in the spoolfile output.
+
+
+nuSolve 0.1.2 (April 7, 2014)
+   Bug fixes:
+   * Fix of the startup wizard: it creates a home directory if the directory
+     does not exist.

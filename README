@@ -1,0 +1,10 @@
+What to read next:
+-----------------
+
+INSTALL		: general instruction how to use GNU Build tools (configure,
+		  make, etc.). If you are not familiar with the tools, it is
+		  worth to read it at least once.
+INSTALL.local	: comments on nuSolve installation (it is assumed that a user
+		  comprehends the content of INSTALL file).
+docs/UserGuides/*UserGuide.pdf
+		: sort of user guides.

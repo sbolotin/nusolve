@@ -1,0 +1,2 @@
+#! /bin/sh
+. ./testSuite; runATest "$0"

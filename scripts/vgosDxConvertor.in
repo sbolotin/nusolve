@@ -1,0 +1,207 @@
+#!/bin/bash
+#
+#
+#    This file is a part of nuSolve. nuSolve is a part of CALC/SOLVE system
+#    and is designed to perform data analyis of a geodetic VLBI session.
+#    Copyright (C) 2021 Sergei Bolotin.
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Define a path to a directory where to put temporary files:
+#
+path2temp="/tmp"
+#
+# For advanced users:
+#
+#path2temp="/dev/shm"
+#
+#
+# Unset the debug messages:
+debug=""
+#
+#debug="yes"
+#
+#
+selfName=`basename "$0"`
+#
+help()
+{
+    echo ""
+    echo "Usage:"
+    echo "$selfName <CONVERT_MODE> <INPUT> <OUTPUT>"
+    echo ""
+    echo "Where:"
+    echo "      <CONVERT_MODE> -- a mode of format conversion, either \"db2da\" or \"da2db\"."
+    echo "      <INPUT> -- a name of input database."
+    echo "      <OUTPUT> -- a name of output database."
+    echo "Name of a database could be:"
+    echo "      vgosDa format: a file name,"
+    echo "      vgosDb format: a name of wrapper file, name of a directory with vgosDb data tree or an archive (.tgz or .tar.gz)"
+    echo ""
+    echo "Examples:"
+    echo "      $selfName db2da ~/500/vgosDb/2020/20APR01XA ~/500/vgosDa/"
+    echo " will create a vgosDa file \"20APR01XA.vda\" in ~/500/vgosDa/"
+    echo ""
+    echo "      $selfName db2da ~/500/vgosDb/2020/20APR01XA ~/500/vgosDa/2020_04_01"
+    echo " will create a vgosDa file \"2020_04_01.vda\" in ~/500/vgosDa/"
+    echo ""
+    echo "      $selfName db2da ~/500/vgosDb/2020/20APR01XA ~/500/vgosDa/2020_04_01.my_extension"
+    echo " will create a vgosDa file \"2020_04_01.my_extension\" in ~/500/vgosDa/"
+    echo ""
+    echo "      $selfName db2da ~/Downloads/20APR01XA.tgz ~/tmp/vda/20APR01XA.vda"
+    echo " will create a vgosDa file \"20APR01XA.vda\" in ~/tmp/vda, using an archive as input"
+    echo ""
+    echo ""
+}
+
+
+#
+# init variables:
+#
+convertMode=""
+input=""
+output=""
+isArch="0"
+tmpDir=""
+tmpput=""
+arcName=""
+path2arc=""
+archExt=""
+package="@PACKAGE@"
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+datarootdir="@datarootdir@"
+scriptName="@datadir@/${package}/scripts/vgosDx.js"
+executable="@bindir@/nuSolve"
+#
+#scriptName="vgosDx.js"
+#executable="nuSolve"
+#
+#
+# basic check:
+#
+if [ -n "$1" ]
+then
+    convertMode=$1
+    test -n "$debug" && echo "..debug: Convert mode is $convertMode"
+else
+    echo "Error: the format mode is not specifies"
+    help
+    exit
+fi
+if [ -n "$2" ]
+then
+    input=$2
+    test -n "$debug" && echo "..debug: The input database is $input"
+else
+    echo "Error: the input database is not specified"
+    help
+    exit
+fi
+if [ -n "$3" ]
+then
+    output=$3
+    test -n "$debug" &&  echo "..debug: The output database is $output"
+else
+    echo "Error: the output database is not specifies"
+    help
+    exit
+fi
+if [[ "$convertMode" != "db2da" && "$convertMode" != "da2db" ]]
+then
+    echo "Error: unknown mode \"$convertMode\""
+    help
+    exit
+fi
+
+
+#
+#
+if [[ "$input" == *".tar.gz" || "$input" == *".tgz" ]]
+then
+    test -n "$debug" &&  echo "..debug: the input is .tar.gz archive"
+    isArch="1"
+    tmpDir=`mktemp -d $path2temp"/$selfName-tmpXXXXXXXX"`
+    test -n "$debug" && echo "..debug: the temporary dir \"$tmpDir\" is created"
+    rc=`tar xvf $input -C $tmpDir`
+    input="$tmpDir/"`ls $tmpDir`
+fi
+
+
+#
+#
+if [[ "$output" == *".tar.gz" ]]
+then
+    archExt=".tar.gz"
+elif [[ "$output" == *".tgz" ]]
+then
+    archExt=".tgz"
+fi
+
+tmpput=$output
+if [ -n "$archExt" ]
+then
+    test -n "$debug" && echo "..debug: the output is .tar.gz archive"
+    isArch="1"
+    tmpDir=`mktemp -d $path2temp"/$selfName-tmpXXXXXXXX"`
+    test -n "$debug" && echo "..debug: the temporary dir \"$tmpDir\" is created"
+    tmpput=`echo $output | sed -e "s/\.tar\.gz//g" | sed -e "s/\.tgz//g"`
+    arcName="${tmpput##*/}"
+    path2arc="${tmpput%/*}"
+    tmpput=$tmpDir/$arcName
+    test -n "$debug" && echo "..debug: tmpput = [$tmpput]"
+fi
+#
+#
+#
+test -n "$debug" &&
+{
+    echo "..debug: convertMode => $convertMode"
+    echo "..debug: input => $input"
+    echo "..debug: output => $output"
+    echo "..debug: tmpput => $tmpput"
+}
+#
+#
+#
+$executable -t $scriptName $convertMode $input $tmpput
+rc=$?
+test -n "$debug" && echo "rc = $rc"
+#
+#
+#
+# make an archive:
+if [[ "$convertMode" == "da2db" && "$isArch" == "1" ]]
+then
+    archive=$arcName$archExt
+    pwd=`pwd`
+    cd $tmpDir
+    rc=`tar czvf $archive $arcName`
+    cd $pwd
+    mkdir -p $path2arc
+    test -n "$debug" && echo "mv $tmpDir"/"$archive $path2arc"
+    mv $tmpDir"/"$archive $path2arc
+fi
+
+#
+# clean the temporary dir:
+#
+if [[ "$isArch" == "1" ]]
+then
+    test -n "$debug" && echo "..debug: clearing working directory \"$tmpDir\""
+    `rm -r $tmpDir`
+fi
+
+exit $rc

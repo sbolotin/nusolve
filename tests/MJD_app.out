@@ -1,0 +1,126 @@
+Pass one: Checking the interface of the object.
+Different output formats: 
+Format: F_Verbose: 
+      t1: 14 Apr, 2010; 00:24:28.8000
+      t2: 05 Apr, 2010; 12:00:00.0000
+      t3: 12 Apr, 2009; 01:03:25.2000
+      t4: 12 Apr, 2009; 01:03:25.2000
+Format: F_VerboseLong: 
+      t1: Wed, the 14th of Apr, 2010; 00hr 24min 28.8000sec
+      t2: Mon, the 5th of Apr, 2010; 12hr 00min 00.0000sec
+      t3: Sun, the 12th of Apr, 2009; 01hr 03min 25.2000sec
+      t4: Sun, the 12th of Apr, 2009; 01hr 03min 25.2000sec
+Format: F_YYYYMMDDHHMMSSSS: 
+      t1: 2010/04/14 00:24:28.8
+      t2: 2010/04/05 12:00:00.0
+      t3: 2009/04/12 01:03:25.2
+      t4: 2009/04/12 01:03:25.2
+Format: F_YYYYMMDDSSSSSS: 
+      t1: 20100414014688
+      t2: 20100405432000
+      t3: 20090412038052
+      t4: 20090412038052
+Format: F_INTERNAL: 
+      t1: 055300:01468.800000
+      t2: 055291:43200.000000
+      t3: 054933:03805.200000
+      t4: 054933:03805.200000
+Format: F_ECCDAT: 
+      t1: 2010.04.14-00.24
+      t2: 2010.04.05-12.00
+      t3: 2009.04.12-01.03
+      t4: 2009.04.12-01.03
+Format: F_MJD: 
+      t1: 55300.0170
+      t2: 55291.5000
+      t3: 54933.0440
+      t4: 54933.0440
+Format: F_UNIX: 
+      t1: 1271204668.8000
+      t2: 1270468800.0000
+      t3: 1239498205.2000
+      t4: 1239498205.2000
+Format: F_SINEX: 
+      t1: 10:104:01469
+      t2: 10:095:43200
+      t3: 09:102:03805
+      t4: 09:102:03805
+Format: F_Date: 
+      t1: 2010 Apr 14
+      t2: 2010 Apr 05
+      t3: 2009 Apr 12
+      t4: 2009 Apr 12
+Format: F_DDMonYYYY: 
+      t1: 14 Apr, 2010
+      t2: 05 Apr, 2010
+      t3: 12 Apr, 2009
+      t4: 12 Apr, 2009
+Format: F_YYYYMMDD: 
+      t1: 2010 04 14
+      t2: 2010 04 05
+      t3: 2009 04 12
+      t4: 2009 04 12
+Format: F_YYMonDD: 
+      t1: 10Apr14
+      t2: 10Apr05
+      t3: 09Apr12
+      t4: 09Apr12
+Format: F_Year: 
+      t1: 2010.28
+      t2: 2010.26
+      t3: 2009.28
+      t4: 2009.28
+Format: F_SINEX_S: 
+      t1: 10:104
+      t2: 10:095
+      t3: 09:102
+      t4: 09:102
+Format: F_Time: 
+      t1: 00:24:28.8
+      t2: 12:00:00.0
+      t3: 01:03:25.2
+      t4: 01:03:25.2
+Format: F_HHMMSS: 
+      t1: 00:24:28
+      t2: 12:00:00
+      t3: 01:03:25
+      t4: 01:03:25
+Format: F_TimeShort: 
+      t1: 00:24
+      t2: 12:00
+      t3: 01:03
+      t4: 01:03
+t4 now: Wed, the 22nd of Apr, 2009; 01hr 03min 25.2000sec
+t1 - t2: 8 days 12hr 24min 28.80sec
+t1 - tZero: 52 years 6 months 9 days 09hr 24min 28.80sec, or 19185 days
+t2 - tZero: 52 years 6 months 21hr 00.00sec, or 19176.5 days
+t1 - tUnix0: 40 years 3 months 11 days 16hr 54min 28.80sec, or 14713 days
+t2 - tUnix0: 40 years 3 months 3 days 04hr 30min 00.00sec, or 14704.5 days
+t2 - (t2+1yr): -(1 year 1 day 00.00sec), or -366.25 days
+t2 - (t2+1month): -(1 month 13hr 30min 00.00sec), or -31 days
+t2 - (t2+1day): -(1 day 12hr 00.00sec), or -1.5 days
+t1: 55300.01700000,  tUnix0: 40587.00000000, t1-tUnix0: 14713.01700000 days
+0.017days: 24min 28.80sec, and (1-0.017)days: 23hr 35min 31.20sec
+End of the pass one.
+
+t1       : 14 Apr, 2010; 00:24:28.8000, 55300.01700000
+tUnix0   : 01 Jan, 1970; 00:00:00.0000, 40587.00000000
+t1-tUnix0: 14713.01700000 days
+t1-tUnix0: 40 years 3 months 11 days 16hr 54min 28.80sec
+
+
+Pass two: Checking basic functions of the object.
+2007: 08 Apr, 2007; 16:15:14.0000
+2008: 07 Apr, 2008; 16:15:14.0000
+2009: 08 Apr, 2009; 16:15:14.0000
+t1: 28 Sep, 1980; 00:00:00.0000
+t1: 30 Dec, 2008; 00:00:00.0000
+t1: 07 Sep, 2005; 00:00:00.0000
+t1: 27 Jun, 1992; 00:00:00.0000
+t1: 24 Jun, 1992; 15:39:54.0000
+t1: 29 Jun, 1992; 08:18:24.0000
+End of the pass two.
+
+Pass three: Checking basic vector oparations.
+End of the pass three.
+

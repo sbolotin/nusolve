@@ -1,0 +1,8 @@
+*.aux
+*.ilg
+*.ind
+*.log
+*.toc
+*.pdf
+!Makefile
+archive/

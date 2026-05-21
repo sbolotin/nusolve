@@ -1,0 +1,44 @@
+Pass one: Checking the interface, basic functions and matrix operations of the object.
+A rotational matrix around axis X on the angle 30 is: 
+|1, 0, 0|
+|0, 0.866025, 0.5|
+|0, -0.5, 0.866025|
+
+A rotational matrix around axis Y on the angle 60 is: 
+|0.5, 0, -0.866025|
+|0, 1, 0|
+|0.866025, 0, 0.5|
+
+A rotational matrix around axis Z on the angle 90 is: 
+|6.12323e-17, 1, 0|
+|-1, 6.12323e-17, 0|
+|0, 0, 1|
+
+A copy of the last rotational matrix around axis Z on the angle 90 is: 
+|6.12323e-17, 1, 0|
+|-1, 6.12323e-17, 0|
+|0, 0, 1|
+
+A product of the vector (4.55, 5.128, -7.77) and rotational matrix 
+|3.06162e-17, 0.5, -0.866025|
+|-0.866025, 0.433013, 0.25|
+|0.5, 0.75, 0.433013|
+
+ is (9.29302, -3.66243, 2.75649)
+
+Now three matrices are: 
+|1, 0, 0|
+|0, 6.12323e-17, 1|
+|0, -1, 6.12323e-17|
+
+|6.12323e-17, 0, 1|
+|0, 1, 0|
+|-1, 0, 6.12323e-17|
+
+|6.12323e-17, 1, 0|
+|-1, 6.12323e-17, 0|
+|0, 0, 1|
+
+The vector (1, 0, 0) becames (1, -6.12323e-17, 0)
+End of the pass one.
+

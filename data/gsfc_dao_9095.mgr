@@ -1,0 +1,212 @@
+# MGR-FORMAT V 1.0   GSFC DAO Mean Gradient 
+*************************************************************
+*
+* Mean site gradients computed from GSFC Data Assimilation
+* Office (DAO) model for met data from 1990-95. Atmospheric
+* gradient delay is modeled as 
+*      tau = m_grad(el,az) * [GN*cos(az)+GE*sin(az)], 
+* where el and az are the elevation and azimuth of the the 
+* observation and the gradient mapping function is m_grad.
+* The gradient vector has east and north components
+* GE and GN. Here, the delay units are mm.
+*
+* References:
+*
+* MacMillan, D.S., Atmospheric gradients from very
+*    long baseline interferometry observations, Geophys. Res.
+*    Lett., 22, 1041-1044, 1995.
+*
+* MacMillan, D.S. and C. Ma, Atmospheric gradients and the 
+*    VLBI terrestrial and celestial reference frames, Geophys.
+*    Res. Lett., 24, 453-456, 1997.
+*
+*
+*  pet  2001.09.25  Added KOGANEI, MOURA, TATEYAMA: copied values from KASHIMA
+*  pet  2002.05.20  Added AIRA, CHICHI10, GIFU3:    copied values from KASHIMA
+*  pet  2002.05.29  Added TIGOCONC: copied values from SANTIA12
+*  pet  2003.03.06  Added CTVASBAY, CTVASTJ   copied from ALGOPARK
+*  pet  2003.06.27  Added VERAMZSW 
+*  pet  2003.07.21  Added GIFU11, GBT-VLBA
+*  pet  2005.03.25  Added METSAHOV ( copy of METSHOVI )
+*  pet  2005.03.25  Added SVETLOE  ( copy of METSHOVI )
+*  pet  2005.12.27  Added TIDBIN64 ( copy of DSS15 )
+*  pet  2006.01.19  Added ZELENCHK ( copy of CRIMEA )
+*  pet  2006.02.09  Added VERAIRIK 
+*  pet  2006.02.09  Added VERAISGK 
+*  pet  2006.02.09  Added VERAOGSW
+*  pet  2007.03.23  Added DSS13
+*  pet  2007.03.23  Added BADARY
+*  DG   2009.04.01  Added GOLDMARS and MADRID64, corrected TIDBIN64 (copy of DSS45)
+*  DG   2010.04.15  Added YEBES40M and SINTOTU3.
+*  DM   2010.10.21  Added HOBART12 
+*  DG   2014.07.23  Added HART15M, copy of HARTRAO.
+*
+*************************************************************
+*
+*Site       North Gradient (mm)     East Gradient (mm)   
+*
+*               mean         rms       mean          rms  
+* 
+AIRA        -.50E+00     .51E+00     .32E-01     .33E+00
+ALGOPARK    -.46E+00     .40E+00    -.15E-01     .28E+00
+AUSTINTX    -.25E+00     .38E+00     .46E-01     .27E+00
+AZORES      -.11E+00     .32E+00    -.71E-01     .26E+00
+BADARY      -.26E+00     .24E+00    -.58E-01     .12E+00
+BERMUDA     -.26E+00     .45E+00     .42E-02     .32E+00
+BLKBUTTE    -.14E+00     .25E+00     .82E-01     .24E+00
+BLOOMIND    -.40E+00     .41E+00    -.20E-03     .29E+00
+BR-VLBA     -.17E+00     .27E+00     .31E-01     .18E+00
+BREST       -.27E+00     .42E+00    -.55E-02     .25E+00
+CARNUSTY    -.35E+00     .41E+00     .17E-01     .23E+00
+CARROLGA    -.28E+00     .41E+00     .21E-01     .29E+00
+CHICHI10    -.50E+00     .51E+00     .32E-01     .33E+00
+CHLBOLTN    -.28E+00     .42E+00    -.34E-02     .25E+00
+CRIMEA      -.16E+00     .32E+00     .58E-03     .20E+00
+CTVASBAY    -.46E+00     .40E+00    -.15E-01     .28E+00
+CTVASTJ     -.46E+00     .40E+00    -.15E-01     .28E+00
+DAITO       -.18E+00     .49E+00    -.21E-01     .31E+00
+DEADMANL    -.88E-01     .21E+00     .77E-01     .24E+00
+DSS13       -.86E-01     .22E+00     .67E-01     .22E+00
+DSS15       -.86E-01     .22E+00     .67E-01     .22E+00
+GOLDMARS    -.86E-01     .22E+00     .67E-01     .22E+00
+DSS45        .24E+00     .28E+00     .73E-02     .24E+00
+DSS65       -.14E+00     .25E+00     .41E-02     .20E+00
+MADRID64    -.14E+00     .25E+00     .41E-02     .20E+00
+EFLSBERG    -.30E+00     .38E+00     .10E-01     .22E+00
+ELY         -.16E+00     .19E+00     .15E-01     .18E+00
+FD-VLBA     -.24E+00     .27E+00    -.19E-01     .21E+00
+FLAGSTAF    -.15E+00     .19E+00     .70E-01     .19E+00
+FORT ORD    -.11E+00     .24E+00     .42E-01     .22E+00
+FORTLEZA     .18E-01     .28E+00    -.47E-01     .19E+00
+FORTORDS    -.11E+00     .24E+00     .40E-01     .22E+00
+FTD 7900    -.24E+00     .27E+00    -.19E-01     .21E+00
+GBT-VLBA    -.42E+00     .42E+00    -.21E-01     .30E+00
+GGAO7108    -.40E+00     .43E+00    -.36E-01     .31E+00
+GIFU3       -.50E+00     .51E+00     .32E-01     .33E+00
+GIFU11      -.50E+00     .51E+00     .32E-01     .33E+00
+GILCREEK    -.18E+00     .28E+00     .34E-01     .11E+00
+GOLDVENU    -.86E-01     .22E+00     .68E-01     .22E+00
+GORF7102    -.40E+00     .43E+00    -.36E-01     .31E+00
+GRASSE      -.80E-01     .27E+00    -.32E-01     .20E+00
+HALEAKAL    -.13E+00     .29E+00    -.79E-01     .23E+00
+HARTRAO      .10E+00     .23E+00    -.11E-02     .18E+00
+HART15M      .10E+00     .23E+00    -.11E-02     .18E+00
+HATCREEK    -.13E+00     .23E+00     .66E-01     .21E+00
+HAYSTACK    -.43E+00     .43E+00    -.24E-01     .31E+00
+HN-VLBA     -.43E+00     .43E+00    -.22E-01     .31E+00
+HOBART26     .29E+00     .30E+00     .81E-02     .25E+00
+HOBART12     .29E+00     .30E+00     .81E-02     .25E+00
+HOFN        -.25E+00     .38E+00     .34E-01     .17E+00
+HOHENFRG    -.31E+00     .38E+00    -.26E-01     .22E+00
+HOHNBERG    -.19E+00     .29E+00    -.28E-01     .18E+00
+HRAS 085    -.24E+00     .27E+00    -.19E-01     .21E+00
+JPL MV1     -.95E-01     .23E+00     .54E-01     .23E+00
+KARLBURG    -.30E+00     .37E+00    -.28E-01     .22E+00
+KASHIM11    -.50E+00     .51E+00     .32E-01     .33E+00
+KASHIM34    -.50E+00     .51E+00     .32E-01     .33E+00
+KASHIMA     -.50E+00     .51E+00     .32E-01     .33E+00
+KAUAI       -.19E+00     .32E+00    -.22E-01     .26E+00
+KIRSBERG    -.29E+00     .35E+00    -.36E-01     .21E+00
+KODIAK      -.16E+00     .39E+00     .47E-01     .21E+00
+KOKEE       -.19E+00     .32E+00    -.22E-01     .26E+00
+KP-VLBA     -.19E+00     .25E+00     .13E+00     .21E+00
+KWAJAL26    -.29E+00     .45E+00    -.91E-01     .29E+00
+LA-VLBA     -.17E+00     .21E+00     .13E-01     .17E+00
+LEONRDOK    -.31E+00     .37E+00     .28E-01     .31E+00
+MAMMOTHL    -.84E-01     .21E+00     .66E-01     .20E+00
+MARCUS      -.15E+00     .39E+00     .12E-02     .26E+00
+MARPOINT    -.40E+00     .44E+00    -.44E-01     .32E+00
+MATERA      -.11E+00     .25E+00    -.34E-01     .20E+00
+MCD 7850    -.24E+00     .27E+00    -.18E-01     .21E+00
+MEDICINA    -.93E-01     .25E+00    -.32E-01     .18E+00
+METSHOVI    -.29E+00     .34E+00    -.50E-02     .21E+00
+METSAHOV    -.29E+00     .34E+00    -.50E-02     .21E+00
+MIAMI20     -.18E+00     .39E+00     .25E-01     .27E+00
+MILESMON    -.32E+00     .26E+00    -.81E-01     .19E+00
+MIYAZAKI    -.53E+00     .50E+00     .21E-01     .32E+00
+MIZNAO10    -.57E+00     .43E+00     .25E-01     .30E+00
+VERAMZSW    -.57E+00     .43E+00     .25E-01     .30E+00
+VERAIRIK    -.57E+00     .43E+00     .25E-01     .30E+00
+VERAISGK    -.57E+00     .43E+00     .25E-01     .30E+00
+VERAOGSW    -.57E+00     .43E+00     .25E-01     .30E+00
+MIZUSGSI    -.57E+00     .43E+00     .25E-01     .30E+00
+MK-VLBA     -.84E-01     .32E+00    -.88E-01     .23E+00
+MOJ 7288    -.86E-01     .22E+00     .67E-01     .22E+00
+MOJAVE12    -.86E-01     .22E+00     .67E-01     .22E+00
+MON PEAK    -.14E+00     .25E+00     .89E-01     .25E+00
+MV2ONSLA    -.29E+00     .37E+00    -.13E-01     .21E+00
+NL-VLBA     -.37E+00     .38E+00    -.35E-01     .29E+00
+NOBEY 6M    -.51E+00     .48E+00     .63E-01     .31E+00
+NOME        -.11E+00     .31E+00     .37E-01     .14E+00
+NOTO        -.15E+00     .29E+00    -.83E-01     .21E+00
+NRAO 140    -.42E+00     .42E+00    -.21E-01     .30E+00
+NRAO20      -.42E+00     .42E+00    -.21E-01     .30E+00
+NRAO85 1    -.42E+00     .42E+00    -.21E-01     .30E+00
+NRAO85 3    -.42E+00     .42E+00    -.22E-01     .30E+00
+NYALES20    -.19E+00     .30E+00     .22E-02     .58E-01
+OCOTILLO    -.14E+00     .25E+00     .90E-01     .25E+00
+OHIGGINS     .42E+00     .33E+00    -.30E-01     .17E+00
+ONSALA60    -.29E+00     .37E+00    -.13E-01     .21E+00
+ONSALA85    -.29E+00     .37E+00    -.13E-01     .21E+00
+OV-VLBA     -.90E-01     .20E+00     .70E-01     .20E+00
+OVR 7853    -.90E-01     .20E+00     .70E-01     .20E+00
+OVRO 130    -.90E-01     .20E+00     .70E-01     .20E+00
+PARKES       .25E+00     .30E+00     .14E-01     .24E+00
+PBLOSSOM    -.91E-01     .23E+00     .59E-01     .22E+00
+PENTICTN    -.17E+00     .27E+00     .27E-01     .17E+00
+PIETOWN     -.18E+00     .19E+00     .49E-01     .18E+00
+PINFLATS    -.14E+00     .25E+00     .83E-01     .24E+00
+PLATTVIL    -.24E+00     .20E+00    -.44E-01     .18E+00
+PRESIDIO    -.12E+00     .25E+00     .64E-01     .21E+00
+PT REYES    -.99E-01     .25E+00    -.15E-01     .24E+00
+PVERDES     -.15E+00     .26E+00     .48E-01     .23E+00
+QUINCY      -.95E-01     .22E+00     .73E-01     .21E+00
+RICHMOND    -.18E+00     .39E+00     .25E-01     .27E+00
+ROBLED32    -.14E+00     .25E+00     .41E-02     .20E+00
+SAGARA      -.51E+00     .48E+00     .48E-01     .31E+00
+SANPAULA    -.11E+00     .23E+00     .57E-01     .23E+00
+SANTIA12     .24E+00     .19E+00     .19E+00     .20E+00
+SC-VLBA     -.89E-01     .33E+00    -.12E+00     .23E+00
+SEATTLE1    -.24E+00     .29E+00     .35E-01     .21E+00
+SESHAN25    -.61E+00     .56E+00    -.11E+00     .32E+00
+SEST         .14E+00     .17E+00     .14E+00     .16E+00
+SHANGHAI    -.62E+00     .56E+00    -.11E+00     .32E+00
+SINTOTU     -.43E+00     .39E+00     .23E-01     .27E+00
+SINTOTU3    -.43E+00     .39E+00     .23E-01     .27E+00
+SNDPOINT    -.22E+00     .40E+00     .61E-01     .23E+00
+SOURDOGH    -.14E+00     .28E+00     .50E-01     .12E+00
+SVETLOE     -.29E+00     .34E+00    -.50E-02     .21E+00
+SYOWA        .000+00     .00E+00     .00E+00     .00E+00 
+TIGOCONC     .24E+00     .19E+00     .19E+00     .20E+00
+TIGOWTZL    -.26E+00     .32E+00    -.44E-01     .19E+00
+TITIJIMA    -.23E+00     .51E+00    -.14E-02     .27E+00
+TOULOUSE    -.17E+00     .29E+00    -.40E-01     .21E+00
+TROMSONO    -.30E+00     .31E+00     .51E-02     .12E+00
+TRYSILNO    -.24E+00     .33E+00    -.73E-02     .22E+00
+TSUKUBA     -.55E+00     .47E+00     .32E-01     .33E+00
+TSUKUB32    -.55E+00     .47E+00     .32E-01     .33E+00
+URUMQI      -.26E+00     .24E+00    -.58E-01     .12E+00
+USSURISK    -.37E+00     .36E+00    -.53E-01     .24E+00
+USUDA64     -.55E+00     .44E+00     .65E-01     .31E+00
+VERNAL      -.20E+00     .18E+00     .22E-01     .16E+00
+VICTORIA    -.18E+00     .30E+00     .36E-01     .23E+00
+VLA         -.18E+00     .20E+00     .50E-01     .18E+00
+VNDNBERG    -.14E+00     .25E+00     .40E-02     .23E+00
+WESTFORD    -.43E+00     .43E+00    -.24E-01     .31E+00
+WETTZELL    -.26E+00     .32E+00    -.44E-01     .19E+00
+WHTHORSE    -.15E+00     .27E+00     .40E-01     .14E+00
+YAKATAGA    -.86E-01     .28E+00     .72E-01     .15E+00
+YEBES       -.15E+00     .25E+00     .40E-02     .20E+00
+YEBES40M    -.15E+00     .25E+00     .40E-02     .20E+00
+YELLOWKN    -.29E+00     .27E+00    -.68E-01     .15E+00
+YLOW7296    -.29E+00     .27E+00    -.68E-01     .15E+00
+YUMA        0.000000     .00E+00    0.000000     .00E+00
+ZELENCHK    -.16E+00     .32E+00     .58E-03     .20E+00
+*
+KOGANEI     -.50E+00     .51E+00     .32E-01     .33E+00
+KOGANEI3    -.50E+00     .51E+00     .32E-01     .33E+00
+MIURA       -.50E+00     .51E+00     .32E-01     .33E+00
+TATEYAMA    -.50E+00     .51E+00     .32E-01     .33E+00
+* TIDBIN64    -.86E-01     .22E+00     .67E-01     .22E+00
+TIDBIN64     .24E+00     .28E+00     .73E-02     .24E+00
+TSUKU3      -.55E+00     .47E+00     .32E-01     .33E+00

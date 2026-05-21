@@ -1,0 +1,12 @@
+#! /bin/sh
+##
+## Reserved place for tests that are expected to fail
+##
+
+# Explain what is going on (if asked):
+if [ -n "$ISDEBUG" ]
+then
+ echo "----> This test is expected to be skipped by the test suite."
+fi
+
+exit 77

@@ -1,0 +1,1734 @@
+/*
+ *
+ *    This file is a part of Space Geodetic Library. The library is used by
+ *    nuSolve, a part of CALC/SOLVE system, and designed to make analysis of
+ *    geodetic VLBI observations.
+ *    Copyright (C) 2010-2017 Sergei Bolotin.
+ *
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+
+#include <QtCore/QDataStream>
+
+#include <SgVlbiSourceInfo.h>
+
+#include <SgLogger.h>
+//#include <SgParametersDescriptor.h>
+
+
+
+/*=======================================================================================================
+*
+*                           METHODS (aux):
+* 
+*======================================================================================================*/
+//
+//
+double SgVlbiSourceInfo::StructModel::tauS(double f, double u, double v) const
+{
+  double                        d=0.0;
+  double                        r, c, s, a;
+  
+  r = u*x_ + v*y_;
+ 
+  sincos(2.0*M_PI*r, &s, &c);
+  a = k_*k_ + 2.0*k_*c + 1.0;
+  
+  d = k_*(1.0 - k_)*r*(1.0 - c)/f/(1.0 + k_)/a;
+   
+  return d;
+};
+/*=====================================================================================================*/
+
+
+
+
+
+/*=====================================================================================================*/
+//
+//
+void SgVlbiSourceInfo::StructModelMp::prepareModel(double u, double v)
+{
+  dR_ = u*getX() + v*getY();
+  sincos(2.0*M_PI*dR_, &dS_, &dC_);
+  return;
+};
+/*=====================================================================================================*/
+
+
+
+
+
+/*=======================================================================================================
+*
+*                           METHODS:
+* 
+*======================================================================================================*/
+//
+// static first:
+const QString SgVlbiSourceInfo::className()
+{
+  return "SgVlbiSourceInfo";
+};
+
+
+
+// A constructor:
+SgVlbiSourceInfo::SgVlbiSourceInfo(int idx, const QString& key, const QString& aka) :
+  SgObjectInfo(idx, key, aka),
+  aprioriReference_("Unrefered"),
+  aprioriComments_(""),
+//  aPrioriStructModels_(),
+  sModel_()
+{
+  RA_ = RA_ea_ = 0.0;
+  DN_ = DN_ea_ = 0.0;
+  al2ExtA_ = al2Estd_ = 0.0;
+  pRA_ = NULL;
+  pDN_ = NULL;
+  pK_ = NULL;
+  pB_ = NULL;
+  pX_ = NULL;
+  pY_ = NULL;
+  
+  pA0_ = NULL;
+  pB0_ = NULL;
+  pTheta0_ = NULL;
+  pA1_ = NULL;
+  pB1_ = NULL;
+  pTheta1_ = NULL;
+  
+
+//  addAttr(Attr_ESTIMATE_COO);
+  delAttr(Attr_ESTIMATE_COO);
+  totalScanNum_ = 0;
+  procdScanNum_ = 0;
+  estimatePosition_ = estimateRatio_ = estimateSpIdx_ = false;
+  smtType_ = SMT_NONE;
+
+  isExtSS_ = false;
+
+  isExtSS_ = true;
+  smtType_ = SMT_MULTIPLE_POINTS;
+
+  x_ = y_ = k_ = 0.0;
+  kSig_ = bSig_ = xSig_ = ySig_ = 0.0;
+  
+  a0_ = b0_ = theta0_ = a1_ = b1_ = theta1_ = 0.0;
+  a0Sig_ = b0Sig_ = theta0Sig_ = a1Sig_ = b1Sig_ = theta1Sig_ = 0.0;
+
+  estimateA0_ = estimateB0_ = estimateT0_ = estimateA1_ = estimateB1_ = estimateT1_ = false;
+  
+  
+//  if (false)
+  if (true)
+  {
+    if (getKey() == "0016+731")
+    {
+      // 0016+731: K=0.1684  B=0.800000  X=0.4948(mas) Y=0.0423(mas) 2.6ps
+
+      // three-components:
+      // 0016+731: K=0.2264  B=0.000000  X=0.4320(mas) Y=0.0345(mas)
+      // 0016+731: K=0.2264  B=2.941074  X=0.3550(mas) Y=0.0284(mas)
+      // 0016+731: K=0.2146  B=2.941074  X=0.3576(mas) Y=0.0340(mas)  // true, false, true
+      
+      // K=0.3661  B=-4.000000  X=-0.1590(mas) Y=0.3775(mas)
+      // K=0.3661  B=-4.049136  X=-0.1580(mas) Y=0.3770(mas)
+      // K=0.3709  B=-4.193428  X=-0.1549(mas) Y=0.3763(mas) // true, true, true
+//->      sModel_.append(StructModelMp(0.4568,  1.596207,   0.3628/RAD2MAS,  -0.0560/RAD2MAS, false, false, false));
+//->      sModel_.append(StructModelMp(0.4054, -4.063321,  -0.1743/RAD2MAS,   0.3063/RAD2MAS, false, false, false));
+
+      // 0016+731: K=0.4032  B=0.000000  X=-0.5255(mas) Y=0.0602(mas)
+      // 0016+731: K=0.4032  B=0.060820  X=-0.5248(mas) Y=0.0619(mas)
+      // 0016+731: K=0.1771  B=4.318442  X=-0.5742(mas) Y=0.0809(mas)
+//->      sModel_.append(StructModelMp(0.1771,  4.318442,  -0.5742/RAD2MAS,  0.0809/RAD2MAS, true, false, true));
+
+      // 19FEB19VG:
+      //0016+731: K=0.1575  B=4.318442  X=-0.5925(mas) Y=0.0636(mas)
+//      sModel_.append(StructModelMp(0.1575,  4.318442,  -0.5925/RAD2MAS,  0.0636/RAD2MAS, true, false, true));
+//      sModel_.append(StructModelMp(0.1575,  4.318442,  -0.5925/RAD2MAS,  0.0636/RAD2MAS, false, false, false));
+
+      // -0.575 0.425
+      // 0016+731: K=0.0960  B=0.000000  X=-0.6546(mas) Y=0.6002(mas)
+      // 0016+731: K=0.0960  B=0.614113  X=-0.6724(mas) Y=0.6302(mas)
+      // 0016+731: K=0.0810  B=0.614113  X=-0.6829(mas) Y=0.6514(mas)
+      // 0016+731: K=0.0810  B=1.041639  X=-0.6974(mas) Y=0.6593(mas)
+//      sModel_.append(StructModelMp(0.0810,  1.041639,  -0.6974/RAD2MAS,  0.6593/RAD2MAS, true, false, true));
+
+
+      // a pair:
+      // 0016+731: K=0.1828  B=4.318442  X=-0.5976(mas) Y=0.0878(mas)
+      // 0016+731: K=0.0822  B=1.041639  X=-0.7111(mas) Y=0.7176(mas)
+      // 0016+731: K=0.1828  B=4.251049  X=-0.5980(mas) Y=0.0897(mas)
+      // 0016+731: K=0.0822  B=0.874108  X=-0.7047(mas) Y=0.7175(mas)
+      // 0016+731: K=0.1850  B=4.251049  X=-0.5970(mas) Y=0.0894(mas)
+      // 0016+731: K=0.0852  B=0.874108  X=-0.7031(mas) Y=0.7141(mas)
+// 2.2ps:
+/*
+      sModel_.append(StructModelMp(0.1850,  4.251049,  -0.5970/RAD2MAS,  0.0894/RAD2MAS, true, false, true));
+      sModel_.append(StructModelMp(0.0852,  0.874108,  -0.7031/RAD2MAS,  0.7141/RAD2MAS, true, false, true));
+*/
+
+
+
+      // 0.325 0.475
+      // 0016+731: K=0.1587  B=4.251049  X=-0.6023(mas) Y=0.0746(mas)
+      // 0016+731: K=0.1112  B=0.100000  X=0.4214(mas) Y=0.5992(mas)
+      // 0016+731: K=0.1587  B=4.369758  X=-0.5989(mas) Y=0.0731(mas)
+      // 0016+731: K=0.1112  B=-0.703972  X=0.3905(mas) Y=0.5682(mas)
+      // 0016+731: K=0.1572  B=4.369758  X=-0.5974(mas) Y=0.0746(mas)
+      // 0016+731: K=0.1461  B=-0.703972  X=0.3940(mas) Y=0.5428(mas)
+// alternative:
+//      sModel_.append(StructModelMp(0.1572,  4.369758,  -0.5974/RAD2MAS,  0.0746/RAD2MAS, false, true, true));
+//      sModel_.append(StructModelMp(0.1461,  -0.703972,  0.3940/RAD2MAS,  0.5428/RAD2MAS, false, true, true));
+
+
+      // 0016+731: K=0.1755  B=4.251049  X=-0.6187(mas) Y=0.0898(mas)
+      // 0016+731: K=0.0705  B=0.874108  X=-0.7236(mas) Y=0.6690(mas)
+      // 0016+731: K=0.0741  B=-0.703972  X=0.4268(mas) Y=0.6367(mas)
+      // 0016+731: K=0.1755  B=4.330314  X=-0.6176(mas) Y=0.0864(mas)
+      // 0016+731: K=0.0705  B=1.029553  X=-0.7233(mas) Y=0.6927(mas)
+      // 0016+731: K=0.0741  B=-2.047651  X=0.3392(mas) Y=0.5886(mas)
+//?
+//      sModel_.append(StructModelMp(0.1755,  4.330314, -0.6176/RAD2MAS,  0.0864/RAD2MAS, true, false, true));
+//      sModel_.append(StructModelMp(0.0705,  1.029553, -0.7233/RAD2MAS,  0.6927/RAD2MAS, true, false, true));
+//      sModel_.append(StructModelMp(0.0741, -2.047651,  0.3392/RAD2MAS,  0.5886/RAD2MAS, true, false, true));
+
+    };
+
+    if (getKey() == "0059+581")
+    {
+      // 19FEB19VG:
+      // 0059+581: K=0.6482  B=0.000000  X=0.2167(mas) Y=0.3327(mas)
+      // 0059+581: K=0.6482  B=0.169959  X=0.2178(mas) Y=0.3353(mas)
+      // 0059+581: K=0.6262  B=0.169959  X=0.2171(mas) Y=0.3335(mas)
+      // 0059+581: K=0.6262  B=0.347193  X=0.2183(mas) Y=0.3358(mas)
+      // 0059+581: K=0.6059  B=0.347193  X=0.2177(mas) Y=0.3341(mas)
+      // 0059+581: K=0.6050  B=0.553154  X=0.2190(mas) Y=0.3363(mas)
+      // 0059+581: K=0.5845  B=0.553154  X=0.2182(mas) Y=0.3347(mas)
+      sModel_.append(StructModelMp(0.5845,  0.553154,  0.2182/RAD2MAS,  0.3347/RAD2MAS, true, false, true));
+
+      // nothing..
+//      sModel_.append(StructModelMp(0.5845,  0.553154,  0.2182/RAD2MAS,  0.3347/RAD2MAS, false, false, false));
+//      sModel_.append(StructModelMp(0.35,  0.0, -0.525/RAD2MAS,  -0.275/RAD2MAS, true, false, true));
+
+    };
+    
+    if (getKey() == "0119+115")
+    {
+      // -0.975 -3.075
+      // 0119+115: K=0.5045  B=0.000000  X=-1.1088(mas) Y=-2.6533(mas) 8.6ps
+      sModel_.append(StructModelMp(0.5045,  0.0,  -1.1088/RAD2MAS, -2.6533/RAD2MAS, true, false, true));
+    };
+
+    
+    if (getKey() == "0133+476")
+    {
+      // 0.425 -0.025
+      // 0133+476: K=0.4641  B=0.000000  X=0.3723(mas) Y=-0.0211(mas) 1.9ps
+      // 0133+476: K=0.4641 (1.0000)  B=0.466177 (1.981735)  X=0.3736 (0.0090)  Y=-0.0200 (0.0184) [mas]
+      // 0133+476: K=0.4406 (0.1473)  B=0.466177 (1.000000)  X=0.3742 (0.0086)  Y=-0.0216 (0.0192) [mas]
+      // 0133+476: K=0.4406 (1.0000)  B=0.833164 (2.115047)  X=0.3746 (0.0071)  Y=-0.0200 (0.0185) [mas]
+      // 0133+476: K=0.4202 (0.1341)  B=0.833164 (1.000000)  X=0.3750 (0.0078)  Y=-0.0215 (0.0192) 1.939(ps)
+      // 0133+476: K=0.4202 (1.0000)  B=1.213191 (2.293947)  X=0.3748 (0.0067)  Y=-0.0200 (0.0186) 1.939(ps)
+      // 0133+476: K=0.4024 (0.1233)  B=1.213191 (1.000000)  X=0.3750 (0.0072)  Y=-0.0214 (0.0190) 1.939(ps)
+      sModel_.append(StructModelMp(0.4024, 1.213191, 0.3750/RAD2MAS, -0.0214/RAD2MAS, true, false, true));
+    };
+
+    
+    if (getKey() == "0229+131")
+    {
+      // 0229+131: K=0.6535  B=-1.650886  X=-1.9324(mas) Y=-3.7017(mas) 3.2ps
+      //sModel_.append(StructModelMp(0.6535,  -1.650886,  -1.9324/RAD2MAS,  -3.7017/RAD2MAS, false, false, false));
+
+    };
+
+    if (getKey() == "0529+483")
+    {
+      // 0.075 -0.325
+      // nope
+      // sModel_.append(StructModelMp(0.3,  0.0,  -0.15/RAD2MAS, 0.35/RAD2MAS, true, false, true));
+    };
+
+    if (getKey() == "0552+398")
+    {
+/* --> here
+      smtType_ = SMT_MULTIPLE_POINTS;
+      // 0552+398: K=0.3617   X=0.9291(mas) Y=-0.2235(mas)
+      sModel_.append(StructModelMp(0.3617,  0.9291/RAD2MAS,  -0.2235/RAD2MAS, false, false));
+
+*/
+ //     if (!false)
+      if (false)
+      {
+        smtType_ = SMT_TWO_POINTS;
+        k_ = 0.3224;
+        b_ = 0.0;
+
+        x_ = 0.80/RAD2MAS;
+        y_ =-0.12/RAD2MAS;
+        // X=1.0482(mas) Y=0.0532(mas) 
+        x_ = 0.9528 /RAD2MAS;
+        y_ =-0.1182 /RAD2MAS;
+        estimateRatio_ = false;    //true;
+//        estimateRatio_ = true;    //true;
+
+        estimatePosition_ = false; // true;
+        estimatePosition_ = true; // true;
+        //b_ = 0.0;
+
+        estimateSpIdx_ = false;
+        estimateSpIdx_ = true;
+
+//      A0=0.5395(mas) B0=0.4936(mas) Th0=-69.1703(deg)
+        a0_ = 0.4236  / RAD2MAS;
+        b0_ = 0.2232  /RAD2MAS;
+        theta0_ = 8.3119 /RAD2DEG;
+
+//      
+//      A1=0.4487(mas) B1=0.0346(mas) Th1=74.1037(deg)
+//      A1=0.3636(mas) B1=0.1014(mas) Th1=34.9132(deg)
+//      A1=0.3785(mas) B1=0.1563(mas) Th1=24.8408(deg)
+        a1_ = 0.3790 /RAD2MAS;
+        b1_ = 0.1609 /RAD2MAS;
+        theta1_ = 24.7142 /RAD2DEG;
+
+// with sp.idx:
+        k_ = 0.3557;
+        b_ =-2.0889;
+        x_ = 0.7908 /RAD2MAS;
+        y_ =-0.1459 /RAD2MAS;
+        a0_ = 0.4426  / RAD2MAS;
+        b0_ = 0.2368  /RAD2MAS;
+        theta0_ = 5.4093 /RAD2DEG;
+        a1_ = 0.4855 /RAD2MAS;
+        b1_ = 0.2925 /RAD2MAS;
+        theta1_ = 6.5111 /RAD2DEG;
+
+        estimateRatio_ = false;
+        estimatePosition_ = false;
+        estimateSpIdx_ = false;
+
+//K=0.3224  B=-2.2635    X=0.7853(mas) Y=-0.1476(mas)   A0=0.4236(mas) B0=0.2232(mas) Th0=8.3119(deg)   A1=0.4712(mas) B1=0.3030(mas) Th1=8.7074(deg)
+//K=0.3664  B=-2.2635    X=0.7749(mas) Y=-0.1494(mas)   A0=0.4236(mas) B0=0.2232(mas) Th0=8.3119(deg)   A1=0.4800(mas) B1=0.2852(mas) Th1=7.4838(deg)
+//K=0.3482  B=-2.2635    X=0.7807(mas) Y=-0.1466(mas)   A0=0.4335(mas) B0=0.2270(mas) Th0=6.6301(deg)   A1=0.4800(mas) B1=0.2852(mas) Th1=7.4838(deg)
+//K=0.3482  B=-2.0889    X=0.7931(mas) Y=-0.1433(mas)   A0=0.4426(mas) B0=0.2368(mas) Th0=5.3769(deg)   A1=0.4800(mas) B1=0.2852(mas) Th1=7.4838(deg)
+//K=0.3407  B=-2.0889    X=0.7943(mas) Y=-0.1434(mas)   A0=0.4426(mas) B0=0.2368(mas) Th0=5.4093(deg)   A1=0.4800(mas) B1=0.2852(mas) Th1=7.4838(deg)
+//K=0.3557  B=-2.0889    X=0.7908(mas) Y=-0.1459(mas)   A0=0.4426(mas) B0=0.2368(mas) Th0=5.4093(deg)   A1=0.4855(mas) B1=0.2925(mas) Th1=6.5111(deg)
+
+      }
+      else if (!false)
+      {
+        // 0552+398: K=0.3928   X=0.9057(mas) Y=-0.1403(mas)
+        smtType_ = SMT_MULTIPLE_POINTS;
+        // one ext component:
+        // 0552+398: K=0.3383  B=-1.603046  X=0.8197(mas) Y=-0.1200(mas) 2.6ps
+//        sModel_.append(StructModelMp(0.3383, -1.603046, 0.8197/RAD2MAS,  -0.1200/RAD2MAS, false, false, false));
+
+        // 0552+398: K=0.3184  B=-2.217034  X=0.7796(mas) Y=-0.1105(mas)
+        // 0552+398: K=0.0975  B=6.239579  X=-0.2293(mas) Y=0.4864(mas)
+//->        sModel_.append(StructModelMp(0.3383, -1.603046, 0.8197/RAD2MAS,  -0.1200/RAD2MAS, false, false, false));
+        
+        // 19FEB19VG:
+        // 0552+398: K=0.3578  B=-1.599969  X=0.7912(mas) Y=-0.1422(mas)
+        // 0552+398: K=0.3498  B=-1.512049  X=0.8043(mas) Y=-0.1536(mas)
+//->        sModel_.append(StructModelMp(0.3498, -1.512049, 0.8043/RAD2MAS,  -0.1536/RAD2MAS, true, true, true));
+
+
+        sModel_.append(StructModelMp(0.3498, 0.0, 0.8043/RAD2MAS,  -0.1536/RAD2MAS, true, false, true));
+
+/* it is ok:
+        sModel_.append(StructModelMp(0.3498, -1.512049, 0.8043/RAD2MAS,  -0.1536/RAD2MAS, false, false, false));
+        sModel_.append(StructModelMp(0.0342, -1.549581, -0.225/RAD2MAS,  -0.325/RAD2MAS, true, false, true));
+*/        
+
+        // 0552+398: K=0.1173  B=3.000000  X=-0.2416(mas) Y=0.4756(mas)
+        // 0552+398: K=0.1173  B=5.850120  X=-0.2360(mas) Y=0.5049(mas)
+        // 0552+398: K=0.0970  B=5.850120  X=-0.2417(mas) Y=0.5091(mas)
+        // 0552+398: K=0.0970  B=6.590056  X=-0.2416(mas) Y=0.5100(mas)
+        // 0552+398: K=0.0859  B=6.590056  X=-0.2451(mas) Y=0.5136(mas) 2.0ps
+        
+        // 0552+398: K=0.3383  B=-1.603046  X=0.7956(mas) Y=-0.1268(mas)
+        // 0552+398: K=0.1354  B=6.590056  X=-0.2095(mas) Y=0.4427(mas)
+//->        sModel_.append(StructModelMp(0.0859,  6.590056, -0.2451/RAD2MAS,  0.5136/RAD2MAS, false, false, false));
+      };
+
+    };
+
+
+    if (getKey() == "0642+449")
+    {
+/*
+      x_ = -0.054/RAD2MAS;
+      y_ = -0.416/RAD2MAS;
+      k_ = 0.482;
+*/
+    };
+
+    if (getKey() == "0716+714")
+    {
+      // 0.175 -0.375
+      // 0716+714: K=0.0678 (0.0094)  B=0.000000 (1.000000)  X=0.1128 (0.0446)  Y=-0.5024 (0.0738) 2.398(ps)
+      // 0716+714: K=0.0678 (1.0000)  B=0.000381 (0.306709)  X=0.1057 (0.0412)  Y=-0.4990 (0.0729) 2.397(ps)
+      // 0716+714: K=0.0686 (0.0100)  B=0.000381 (1.000000)  X=0.1030 (0.0414)  Y=-0.4966 (0.0759) 2.397(ps)
+      // 0716+714: K=0.0686 (1.0000)  B=-0.020993 (0.309151)  X=0.1043 (0.0411)  Y=-0.4977 (0.0734) 2.397(ps)
+      // 0716+714: K=0.0694 (0.0101)  B=-0.020993 (1.000000)  X=0.1028 (0.0413)  Y=-0.4960 (0.0756) 2.397(ps)
+      // 0716+714: K=0.0694 (1.0000)  B=-0.045789 (0.305489)  X=0.1043 (0.0410)  Y=-0.4973 (0.0729) 2.397(ps)
+      // 0716+714: K=0.0702 (0.0102)  B=-0.045789 (1.000000)  X=0.1029 (0.0412)  Y=-0.4958 (0.0749) 2.397(ps)
+      sModel_.append(StructModelMp(0.0702,  -0.045789,  0.1029/RAD2MAS, -0.4958/RAD2MAS, true, false, true));
+    };
+
+
+    if (getKey() == "0800+618")
+    {
+      // 19FEB19VG:
+      // 0800+618: K=0.2105  B=0.000000  X=0.2187(mas) Y=-1.2558(mas)
+      // 0800+618: K=0.2105  B=0.097515  X=0.2248(mas) Y=-1.2623(mas)
+      // 0800+618: K=0.2058  B=0.097515  X=0.2301(mas) Y=-1.2659(mas)
+      // 0800+618: K=0.2058  B=0.175283  X=0.2337(mas) Y=-1.2740(mas)
+      // 0800+618: K=0.2009  B=0.175283  X=0.2397(mas) Y=-1.2778(mas)
+      // 0800+618: K=0.2006  B=0.175283  X=0.2411(mas) Y=-1.2786(mas)
+      sModel_.append(StructModelMp(0.2006,  0.175283,  0.2411/RAD2MAS, -1.2786/RAD2MAS, true, false, true));
+
+      // 0800+618: K=0.0933  B=0.000000  X=-0.2765(mas) Y=2.3397(mas)
+      // 0800+618: K=0.0933  B=-2.638292  X=-0.4815(mas) Y=2.3009(mas)
+      // 0800+618: K=0.0846  B=-2.638292  X=-0.4862(mas) Y=2.3104(mas)
+      // 0800+618: K=0.0846  B=-2.964418  X=-0.5012(mas) Y=2.3026(mas)
+      // 0800+618: K=0.0805  B=-2.964418  X=-0.5042(mas) Y=2.3077(mas)
+//      sModel_.append(StructModelMp(0.0805,  -2.964418,  -0.5042/RAD2MAS, 2.3077/RAD2MAS, true, false, true));
+// two points?
+      //
+//      sModel_.append(StructModelMp(0.2006,  0.175283,  0.2411/RAD2MAS, -1.2786/RAD2MAS, false, false, false));
+//      sModel_.append(StructModelMp(0.35,  0.0,  -0.075/RAD2MAS, -0.825/RAD2MAS, true, false, true));
+    };
+
+    if (getKey() == "0955+476")
+    {
+      //  0.275 -0.275?
+      // 0.225 -0.225
+      // nope yet
+      // sModel_.append(StructModelMp(0.35,  0.0,  0.275/RAD2MAS, -0.275/RAD2MAS, true, false, true));
+    };
+
+    if (getKey() == "1053+815")
+    {
+      // -0.125 0.975
+      // 1053+815: K=0.0976 (0.0351)  B=0.000000 (1.000000)  X=-0.2313 (0.1013)  Y=1.1052 (0.0777) 2.507(ps)
+      // 1053+815: K=0.0976 (1.0000)  B=0.893072 (0.717948)  X=-0.2534 (0.0814)  Y=1.2012 (0.0822) 2.505(ps)
+      // 1053+815: K=0.0779 (0.0255)  B=0.893072 (1.000000)  X=-0.2581 (0.0990)  Y=1.2289 (0.0897) 2.498(ps)
+      // 1053+815: K=0.0779 (1.0000)  B=1.619311 (0.812591)  X=-0.2735 (0.0846)  Y=1.2908 (0.0882) 2.502(ps)
+      // 1053+815: K=0.0647 (0.0201)  B=1.619311 (1.000000)  X=-0.2795 (0.0999)  Y=1.3157 (0.0986) 2.495(ps)
+      // 1053+815: K=0.0647 (1.0000)  B=2.265863 (0.919762)  X=-0.2925 (0.0886)  Y=1.3604 (0.0948) 2.501(ps)
+      // 1053+815: K=0.0552 (0.0165)  B=2.265863 (1.000000)  X=-0.2992 (0.1021)  Y=1.3848 (0.1071) 2.495(ps)
+      sModel_.append(StructModelMp(0.0552,  2.265863,  -0.2992/RAD2MAS,  1.3848/RAD2MAS, true, false, true));
+    };
+
+    if (getKey() == "1156+295")
+    {
+      // sModel_.append(StructModelMp(0.35,  -1.0/RAD2MAS,   0.2/RAD2MAS, true, true));
+      if (false)
+      {
+        smtType_ = SMT_TWO_POINTS;
+        k_ = 0.33;
+        b_ =-1.0;
+        
+        x_ =-1.0/RAD2MAS;
+        y_ = 0.2/RAD2MAS;
+        estimateRatio_ = true;
+        estimatePosition_ = true;
+        estimateSpIdx_ = true;
+      }
+      else if (false)
+      {
+        smtType_ = SMT_MULTIPLE_POINTS;
+   
+        sModel_.append(StructModelMp(0.35, 0.0,  -0.8/RAD2MAS, -0.6/RAD2MAS, true, true, true));
+      };
+  
+    };
+
+    if (getKey() == "1732+389")
+    {
+        smtType_ = SMT_MULTIPLE_POINTS;
+        // 
+        //sModel_.append(StructModelMp(0.2719, -1.405594,  -0.7822/RAD2MAS, 0.4136/RAD2MAS, true, false, true));
+        sModel_.append(StructModelMp(0.2719, -1.405594,  -0.7822/RAD2MAS, 0.4136/RAD2MAS, false, false, false));
+    };
+
+
+    if (getKey() == "2209+236")
+    {
+        smtType_ = SMT_MULTIPLE_POINTS;
+        // 
+        // 0.575 0.725
+        // 2209+236: K=0.2726  B=3.400000  X=0.5058(mas) Y=0.6754(mas)
+        // 2209+236: K=0.2726  B=3.535338  X=0.5097(mas) Y=0.6685(mas)
+        // 2209+236: K=0.2655  B=3.535338  X=0.5063(mas) Y=0.6765(mas)
+        // 2209+236: K=0.2655  B=3.653697  X=0.5096(mas) Y=0.6706(mas)
+        // 2209+236: K=0.2595  B=3.653697  X=0.5067(mas) Y=0.6774(mas)
+        sModel_.append(StructModelMp(0.2595, 3.653697,  0.5067/RAD2MAS, 0.6774/RAD2MAS, true, false, true));
+        
+        //  -0.825 -0.775
+        // 2209+236: K=0.2625  B=-2.000000  X=-0.9148(mas) Y=-0.8802(mas)
+        // 2209+236: K=0.2625  B=-2.898434  X=-0.8582(mas) Y=-0.8296(mas)
+        // 2209+236: K=0.2391  B=-2.898434  X=-0.8491(mas) Y=-0.8929(mas)
+        // 2209+236: K=0.2391  B=-3.432720  X=-0.8208(mas) Y=-0.8514(mas)
+        // 2209+236: K=0.2253  B=-3.432720  X=-0.8145(mas) Y=-0.8903(mas)
+        // 2209+236: K=0.2253  B=-3.805153  X=-0.7971(mas) Y=-0.8599(mas)
+        // 2209+236: K=0.2159  B=-3.805153  X=-0.7926(mas) Y=-0.8870(mas)
+        // 2209+236: K=0.2159  B=-4.084775  X=-0.7807(mas) Y=-0.8640(mas)
+        // 2209+236: K=0.2089  B=-4.084775  X=-0.7772(mas) Y=-0.8843(mas
+//        sModel_.append(StructModelMp(0.2089, -4.084775,  -0.7772/RAD2MAS, -0.8843/RAD2MAS, true, false, true));
+
+// two points?        
+    };
+
+
+
+    if (getKey() == "2229+695")
+    {
+      if (false)
+      {
+
+// 2229+695: K=0.3483 (0.0087)  B=0.000000 (1.000000)  X=-0.7691 (0.0051)  Y=-0.1555 (0.0081) 3.947(ps)
+        smtType_ = SMT_TWO_POINTS;
+        k_ = 0.3483;
+        b_ = 0.0;
+        
+        x_ = -0.7691 /RAD2MAS;
+        y_ = -0.1555 /RAD2MAS;
+
+        a0_ = 1.0      /RAD2MAS;
+        b0_ = 1.0      /RAD2MAS;
+        theta0_ = 90.0 /RAD2DEG;
+
+        a1_ = 0.5 /RAD2MAS;
+        b1_ = 0.2 /RAD2MAS;
+        theta1_ = 20.0 /RAD2DEG;
+
+        estimateRatio_ = false;
+        //estimateRatio_ = true;
+
+        estimatePosition_ = false;
+        //estimatePosition_ = true;
+
+        estimateSpIdx_ = false;
+        //estimateSpIdx_ = true;
+
+        estimateA0_ = false;
+        //estimateA0_ = true;
+
+        estimateB0_ = false;
+        //estimateB0_ = true;
+
+        estimateT0_ = false;
+        //estimateT0_ = true;
+
+        estimateA1_ = false;
+        //estimateA1_ = true;
+
+        estimateB1_ = false;
+        //estimateB1_ = true;
+
+        estimateT1_ = false;
+        estimateT1_ = true;
+
+
+      }
+      else if (!false)
+      {
+        smtType_ = SMT_MULTIPLE_POINTS;
+   
+        // 2229+695: K=0.2992   X=-0.7615(mas) Y=-0.1313(mas)
+        // 2229+695: K=0.1896   X=0.4328(mas) Y=-0.3126(mas)
+//        sModel_.append(StructModelMp(0.2992, 0.0,  -0.7615/RAD2MAS, -0.1313/RAD2MAS, false, false, false));
+//        sModel_.append(StructModelMp(0.1896, 0.0,   0.4328/RAD2MAS, -0.3126/RAD2MAS, false, false, false));
+
+/*
+        // 2229+695: K=0.2646  B= 0.738103  X=-0.8076(mas) Y=-0.1703(mas)
+        // 2229+695: K=0.1967  B=-0.810064  X=0.3594(mas) Y=-0.5042(mas)
+        sModel_.append(StructModelMp(0.2646,  0.738103,  -0.8076/RAD2MAS, -0.1703/RAD2MAS, false, false, false));
+        sModel_.append(StructModelMp(0.1967, -0.810064,   0.3594/RAD2MAS, -0.5042/RAD2MAS, false, false, false));
+*/
+        // K=0.2053  B=2.431965  X=-0.8684(mas) Y=-0.1756(mas)
+
+        // 19FEB19VG:
+        // 2229+695: K=0.2209  B=0.000000  X=-0.6690(mas) Y=-0.4661(mas)
+        // 2229+695: K=0.2209  B=-0.123513  X=-0.6641(mas) Y=-0.4643(mas)
+        // 2229+695: K=0.2439  B=-0.339578  X=-0.6451(mas) Y=-0.4516(mas)
+
+//->latest        sModel_.append(StructModelMp(0.2439,  -0.339578,  -0.6451/RAD2MAS, -0.4516/RAD2MAS, true, true, true));
+
+        
+        sModel_.append(StructModelMp(0.2992, 0.0,  -0.7615/RAD2MAS, -0.1313/RAD2MAS, true, false, true));
+
+
+      };
+
+    };
+
+
+
+    if (getKey() == "3C371   ")
+    {
+      if (false)
+      {
+        smtType_ = SMT_TWO_POINTS;
+        k_ = 0.3;
+        b_ =-0.5;
+        x_ =-0.7/RAD2MAS;
+        y_ =-0.2/RAD2MAS;
+        x_ = 1.4/RAD2MAS;
+        y_ = 0.3/RAD2MAS;
+        estimateRatio_ = true;
+        estimateSpIdx_ = true;
+        estimatePosition_ = true;
+      }
+      else if (!false)
+      {
+        smtType_ = SMT_MULTIPLE_POINTS;
+        // double:
+        // 3C371   : K=0.3399   X=-0.7852(mas) Y=-0.1912(mas) 3.3ps
+        // 3C371   : K=0.2196   X= 0.8643(mas) Y= 0.2193(mas)
+//        sModel_.append(StructModelMp(0.3399, 0.0, -0.7852/RAD2MAS,  -0.1912/RAD2MAS, false, false, false));
+//        sModel_.append(StructModelMp(0.2196, 0.0,  0.8643/RAD2MAS,   0.2193/RAD2MAS, false, false, false));
+
+
+        // 3C371   : K=0.3232  B=0.883622  X=-0.8029(mas) Y=-0.1958(mas)
+        // 3C371   : K=0.1134  B=3.276147  X=0.9789(mas) Y=0.2471(mas)
+
+        // 3C371   : K=0.3232  B=1.534863  X=-0.8068(mas) Y=-0.1994(mas)
+        // 3C371   : K=0.1134  B=4.522057  X=0.9301(mas) Y=0.2363(mas)
+
+//        sModel_.append(StructModelMp(0.3232, 1.534863, -0.8086/RAD2MAS,  -0.1994/RAD2MAS, true, false, true));
+//        sModel_.append(StructModelMp(0.1134, 4.522057,  0.9301/RAD2MAS,   0.2363/RAD2MAS, true, true, true));
+
+
+        // 3C371   : K=0.3171  B=1.535173  X=-0.8084(mas) Y=-0.1991(mas)
+        // 3C371   : K=0.1094  B=4.522723  X=0.9369(mas) Y=0.2374(mas)
+
+        // 3C371   : K=0.3171  B=1.838107  X=-0.8100(mas) Y=-0.2004(mas)
+        // 3C371   : K=0.1094  B=5.255939  X=0.9217(mas) Y=0.2339(mas
+
+        // 3C371   : K=0.3119  B=1.838107  X=-0.8110(mas) Y=-0.2000(mas)
+        // 3C371   : K=0.1060  B=5.255939  X=0.9263(mas) Y=0.2345(mas)
+/*
+        sModel_.append(StructModelMp(0.3119, 1.838107, -0.8100/RAD2MAS,  -0.2000/RAD2MAS, true, true, false));
+        sModel_.append(StructModelMp(0.1060, 5.255939,  0.9263/RAD2MAS,   0.2345/RAD2MAS, true, true, false));
+  */      
+
+
+        // 19FEB04VG
+        // 3C371   : K=0.2187  B=0.000000  X=1.2718(mas) Y=0.2286(mas)
+        // 3C371   : K=0.1763  B=0.000000  X=1.2369(mas) Y=0.2523(mas)
+        
+        // 19FEB19VG:
+        // 3C371   : K=0.1844  B=0.000000  X=1.2370(mas) Y=0.2856(mas)
+        // 3C371   : K=0.1844  B=-0.122920  X=1.2296(mas) Y=0.2864(mas)
+        // 3C371   : K=0.1850  B=-0.123986  X=1.2297(mas) Y=0.2864(mas)
+        // 3C371   : K=0.1844  B=-0.054432  X=1.2363(mas) Y=0.2869(mas)
+        sModel_.append(StructModelMp(0.1844, -0.054432, 1.2363/RAD2MAS, 0.2869/RAD2MAS, true, true, true));
+//        sModel_.append(StructModelMp(0.1844, -0.054432, 1.2363/RAD2MAS, 0.2869/RAD2MAS, false, false, false));
+        
+        
+        // 17DEC03VG
+        // 3C371   : K=0.1241  B=0.000000  X=1.3753(mas) Y=0.3487(mas) (.010, -, .016, .025)
+        
+      };
+    };
+
+ 
+    if (getKey() == "3C418   ")
+    {
+      if (false)
+      {
+        // 3C418   : K=0.2408  B=-0.0026    X=-0.8323(mas) Y=-0.2096(mas)
+        // 3C418   : K=0.7572  B=-1.2976    X=-0.5251(mas) Y=-0.7225(mas)
+        smtType_ = SMT_TWO_POINTS;
+        k_ =  0.35;
+        b_ =  0.0;
+        x_ = -0.175 /RAD2MAS;
+        y_ =  1.875 /RAD2MAS;
+        estimateRatio_ = /*false; /*/true;
+        estimateSpIdx_ = /*false; /*/true;
+        estimatePosition_ = /*false; /*/true;
+      }
+      else if (!false)
+      {
+        smtType_ = SMT_MULTIPLE_POINTS;
+        
+        // K=0.2415  B=0.763673  X=-0.8950(mas) Y=-0.1946(mas)
+        // K=0.2415  B=0.768276  X=-0.8953(mas) Y=-0.1943(mas
+        //sModel_.append(StructModelMp(0.2415, 0.768276, -0.8953/RAD2MAS, -0.1943/RAD2MAS, false, false, false));
+        
+        // 19FEB04VG:
+        // 3C418   : K=0.2896  B=0.000000  X=1.0128(mas) Y=1.4779(mas)
+        // 3C418   : K=0.2327  B=0.000000  X=1.2412(mas) Y=1.3557(mas)
+        //
+        // 19APR01VG:
+        // 3C418   : K=0.1900  B=0.000000  X=1.1357(mas) Y=1.4212(mas)
+//->        sModel_.append(StructModelMp(0.1533, 0.0, 1.2729/RAD2MAS, 1.3216/RAD2MAS, false, true, true));
+        //
+        // 19FRB19VG:
+        // 3C418   : K=0.1168  B=0.000000  X=1.1899(mas) Y=1.3206(mas)
+        // 3C418   : K=0.1168  B=0.867287  X=1.2141(mas) Y=1.3277(mas)
+        // 3C418   : K=0.0945  B=1.941674  X=1.2300(mas) Y=1.3320(mas)
+//->
+//        sModel_.append(StructModelMp(0.0945, 1.941674, 1.2300/RAD2MAS, 1.3320/RAD2MAS, true, true, true));
+        // 3C418   : K=0.1280  B=0.000000  X=1.1140(mas) Y=1.3359(mas)
+        // 3C418   : K=0.1280  B=2.377213  X=1.1815(mas) Y=1.3672(mas)
+        // 3C418   : K=0.1077  B=2.377213  X=1.1797(mas) Y=1.3531(mas)
+        // 3C418   : K=0.1077  B=3.341570  X=1.2027(mas) Y=1.3655(mas)
+        // 3C418   : K=0.0968  B=3.341570  X=1.1968(mas) Y=1.3593(mas)
+        // 3C418   : K=0.0968  B=3.996572  X=1.2082(mas) Y=1.3691(mas)
+        sModel_.append(StructModelMp(0.0968, 3.996572, 1.2082/RAD2MAS, 1.3691/RAD2MAS, true, false, true));
+
+//      two points:
+        // 3C418   : K=0.1167  B=0.000000  X=0.5888(mas) Y=-1.1761(mas)
+        // 3C418   : K=0.1013  B=-0.600000  X=0.5108(mas) Y=-1.0653(mas)
+        // 3C418   : K=0.0937  B=0.000000  X=0.5389(mas) Y=-1.1120(mas)
+//        sModel_.append(StructModelMp(0.0945, 1.941674, 1.2300/RAD2MAS, 1.3320/RAD2MAS, false, false, false));
+        //sModel_.append(StructModelMp(0.35, 0.0, -0.225/RAD2MAS,  0.725/RAD2MAS, true, false, true));
+
+
+      };
+        
+
+    };
+    
+
+
+    if (getKey() == "CTA26   ")
+    {
+//     aPrioriStructModels_.append(StructModel(0.2618, -0.8418/RAD2MAS, -0.2540/RAD2MAS));
+      //
+      // 3C418   : K=0.2618   X=-0.8418(mas) Y=-0.2540(mas) // 5.5
+      // 
+      //
+
+/*
+      k_ = 0.3;
+      x_ =  4.0/RAD2MAS;
+      y_ = -7.0/RAD2MAS;
+*/
+
+    };
+  };
+
+  isSsModelEstimating_ = false;
+};
+
+
+
+//
+double SgVlbiSourceInfo::arcLength(double ra_1, double dn_1, double ra_2, double dn_2)
+{
+  long double                   sdn1=0.0, cdn1=0.0, sdn2=0.0, cdn2=0.0;
+  long double                   cdra=0.0;
+  
+  if (abs(ra_1-ra_2)<20.0/RAD2MAS && abs(dn_1-dn_2)<20.0/RAD2MAS) // almost linear 
+    return sqrt((ra_1-ra_2)*(ra_1-ra_2)*cos(dn_1)*cos(dn_1) + (dn_1-dn_2)*(dn_1-dn_2));
+
+  // calculate arc-length:
+  sincosl(dn_1, &sdn1, &cdn1);
+  sincosl(dn_2, &sdn2, &cdn2);
+  cdra = cosl(ra_1 - ra_2);
+  return acosl(sdn1*sdn2 + cdn1*cdn2*cdra);
+};
+
+
+
+//
+QString SgVlbiSourceInfo::ra2String(double ra)
+{
+  QString     str;
+  int         nHour, nMin;
+  double      dSec, dTmp;
+
+  dTmp = ra*RAD2MS;
+  nHour = (int)(dTmp/3600.0/1000.0);
+  nMin  = (int)((dTmp - 3600.0*1000.0*nHour)/60.0/1000.0);
+  dSec  = (dTmp - 3600.0*1000.0*nHour - 60.0*1000.0*nMin)/1000.0;
+  
+  str.sprintf("%02d %02d %011.8f", nHour, nMin, dSec);
+
+  return str;
+};
+
+
+
+//
+QString SgVlbiSourceInfo::dn2String(double dn, bool mandatorySign)
+{
+  QString     str;
+  int         nDeg, nMin;
+  double      dSec, dTmp;
+  char        cSign=mandatorySign?'+':' ';
+  if (dn<0.0)
+  {
+    dn = -dn;
+    cSign = '-';
+  };
+
+  dTmp = dn*RAD2MAS;
+  nDeg = (int)(dTmp/3600/1000.0);
+  nMin = (int)((dTmp - 3600.0*1000.0*nDeg)/60.0/1000.0);
+  dSec = (dTmp - 3600.0*1000.0*nDeg - 60.0*1000.0*nMin)/1000.0;
+  
+  str.sprintf("%c%02d %02d %011.8f", cSign, nDeg, nMin, dSec);
+
+  return str;
+};
+
+
+
+//
+void SgVlbiSourceInfo::createParameters()
+{
+  QString prefix = "Src " + getKey().leftJustified(8, ' ') + ": ";
+  releaseParameters();
+  pRA_ = new SgParameter(prefix + "RA");
+  pDN_ = new SgParameter(prefix + "DN");
+
+  pK_  = new SgParameter(prefix + "ssK");
+  pB_  = new SgParameter(prefix + "ssB");
+  pX_  = new SgParameter(prefix + "ssX");
+  pY_  = new SgParameter(prefix + "ssY");
+
+  pA0_ = new SgParameter(prefix + "ssA0");
+  pB0_ = new SgParameter(prefix + "ssB0");
+  pTheta0_ = new SgParameter(prefix + "ssTheta0");
+  pA1_ = new SgParameter(prefix + "ssA1");
+  pB1_ = new SgParameter(prefix + "ssB1");
+  pTheta1_ = new SgParameter(prefix + "ssTheta1");
+
+
+  for (int i=0; i<sModel_.size(); i++)
+  {
+    sModel_[i].pK() = new SgParameter(prefix + "k_" + QString("").sprintf("%03d", i));
+    sModel_[i].pB() = new SgParameter(prefix + "b_" + QString("").sprintf("%03d", i));
+    sModel_[i].pX() = new SgParameter(prefix + "x_" + QString("").sprintf("%03d", i));
+    sModel_[i].pY() = new SgParameter(prefix + "y_" + QString("").sprintf("%03d", i));
+  };
+
+};
+
+
+
+//
+void SgVlbiSourceInfo::releaseParameters()
+{
+  if (pRA_)
+  {
+    delete pRA_;
+    pRA_ = NULL;
+  };
+  if (pDN_)
+  {
+    delete pDN_;
+    pDN_ = NULL;
+  };
+  for (int i=0; i<sModel_.size(); i++)
+  {
+    if (sModel_[i].pK())
+    {
+      delete sModel_[i].pK();
+      sModel_[i].pK() = NULL;
+    };
+    if (sModel_[i].pB())
+    {
+      delete sModel_[i].pB();
+      sModel_[i].pB() = NULL;
+    };
+    if (sModel_[i].pX())
+    {
+      delete sModel_[i].pX();
+      sModel_[i].pX() = NULL;
+    };
+    if (sModel_[i].pY())
+    {
+      delete sModel_[i].pY();
+      sModel_[i].pY() = NULL;
+    };
+  };
+
+
+  if (pK_)
+  {
+    delete pK_;
+    pK_ = NULL;
+  };
+  if (pB_)
+  {
+    delete pB_;
+    pB_ = NULL;
+  };
+  if (pX_)
+  {
+    delete pX_;
+    pX_ = NULL;
+  };
+  if (pY_)
+  {
+    delete pY_;
+    pY_ = NULL;
+  };
+
+
+  if (pA0_)
+  {
+    delete pA0_;
+    pA0_ = NULL;
+  };
+  if (pB0_)
+  {
+    delete pB0_;
+    pB0_ = NULL;
+  };
+  if (pTheta0_)
+  {
+    delete pTheta0_;
+    pTheta0_ = NULL;
+  };
+  if (pA1_)
+  {
+    delete pA1_;
+    pA1_ = NULL;
+  };
+  if (pB1_)
+  {
+    delete pB1_;
+    pB1_ = NULL;
+  };
+  if (pTheta1_)
+  {
+    delete pTheta1_;
+    pTheta1_ = NULL;
+  };
+
+ 
+};
+
+
+
+//
+bool SgVlbiSourceInfo::saveIntermediateResults(QDataStream& s) const
+{
+  SgObjectInfo::saveIntermediateResults(s);
+  return s.status() == QDataStream::Ok;
+};
+
+
+
+//
+bool SgVlbiSourceInfo::loadIntermediateResults(QDataStream& s)
+{
+  SgObjectInfo::loadIntermediateResults(s);
+  return s.status()==QDataStream::Ok;
+};
+
+
+
+//
+double SgVlbiSourceInfo::calcR(double u, double v)
+{
+  return u*x_ + v*y_;
+};
+
+
+
+//
+double SgVlbiSourceInfo::tauS(double f, double u, double v)
+{
+  double                        d=0.0;
+  if (smtType_ == SMT_NONE)
+    return d;
+  else if (smtType_ == SMT_TWO_POINTS)
+  {
+
+    if (isExtSS_) // with shape (4tests)
+    {
+      double                      r, c, s, dQ, dT1, dT2, dA, dB;
+      double                      st0, ct0, st1, ct1;
+      double                      u0, v0, u1, v1;
+      r = calcR(u, v);
+      sincos(2.0*M_PI*r, &s, &c);
+      sincos(theta0_, &st0, &ct0);
+      sincos(theta1_, &st1, &ct1);
+      u0 = u*ct0 + v*st0;
+      v0 =-u*st0 + v*ct0;
+      u1 = u*ct1 + v*st1;
+      v1 =-u*st1 + v*ct1;
+      
+      dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+      dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+      dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+      dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+      dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+      // 1):
+      d += dT1/dQ;
+      // 2):
+      d += dT2/dQ;
+    }
+    else
+    {
+      double                      r, c, s, a;
+      r = calcR(u, v);
+      sincos(2.0*M_PI*r, &s, &c);
+      a = k_*k_ + 2.0*k_*c + 1.0;
+
+      // 1):
+      d += - b_*k_*s/(2.0*M_PI*f)/a;
+      // 2):
+      d += - k_*r*(k_ + c)/f/a;
+    };
+  }
+  else if (smtType_ == SMT_MULTIPLE_POINTS)
+  {
+    if (!sModel_.size())
+      return d;
+    
+    if (isExtSS_) // with sp.idx:
+    {
+      double              dT1, dT2, dQ;
+      double              s1, s2, s3, s4, s5;
+      double              ss1, ss2, ss3;
+      int                 n=sModel_.size();
+      s1 = s2 = s3 = s4 = s5 = ss1 = ss2 = ss3 = 0.0;
+      
+      for (int i=0; i<n; i++)
+      {
+        sModel_[i].prepareModel(u, v);
+        s1 += sModel_.at(i).getB()*sModel_.at(i).getK()*sModel_.at(i).getS();
+        s2 += sModel_.at(i).getK()*sModel_.at(i).getR()*sModel_.at(i).getC();
+        s3 += sModel_.at(i).getK()*sModel_.at(i).getK()*sModel_.at(i).getR();
+        s4 += sModel_.at(i).getK()*sModel_.at(i).getK();
+        s5 += sModel_.at(i).getK()*sModel_.at(i).getC();
+      };
+      
+      for (int i=0; i<n-1; i++)
+        for (int j=i+1; j<n; j++)
+        {
+          double                sPhi_ij, cPhi_ij;
+          sincos(2.0*M_PI*(sModel_.at(i).getR() - sModel_.at(j).getR()),    &sPhi_ij, &cPhi_ij);
+
+          ss1 += sModel_.at(i).getK()*sModel_.at(j).getK()*
+                      (sModel_.at(i).getB() - sModel_.at(j).getB())*sPhi_ij;
+            
+          ss2 += sModel_.at(i).getK()*sModel_.at(j).getK()*
+                      (sModel_.at(i).getR() + sModel_.at(j).getR())*cPhi_ij;
+          
+          ss3 += sModel_.at(i).getK()*sModel_.at(j).getK()*cPhi_ij;
+        };
+
+      dT1 = -1.0/(2.0*M_PI*f)*(s1 + ss1);
+      dT2 = -1.0/f*(s2 + s3 + ss2);
+      dQ  = 1.0 + s4 + 2.0*(s5 + ss3);
+      
+      d = (dT1 + dT2)/dQ;
+    }
+    else // no sp idx:
+    {
+      double                    dA, dB, dC, dD, dQ;
+      dA = dB = dC = dD = dQ = 0.0;
+      for (int i=0; i<sModel_.size(); i++)
+      {
+        sModel_[i].prepareModel(u, v);
+        dA += sModel_.at(i).getK()*sModel_.at(i).getS();
+        dB += sModel_.at(i).getK()*sModel_.at(i).getC();
+        dC += sModel_.at(i).getK()*sModel_.at(i).getR()*sModel_.at(i).getS();
+        dD += sModel_.at(i).getK()*sModel_.at(i).getR()*sModel_.at(i).getC();
+      };
+      dQ = 1.0 + dA*dA + dB*dB + 2.0*dB;
+      d = -1.0/f*(dA*dC + (dB + 1.0)*dD)/dQ;
+    };
+
+  }
+  else
+  {
+  
+  };
+  
+  return d;
+};
+
+
+
+//
+void SgVlbiSourceInfo::processPartials4SrcStructModel(QList<SgParameter*>& parameters,
+  double f, double u, double v)
+{
+  if (!sModel_.size())
+    return;
+
+
+  if (isExtSS_) // with sp.idx:
+  {
+
+    double              dT1, dT2, dQ;
+    double              s1, s2, s3, s4, s5;
+    double              ss1, ss2, ss3;
+    int                 n=sModel_.size();
+    s1 = s2 = s3 = s4 = s5 = ss1 = ss2 = ss3 = 0.0;
+    for (int i=0; i<n; i++)
+    {
+      sModel_[i].prepareModel(u, v);
+      s1 += sModel_.at(i).getB()*sModel_.at(i).getK()*sModel_.at(i).getS();
+      s2 += sModel_.at(i).getK()*sModel_.at(i).getR()*sModel_.at(i).getC();
+      s3 += sModel_.at(i).getK()*sModel_.at(i).getK()*sModel_.at(i).getR();
+      s4 += sModel_.at(i).getK()*sModel_.at(i).getK();
+      s5 += sModel_.at(i).getK()*sModel_.at(i).getC();
+    };
+      
+    for (int i=0; i<n-1; i++)
+      for (int j=i+1; j<n; j++)
+      {
+        double                sPhi_ij, cPhi_ij;
+        sincos(2.0*M_PI*(sModel_.at(i).getR() - sModel_.at(j).getR()),    &sPhi_ij, &cPhi_ij);
+
+        ss1 += sModel_.at(i).getK()*sModel_.at(j).getK()*
+                    (sModel_.at(i).getB() - sModel_.at(j).getB())*sPhi_ij;
+            
+        ss2 += sModel_.at(i).getK()*sModel_.at(j).getK()*
+                    (sModel_.at(i).getR() + sModel_.at(j).getR())*cPhi_ij;
+          
+        ss3 += sModel_.at(i).getK()*sModel_.at(j).getK()*cPhi_ij;
+      };
+
+    dT1 = -1.0/(2.0*M_PI*f)*(s1 + ss1);
+    dT2 = -1.0/f*(s2 + s3 + ss2);
+    dQ  = 1.0 + s4 + 2.0*(s5 + ss3);
+      
+
+    for (int l=0; l<n; l++)
+    {
+      double                    dCl=sModel_.at(l).getC();
+      double                    dSl=sModel_.at(l).getS();
+      double                    dRl=sModel_.at(l).getR();
+      double                    dKl=sModel_.at(l).getK();
+      double                    dBl=sModel_.at(l).getB();
+      double                    t1L, t1R, t2L, t2R, t3L, t3R, t4L, t4R, t5L, t5R, t6L, t6R;
+      t1L = t1R = t2L = t2R = t3L = t3R = t4L = t4R = t5L = t5R = t6L = t6R = 0.0;
+
+      double                    sPhi_il, cPhi_il;
+      double                    sPhi_li, cPhi_li;
+      
+      // left part:
+      for (int i=0; i<l; i++)
+      {
+        sincos(2.0*M_PI*(sModel_.at(i).getR() - sModel_.at(l).getR()),    &sPhi_il, &cPhi_il);
+        sPhi_li =-sPhi_il;
+        cPhi_li = cPhi_il;
+
+        t1L = sModel_.at(i).getK()*sPhi_il;
+        t2L = sModel_.at(i).getK()*(sModel_.at(i).getB() - sModel_.at(l).getB())*sPhi_il;
+        t3L = sModel_.at(i).getK()*(sModel_.at(i).getR() + sModel_.at(l).getR())*cPhi_il;
+        t4L = sModel_.at(i).getK()*cPhi_il;
+        t5L = sModel_.at(i).getK()*(sModel_.at(i).getB() - sModel_.at(l).getB())*cPhi_il;
+        t6L = sModel_.at(i).getK()*(sModel_.at(i).getR() + sModel_.at(l).getR())*sPhi_il;
+      };
+      // right part:
+      for (int i=l+1; i<n; i++)
+      {
+        sincos(2.0*M_PI*(sModel_.at(i).getR() - sModel_.at(l).getR()),    &sPhi_il, &cPhi_il);
+        sPhi_li =-sPhi_il;
+        cPhi_li = cPhi_il;
+        
+        t1R = sModel_.at(i).getK()*sPhi_li;
+        t2R = sModel_.at(i).getK()*(sModel_.at(l).getB() - sModel_.at(i).getB())*sPhi_li;
+        t3R = sModel_.at(i).getK()*(sModel_.at(l).getR() + sModel_.at(i).getR())*cPhi_li;
+        t4R = sModel_.at(i).getK()*cPhi_li;
+        t5R = sModel_.at(i).getK()*(sModel_.at(l).getB() - sModel_.at(i).getB())*cPhi_li;
+        t6R = sModel_.at(i).getK()*(sModel_.at(l).getR() + sModel_.at(i).getR())*sPhi_li;
+      };
+      double                    dTau1_dBl, dTau1_dKl, dTau2_dKl, dQ_dKl, dTau1_dRl, dTau2_dRl, dQ_dRl;
+
+      dTau1_dBl = -dKl/(2.0*M_PI*f)*(dSl - t1L + t1R);
+      
+      dTau1_dKl = -1.0/(2.0*M_PI*f)*(dBl*dSl + t2L + t2R);
+      dTau2_dKl = -1.0/f*(dRl*(dCl + 2.0*dKl) + t3L + t3R);
+      dQ_dKl    = 2.0*(dKl + dCl + t4L + t4R);
+      
+      dTau1_dRl = -dKl/f*(dBl*dCl - t5L + t5R);
+      dTau2_dRl = -dKl/f*(dCl + dKl - 2.0*M_PI*dRl*dSl + t4L + t4R + 2.0*M_PI*(t6L - t6R));
+      dQ_dRl    = -4.0*M_PI*dKl*(dSl - t1L + t1R);
+
+      double                    d;
+      if (sModel_[l].pK()->isAttr(SgPartial::Attr_IS_IN_RUN))
+      {
+        d = (dTau1_dKl + dTau2_dKl)/dQ - (dT1 + dT2)*dQ_dKl/dQ/dQ;
+        sModel_[l].pK()->setD(d);
+        parameters.append(sModel_[l].pK());
+      };
+      if (sModel_[l].pB()->isAttr(SgPartial::Attr_IS_IN_RUN))
+      {
+        d = dTau1_dBl/dQ;
+        sModel_[l].pB()->setD(d);
+        parameters.append(sModel_[l].pB());
+      };
+
+      if (sModel_[l].pX()->isAttr(SgPartial::Attr_IS_IN_RUN))
+      {
+        d = (dTau1_dRl + dTau2_dRl)/dQ - (dT1 + dT2)*dQ_dRl/dQ/dQ;
+        sModel_[l].pX()->setD(d*u);
+        sModel_[l].pY()->setD(d*v);
+        parameters.append(sModel_[l].pX());
+        parameters.append(sModel_[l].pY());
+      };
+    };
+
+
+  
+  }
+  else // no sp idx:
+  {
+
+
+    double                        d, dA, dB, dC, dD, dQ;
+    dA = dB = dC = dD = dQ = 0.0;
+    for (int i=0; i<sModel_.size(); i++)
+    {
+      sModel_[i].prepareModel(u, v);
+      dA += sModel_.at(i).getK()*sModel_.at(i).getS();
+      dB += sModel_.at(i).getK()*sModel_.at(i).getC();
+      dC += sModel_.at(i).getK()*sModel_.at(i).getR()*sModel_.at(i).getS();
+      dD += sModel_.at(i).getK()*sModel_.at(i).getR()*sModel_.at(i).getC();
+    };
+    dQ = 1.0 + dA*dA + dB*dB + 2.0*dB;
+
+    for (int j=0; j<sModel_.size(); j++)
+    {
+      double                      dCj=sModel_.at(j).getC();
+      double                      dSj=sModel_.at(j).getS();
+      double                      dRj=sModel_.at(j).getR();
+      double                      dKj=sModel_.at(j).getK();
+
+      if (sModel_[j].pK()->isAttr(SgPartial::Attr_IS_IN_RUN))
+      {
+        d = -1.0/f/dQ*
+          (dSj*(dC + dRj*dA) + dCj*(dD + dRj*(dB + 1.0)) - 
+            2.0*(dA*dC + (dB + 1.0)*dD)*(dSj*dA + dCj*(dB + 1.0))/dQ);
+        sModel_[j].pK()->setD(d);
+        parameters.append(sModel_[j].pK());
+      };
+      if (sModel_[j].pX()->isAttr(SgPartial::Attr_IS_IN_RUN))
+      {
+        d = -dKj/f/dQ*
+          (2.0*M_PI*(dCj*dC - dSj*dD) + (dSj + 2.0*M_PI*dRj*dCj)*dA + (dCj - 2.0*M_PI*dRj*dSj)*(dB + 1) -
+            4.0*M_PI*(dA*dC + dD*(dB + 1.0))/dQ*(dCj*dA - dSj*(dB + 1)));
+      
+        sModel_[j].pX()->setD(d*u);
+        sModel_[j].pY()->setD(d*v);
+        parameters.append(sModel_[j].pX());
+        parameters.append(sModel_[j].pY());
+      };
+    };
+
+
+  };
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dK(double f, double u, double v)
+{
+  double                        d=0.0;
+  double                        r, c, s, dQ;
+  
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+
+  if (isExtSS_) // with shape (4tests)
+  {
+    double                      dT1, dT2, dA, dB;
+    double                      st0, ct0, st1, ct1;
+    double                      u0, v0, u1, v1;
+    r = calcR(u, v);
+    sincos(2.0*M_PI*r, &s, &c);
+    sincos(theta0_, &st0, &ct0);
+    sincos(theta1_, &st1, &ct1);
+    u0 = u*ct0 + v*st0;
+    v0 =-u*st0 + v*ct0;
+    u1 = u*ct1 + v*st1;
+    v1 =-u*st1 + v*ct1;
+      
+    dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+    dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+    dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+    dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+    dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+    double                      dQ_dK, dT1_dK, dT2_dK;
+
+    dQ_dK   = 2.0*dB*(k_*dB + dA*c);
+    dT1_dK  = -dA*dB*b_*s/(2.0*M_PI*f);
+//  dT2_dK  = -2.0*dB*r*(k_*dB + dA*c)/f;
+    dT2_dK  = -dB*r*(2.0*k_*dB + dA*c)/f;
+
+    d = (dT1_dK + dT2_dK)/dQ - (dT1 + dT2)*dQ_dK/dQ/dQ;
+  }
+  else
+  {
+    dQ = k_*k_ + 2.0*k_*c + 1.0;
+
+    // 1):
+    d  = - b_*s*(1.0 - k_*k_)/(2.0*M_PI*f)/dQ/dQ;
+    // 2):
+    d += - r*(dQ*(2.0*k_ + c) - 2.0*k_*(k_ + c)*(k_ + c))/f/dQ/dQ;
+  };
+  return d;
+};
+
+
+
+//
+//
+double SgVlbiSourceInfo::dTauS_dB(double f, double u, double v)
+{
+  double                        d=0.0;
+  double                        r, c, s, dQ;
+  
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+
+  if (isExtSS_) // with shape (4tests)
+  {
+    double                      dA, dB;
+    double                      st0, ct0, st1, ct1;
+    double                      u0, v0, u1, v1;
+    sincos(theta0_, &st0, &ct0);
+    sincos(theta1_, &st1, &ct1);
+    u0 = u*ct0 + v*st0;
+    v0 =-u*st0 + v*ct0;
+    u1 = u*ct1 + v*st1;
+    v1 =-u*st1 + v*ct1;
+     
+    dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+    dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+    dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+    d = -dA*dB*k_*s/(2.0*M_PI*f)/dQ;
+  }
+  else
+  {
+    dQ = k_*k_ + 2.0*k_*c + 1.0;
+    // 1):
+    d  = - k_*s/(2.0*M_PI*f)/dQ;
+  };
+   
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dR(double f, double u, double v)
+{
+  double                        d=0.0;
+  double                        r, c, s, dQ;
+
+  if (isExtSS_) // with shape (4tests)
+  {
+    double                      dT1, dT2, dA, dB;
+    double                      st0, ct0, st1, ct1;
+    double                      u0, v0, u1, v1;
+    r = calcR(u, v);
+    sincos(2.0*M_PI*r, &s, &c);
+    sincos(theta0_, &st0, &ct0);
+    sincos(theta1_, &st1, &ct1);
+    u0 = u*ct0 + v*st0;
+    v0 =-u*st0 + v*ct0;
+    u1 = u*ct1 + v*st1;
+    v1 =-u*st1 + v*ct1;
+      
+    dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+    dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+    dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+    dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+    dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+    double                      dQ_dR, dT1_dR, dT2_dR;
+
+    dQ_dR   = -4.0*M_PI*dA*dB*k_*s;
+    dT1_dR  = -dA*dB*b_*k_*c/f;
+    dT2_dR  = -dB*k_*(k_*dB + dA*c - 2.0*M_PI*dA*r*s)/f;
+
+    d = (dT1_dR + dT2_dR)/dQ - (dT1 + dT2)*dQ_dR/dQ/dQ;
+  }
+  else
+  {
+    r = calcR(u, v);
+
+    sincos(2.0*M_PI*r, &s, &c);
+    dQ = k_*k_ + 2.0*k_*c + 1.0;
+
+    // 1):
+    d  = - b_*k_*(dQ*c + 2.0*k_*s*s)/f/dQ/dQ;
+    // 2):
+    d += - k_*(dQ*(k_ + c - 2.0*M_PI*r*s) + 4.0*M_PI*k_*r*s*(k_ + c))/f/dQ/dQ;
+  };
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dX(double f, double u, double v)
+{
+  return dTauS_dR(f, u, v)*u;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dY(double f, double u, double v)
+{
+  return dTauS_dR(f, u, v)*v;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dA0(double f, double u, double v)
+{
+  double                          d=0.0;
+  double                          r, c, s, dQ;
+
+  double                          dT1, dT2, dA, dB;
+  double                          st0, ct0, st1, ct1;
+  double                          u0, v0, u1, v1;
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+  sincos(theta0_, &st0, &ct0);
+  sincos(theta1_, &st1, &ct1);
+  u0 = u*ct0 + v*st0;
+  v0 =-u*st0 + v*ct0;
+  u1 = u*ct1 + v*st1;
+  v1 =-u*st1 + v*ct1;
+      
+  dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+  dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+  dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+  dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+  dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+  double                          dQ_dp, dT1_dp, dT2_dp;
+  double                          q;
+  q = (1.0 - 4.0*M_PI*M_PI*u0*u0*a0_*a0_)/a0_;
+
+  dQ_dp   = 2.0*dA*(dA + 2.0*k_*dB*c)*q;
+  dT1_dp  = -dA*dB/(2.0*M_PI*f)*b_*k_*s*q;
+  dT2_dp  = -dA*dB/f*k_*r*c*q;
+
+  d = (dT1_dp + dT2_dp)/dQ - (dT1 + dT2)*dQ_dp/dQ/dQ;
+  
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dB0(double f, double u, double v)
+{
+  double                          d=0.0;
+  double                          r, c, s, dQ;
+
+  double                          dT1, dT2, dA, dB;
+  double                          st0, ct0, st1, ct1;
+  double                          u0, v0, u1, v1;
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+  sincos(theta0_, &st0, &ct0);
+  sincos(theta1_, &st1, &ct1);
+  u0 = u*ct0 + v*st0;
+  v0 =-u*st0 + v*ct0;
+  u1 = u*ct1 + v*st1;
+  v1 =-u*st1 + v*ct1;
+      
+  dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+  dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+  dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+  dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+  dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+  double                          dQ_dp, dT1_dp, dT2_dp;
+  double                          q;
+  q = (1.0 - 4.0*M_PI*M_PI*v0*v0*b0_*b0_)/b0_;
+
+  dQ_dp   = 2.0*dA*(dA + k_*dB*c)*q;
+  dT1_dp  = -dA*dB/(2.0*M_PI*f)*b_*k_*s*q;
+  dT2_dp  = -dA*dB/f*k_*r*c*q;
+
+  d = (dT1_dp + dT2_dp)/dQ - (dT1 + dT2)*dQ_dp/dQ/dQ;
+
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dTheta0(double f, double u, double v)
+{
+  double                          d=0.0;
+  double                          r, c, s, dQ;
+
+  double                          dT1, dT2, dA, dB;
+  double                          st0, ct0, st1, ct1;
+  double                          u0, v0, u1, v1;
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+  sincos(theta0_, &st0, &ct0);
+  sincos(theta1_, &st1, &ct1);
+  u0 = u*ct0 + v*st0;
+  v0 =-u*st0 + v*ct0;
+  u1 = u*ct1 + v*st1;
+  v1 =-u*st1 + v*ct1;
+      
+  dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+  dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+  dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+  dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+  dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+  double                          dQ_dp, dT1_dp, dT2_dp;
+  double                          du_dp, dv_dp, dC_dp;
+  
+  du_dp = -u*st0 + v*ct0;
+  dv_dp = -u*ct0 - v*st0;
+  dC_dp = -4.0*M_PI*M_PI*dA*(a0_*a0_*u0*du_dp + b0_*b0_*v0*dv_dp);
+  
+  dQ_dp   = 2.0*(dA + k_*dB*c)*dC_dp;
+  dT1_dp  = -dB/(2.0*M_PI*f)*b_*k_*s*dC_dp;
+  dT2_dp  = -dB/f*k_*r*c*dC_dp;
+
+  d = (dT1_dp + dT2_dp)/dQ - (dT1 + dT2)*dQ_dp/dQ/dQ;
+
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dA1(double f, double u, double v)
+{
+  double                          d=0.0;
+  double                          r, c, s, dQ;
+
+  double                          dT1, dT2, dA, dB;
+  double                          st0, ct0, st1, ct1;
+  double                          u0, v0, u1, v1;
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+  sincos(theta0_, &st0, &ct0);
+  sincos(theta1_, &st1, &ct1);
+  u0 = u*ct0 + v*st0;
+  v0 =-u*st0 + v*ct0;
+  u1 = u*ct1 + v*st1;
+  v1 =-u*st1 + v*ct1;
+      
+  dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+  dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+  dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+  dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+  dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+  double                          dQ_dp, dT1_dp, dT2_dp;
+  double                          q;
+  q = (1.0 - 4.0*M_PI*M_PI*u1*u1*a1_*a1_)/a1_;
+
+  dQ_dp   = 2.0*k_*dB*(k_*dB + dA*c)*q;
+  dT1_dp  = -dA*dB/(2.0*M_PI*f)*b_*k_*s*q;
+  dT2_dp  = -dB/f*k_*r*(2.0*k_*dB + dA*c)*q;
+
+  d = (dT1_dp + dT2_dp)/dQ - (dT1 + dT2)*dQ_dp/dQ/dQ;
+  
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dB1(double f, double u, double v)
+{
+  double                          d=0.0;
+  double                          r, c, s, dQ;
+
+  double                          dT1, dT2, dA, dB;
+  double                          st0, ct0, st1, ct1;
+  double                          u0, v0, u1, v1;
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+  sincos(theta0_, &st0, &ct0);
+  sincos(theta1_, &st1, &ct1);
+  u0 = u*ct0 + v*st0;
+  v0 =-u*st0 + v*ct0;
+  u1 = u*ct1 + v*st1;
+  v1 =-u*st1 + v*ct1;
+      
+  dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+  dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+  dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+  dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+  dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+  double                          dQ_dp, dT1_dp, dT2_dp;
+  double                          q;
+  q = (1.0 - 4.0*M_PI*M_PI*v1*v1*b1_*b1_)/b1_;
+
+  dQ_dp   = 2.0*k_*dB*(k_*dB + dA*c)*q;
+  dT1_dp  = -dA*dB/(2.0*M_PI*f)*b_*k_*s*q;
+  dT2_dp  = -dB/f*k_*r*(2.0*k_*dB + dA*c)*q;
+
+  d = (dT1_dp + dT2_dp)/dQ - (dT1 + dT2)*dQ_dp/dQ/dQ;
+  
+  return d;
+};
+
+
+
+//
+double SgVlbiSourceInfo::dTauS_dTheta1(double f, double u, double v)
+{
+  double                          d=0.0;
+  double                          r, c, s, dQ;
+
+  double                          dT1, dT2, dA, dB;
+  double                          st0, ct0, st1, ct1;
+  double                          u0, v0, u1, v1;
+  r = calcR(u, v);
+  sincos(2.0*M_PI*r, &s, &c);
+  sincos(theta0_, &st0, &ct0);
+  sincos(theta1_, &st1, &ct1);
+  u0 = u*ct0 + v*st0;
+  v0 =-u*st0 + v*ct0;
+  u1 = u*ct1 + v*st1;
+  v1 =-u*st1 + v*ct1;
+      
+  dA = 2.0*M_PI*a0_*b0_*exp(-2.0*M_PI*M_PI*(u0*u0*a0_*a0_ + v0*v0*b0_*b0_));
+  dB = 2.0*M_PI*a1_*b1_*exp(-2.0*M_PI*M_PI*(u1*u1*a1_*a1_ + v1*v1*b1_*b1_));
+      
+  dT1 = -dA*dB*b_*k_*s/(2.0*M_PI*f);
+  dT2 = -k_*r*dB*(k_*dB + dA*c)/f;
+  dQ = dA*dA + k_*k_*dB*dB + 2.0*k_*dA*dB*c;
+
+  double                          dQ_dp, dT1_dp, dT2_dp;
+  double                          du_dp, dv_dp, dC_dp;
+  
+  du_dp = -u*st1 + v*ct1;
+  dv_dp = -u*ct1 - v*st1;
+  dC_dp = -4.0*M_PI*M_PI*dB*(a1_*a1_*u1*du_dp + b1_*b1_*v1*dv_dp);
+  
+  dQ_dp   = 2.0*k_*(k_*dB + dA*c)*dC_dp;
+  dT1_dp  = -dA/(2.0*M_PI*f)*b_*k_*s*dC_dp;
+  dT2_dp  = -k_*r/f*(2.0*k_*dB + dA*c)*dC_dp;
+
+  d = (dT1_dp + dT2_dp)/dQ - (dT1 + dT2)*dQ_dp/dQ/dQ;
+
+  return d;
+};
+
+
+
+//
+short SgVlbiSourceInfo::calculateStatusBits()
+{
+  short                         bitArray;
+  bitArray = 0;
+  //
+  //  ! *                                                                      *
+  //  ! *   Format of SOURSTAT_I2 array:                                       *
+  //  ! *          Array SOURSTAT_I2  contains NUMSTR elements, where NUMSTR   *
+  //  ! *               is the number of sources in database.                  *
+  //  ! *          Each element of the array is 16-bits bit field. I-th element*
+  //  ! *               of SOURSTAT_I2 corresponds to the I-th element of the  *
+  //  ! *               source name array kept in database under lcode         *
+  //  ! *               STRNAMES. In general source order in this array        *
+  //  ! *               MAY NOT coincide with order of sources in the list     *
+  //  ! *               ISTRN_CHR kept in prfil.i  !!                          *
+  //  ! *          Bits are counted from 1.                                    *
+  //  ! *          1-st bit is set when the source was selected in solution.   *
+  //  ! *          2-nd bit reserved for future use. It is always 1.           *
+  //  ! *          3-rd bit is set if right ascension of the I-th source       *
+  //  ! *                   was estimated in solution.                         *
+  //  ! *          4-th bit is set if declination of the I-th source           *
+  //  ! *                   was estimated in solution.                         *
+  //
+  // first bit:
+  if (!isAttr(SgVlbiSourceInfo::Attr_NOT_VALID))
+    bitArray |= (1<<0);
+  // second bit:
+  bitArray |= (1<<1);
+  // third and fourth bits:
+  if (isAttr(Attr_ESTIMATE_COO) && !isAttr(Attr_NOT_VALID))
+  {
+    bitArray |= (1<<2);
+    bitArray |= (1<<3);
+  };
+  
+  return bitArray;
+};
+
+
+
+//
+//
+void SgVlbiSourceInfo::applyStatusBits(short bitArray)
+{
+  // check for deselect flag:
+  if (!(bitArray & (1<<0)))
+    addAttr(Attr_NOT_VALID);
+
+  // third and fourth bits:
+  if (bitArray & (1<<2|1<<3)) // if one of bits is on
+    addAttr(Attr_ESTIMATE_COO);
+};
+/*=====================================================================================================*/
+
+
+
+
+/*=====================================================================================================*/
+//
+//                           FRIENDS:
+// 
+/*=====================================================================================================*/
+//
+
+/*=====================================================================================================*/
+//
+// aux functions:
+//
+
+/*=====================================================================================================*/
+//
+// constants:
+//
+
+/*=====================================================================================================*/

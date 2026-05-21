@@ -1,0 +1,81 @@
+
+
+			      IVS EOP FORMAT Version 2.0
+                    Axel Nothnagel, IVS Analysis Coordinator
+			   nothnagel@uni-bonn.de
+
+Files are free format with fields separated by at least one blank.
+
+ FIELD   CONTENTS
+ 
+  1     MJD of the measurement (with at least 5 decimal digits)
+ 	
+     EARTH ORIENTATION
+
+  2     x of the pole (arcseconds)
+  3     y of the pole (arcseconds)
+  4     UT1-UTC (seconds)
+  
+     NUTATION
+
+  5     dpsi (milliarcseconds)
+  6     deps (milliarcseconds)
+  
+     UNCERTAINTY OF EARTH ORIENTATION AND NUTATION
+
+  7     uncertainty in x (arcseconds)
+  8     uncertainty in y (arcseconds)
+  9     uncertainty in UT1-UTC (seconds)
+ 10     uncertainty in dpsi (milliarcseconds)
+ 11     uncertainty in deps (milliarcseconds)
+
+ 12     wrms residual delay of the session in ps (preferably integer)
+ 
+    CORRELATIONS
+
+ 13     correlation coefficient : x, y
+ 14     correlation coefficient : x, UT1
+ 15     correlation coefficient : y, UT1
+ 16     correlation coefficient : dpsi,deps
+   
+    INDICATORS
+
+ 17	number of observables	 
+ 18     6 character session code according to the 2nd
+	column of IVS master schedules,
+	e.g for 2002: ftp://gemini.gsfc.nasa.gov/pub/master/master02.txt
+ 19 	span of the observation (in hours)	 
+ 
+   RATES OF EARTH ORIENTATION AND NUTATION
+
+ 20	x rate of the pole (arcseconds/day)
+ 21	y rate of the pole (arcseconds/day)
+ 22	excess length of day (LOD) (seconds), see comment below 
+ 23	dpsi rate (milliarcseconds/day)
+ 24	deps rate (milliarcseconds/day)
+ 
+   UNCERTAINTY OF RATES OF EARTH ORIENTATION AND NUTATION
+
+ 25     uncertainty in x rate (arcseconds/day)
+ 26     uncertainty in y rate (arcseconds/day)
+ 27     uncertainty in LOD (s)
+ 28     uncertainty in dpsi rate (milliarcseconds/day)
+ 29     uncertainty in deps rate (milliarcseconds/day)
+
+
+Comments:
+
+- For the EOP rates, days are in 86400 SI seconds.
+- The lines starting with characters "! # or *" are considered as comments.
+- Although it is inconsistent to have LOD in the group of rates due to the
+  toggling of the sign, it is maintained here for consistency with other
+  space techniques.
+  LOD = UT1(n) - UT1(n+1) with n in days.
+  LOD has the same magnitude but opposite sign of the UT1-UTC rate 
+  or the UT1-TAI rate, which are normally determined in VLBI analyses and
+  given in seconds/day.
+
+
+Last updated: 2002.02.25
+Axel Nothnagel
+

@@ -1,0 +1,70 @@
+Pass one: Checking the derivatives of rotation matrices.
+A rotational matrix around axis X on the angle 30 is: |0, 0, 0|
+|0, -0.5, 0.866025|
+|0, -0.866025, -0.5|
+
+A rotational matrix around axis Y on the angle 60 is: |-0.866025, 0, -0.5|
+|0, 0, 0|
+|0.5, 0, -0.866025|
+
+A rotational matrix around axis Z on the angle 90 is: |-1, 6.12323e-17, 0|
+|-6.12323e-17, -1, 0|
+|0, 0, 0|
+
+A copy of the last rotational matrix around axis Z on the angle 90 is: |-1, 6.12323e-17, 0|
+|-6.12323e-17, -1, 0|
+|0, 0, 0|
+
+A product of the vector (4.55, 5.128, -7.77) and rotational matrix |0, 0, 0|
+|-0.433013, 2.65144e-17, 0|
+|0.25, -1.53081e-17, 0|
+ is (0, -1.97021, 1.1375)
+
+Now three matrices are: |0, 0, 0|
+|0, -1, 6.12323e-17|
+|0, -6.12323e-17, -1|
+|1, 0, -6.12323e-17|
+|0, 0, 0|
+|6.12323e-17, 0, 1|
+|-1, 6.12323e-17, 0|
+|-6.12323e-17, -1, 0|
+|0, 0, 0|
+
+The vector (1, 0, 0) becames (-2.29585e-49, 0, 3.7494e-33)
+End of the pass one.
+
+Pass two: Checking the second derivatives of rotation matrices.
+A rotational matrix around axis X on the angle 30 is: |0, 0, 0|
+|0, -0.866025, -0.5|
+|0, 0.5, -0.866025|
+
+A rotational matrix around axis Y on the angle 60 is: |-0.5, 0, 0.866025|
+|0, 0, 0|
+|-0.866025, 0, -0.5|
+
+A rotational matrix around axis Z on the angle 90 is: |-6.12323e-17, -1, 0|
+|1, -6.12323e-17, 0|
+|0, 0, 0|
+
+A copy of the last rotational matrix around axis Z on the angle 90 is: |-6.12323e-17, -1, 0|
+|1, -6.12323e-17, 0|
+|0, 0, 0|
+
+A product of the vector (1, 0, 0) and rotational matrix |0, 0, 0|
+|-2.65144e-17, -0.433013, 0|
+|-4.59243e-17, -0.75, 0|
+ is (0, -2.65144e-17, -4.59243e-17)
+
+Now three matrices are: |0, 0, 0|
+|0, -6.12323e-17, -1|
+|0, 1, -6.12323e-17|
+|-6.12323e-17, 0, -1|
+|0, 0, 0|
+|1, 0, -6.12323e-17|
+|-6.12323e-17, -1, 0|
+|1, -6.12323e-17, 0|
+|0, 0, 0|
+
+The vector (1, 0, 0) becames (-1, 0, -6.12323e-17)
+End of the pass one.
+

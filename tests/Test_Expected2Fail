@@ -1,0 +1,12 @@
+#! /bin/sh
+##
+## Reserved place for tests that are expected to fail
+##
+
+# Explain what is going on (if asked):
+if [ -n "$ISDEBUG" ]
+then
+ echo "----> Running test that is expected to fail."
+fi
+
+exit -1

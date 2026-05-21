@@ -1,0 +1,164 @@
+Pass one: Checking the interface of the object.
+A matrix M1 is: |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+and a matrix M2 is: |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+
+Makeing a copy of diagonal elements from M2 to M1.
+The matrix M1 is: |1, 0, 0|
+|0, 5, 0|
+|0, 0, 9|
+and the matrix M2 is: |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+
+Makeing an assignment of a unit matrix (predefined constant) to the matrix M1.
+The matrix M1 now is: |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+
+End of the pass one.
+
+Pass two: Checking basic functions of the object.
+The length of the matrix M1 is: 1
+The length of the matrix M2 is: 0
+The matrix M2 is: |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+and the transposed matrix M2 is: |1, 4, 7|
+|2, 5, 8|
+|3, 6, 9|
+
+The unified matrix M |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+is: |inf, inf, inf|
+|inf, inf, inf|
+|inf, inf, inf|
+
+The unified matrix M |1, 2, 3|
+|4, 5, 6|
+|7, 8, 1|
+is: |0.0416667, 0.0833333, 0.125|
+|0.166667, 0.208333, 0.25|
+|0.291667, 0.333333, 0.0416667|
+
+End of the pass two.
+
+Pass three: Checking basic matrix oparations.
+Incremented matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ on the matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ is: |2, 2, 3|
+|4, 6, 6|
+|7, 8, 10|
+
+Decremented matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ on the matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ is: |0, -2, -3|
+|-4, -4, -6|
+|-7, -8, -8|
+
+The Matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ multiplied by the scalar 4 is |4, 0, 0|
+|0, 4, 0|
+|0, 0, 4|
+
+The Matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ divided by the scalar 4 is |0.25, 0, 0|
+|0, 0.25, 0|
+|0, 0, 0.25|
+
+The matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ and the reverted one |-1, -2, -3|
+|-4, -5, -6|
+|-7, -8, -9|
+
+The sum of the matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ and the matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ is: |2, 2, 3|
+|4, 6, 6|
+|7, 8, 10|
+
+The difference of the matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ and the matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ is: |0, -2, -3|
+|-4, -4, -6|
+|-7, -8, -8|
+
+The matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ divided by the scalar 4 is: |0.25, 0, 0|
+|0, 0.25, 0|
+|0, 0, 0.25|
+
+The product of the scalar 4 and the matrix  |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ is: |4, 0, 0|
+|0, 4, 0|
+|0, 0, 4|
+
+The product of the matrix |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+ and the scalar 4 is: |4, 0, 0|
+|0, 4, 0|
+|0, 0, 4|
+
+The product of the matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ and the vector (11.7, 0.128, 3.54) is: (22.576, 68.68, 114.784)
+The product of the matrix |2, 2, 3|
+|4, 6, 6|
+|7, 8, 10|
+ and the matrix |1, 2, 3|
+|4, 5, 6|
+|7, 8, 9|
+ is: |31, 38, 45|
+|70, 86, 102|
+|109, 134, 159|
+
+The inverted matrix of the matrix |2, 2, 3|
+|4, 6, 6|
+|7, 8, 10|
+ is |-6, -2, 3|
+|-1, 0.5, -0|
+|5, 1, -2|
+
+The product of the matrix and the inverted one is |1, 0, 0|
+|0, 1, 0|
+|0, 0, 1|
+
+The same but minus unit matrix: |0, 0, 0|
+|0, 0, 0|
+|0, 0, 0|
+
+With the module: 0
+End of the pass three.
+

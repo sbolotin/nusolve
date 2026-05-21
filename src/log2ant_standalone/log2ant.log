@@ -1,0 +1,7 @@
+17:20:42 log2ant-0.1.2 (Lands Run Falls): starting
+17:20:42 Warning: SgStnLogCollector::readLogFile(): station NYALE13N: cannot determine proper cable sign from cable_diff_is pattern; input: "2025.244.16:18:25.92;"Cable difference is: na"
+17:20:42 Warning: SgStnLogCollector::readLogFile(): station NYALE13N: got unexpected `on source' record; string: "2025.244.16:19:13.97#flagr#flagr/antenna,acquired"
+17:20:42 Warning: SgStnLogCollector::readLogFile(): station NYALE13N: got unexpected `on source' record; string: "2025.244.16:59:50.00:preob"
+17:20:43 Warning: SgStnLogCollector::readLogFile(): station NYALE13N: got unexpected `on source' record; string: "2025.244.19:08:28.00:preob"
+17:20:52 Warning: SgStnLogReadings::createAntCalFile(): the file r11223nn_orig.anc already exists; it will be overwritten
+17:20:52 Warning: SgStnLogReadings::createAntCalFile(): station NYALE13N: the sked's channel setup is missing

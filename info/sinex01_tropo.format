@@ -1,0 +1,539 @@
+                          D R A F T
+
+   SINEX_TRO -  Solution (Software/technique) INdependent EXchange 
+                Format for combination of TROpospheric estimates 
+                    Version 0.01 (March 01, 1997)
+
+1. INTRODUCTION
+
+For the new IGS product - the series of total zenith path delay
+transformed to precipitable water vapor - a format must be defined.
+This format should be used on the one hand by the IGS Analysis Centers
+to submit  their results for the combination and on the other hand for
+the distribution of the combined products.
+The files should have a simple but flexible structure , so that the
+Anlysis Centers can straightforward reformat their internal tropospheric
+estimates as well as the customers can easily read and handle the
+products.
+The proposed format is based on the SINEX Format.
+A number of blocks are taken directly from SINEX 1.00, namely:
+
+     FILE/REFERENCE          SITE/ECCENTRICITY  
+     SITE/ID                 SITE/ANTENNA
+     SITE/RECEIVER           SITE/GPS_PHASE_CENTER
+  
+Some other blocks are defined within this document.
+
+
+2. PHILOSOPHY
+
+Submission
+----------
+The Analysis Centers should submit daily files containing the estimated
+total zenith path delay parameters from all global sites. Only those
+information should be given which is directly connected with the
+troposphere estimates, the corresponding blocks are
+
+        FILE/REFERENCE
+        TROP/DESCRIPTION      (Mandatory) 
+        TROP/STA_COORDINATES  (Mandatory)
+        TROP/SOLUTION         (Mandatory)
+
+All other blocks of interest for the combination product, which 
+describe the site relevant parameters, will be taken from the weekly
+SINEX-product for the station coordinates and earth rotation
+parameters. By this way we can avoid redundancy for information which
+are constant within a week. 
+The meteorological surface data are taken directly from the Global
+Data Centers and should be in RINEX-2-Format.
+
+The files are named: 
+
+           cccwwwwd.tro     e.g. gfz08901.tro
+           cccwwww7.snx          gfz08907.snx
+           ssssdddv.yym          algo3660.96m
+
+
+
+
+
+
+Combination Product
+-------------------
+For the customer, who is interested in e.g. time series of water vapor
+at a site, it is convenient to have a product with separate files for
+each site. Therefore the product will be a weekly file for each site.
+Weekly files were preferred (instead of daily) to save disc storage by
+storing those information only once which normally is not varying from
+day to day.
+The file contains the following  blocks:  
+
+        FILE/REFERENCE                 TROP/DESCRIPTION
+        SITE/ID                        TROP/STA_COORDINATES
+        SITE/RECEIVER                  CENTERS/INFO_SOLUTION
+        SITE/ECCENTRICITY              CENTERS/INFO_MODEL
+        SITE/ANTENNA                   TROP/SOLUTION
+        SITE/GPS_PHASE_CENTER
+              
+     
+If there are no meteorological surface data so that the zenith path
+delay values can not be converted into precipitable water vapor then
+the file should have a different name indicating this fact.
+
+The files are named: 
+         sssswwww.eee     e.g. algo0890.zpd  for zenith path delay product
+                               algo0890.tro  for water vapor product
+ 
+
+                      A P P E N D I X   I
+ 
+
+
+                       S I N E X _ T R O
+
+                   V E R S I O N   0 . 0 1
+
+          D E T A I L   F O R M A T   D E S C R I P T I O N
+
+
+
+1. Header and Footer Lines (Mandatory)
+ 
+  Description
+ 
+  The Header line must be the first line in a SINEX_TRO file.
+  The Footer line must be the last  line in a SINEX_TRO file.
+ 
+  Contents:
+
+      ___________________________________________________________________
+     |_____________H_E_A_D_E_R___L_I_N_E_________________________________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | File Identifier| %=TRO                             |   A5         |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Format Version | Four digits indicating the version|   1X,F4.2    |
+     |                | of SINEX_TROP format used.        |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | File Agency    | Identify the agency creating the  |   1X,A3      |
+     | Code           | file.                             |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Time           | Creation time of this SINEX file. | 1X,I2.2, ':',|
+     |                |                                   | I3.3,':',I5.5|
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Agency Code    | Identify the agency providing the |   1X,A3      |
+     |                | data in the SINEX file            |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     |  Time          | Start time of solution in the     | 1X,I2.2, ':',|
+     |                | this SINEX_TROP file              | I3.3,':',I5.5|
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     |  Time          | End time of the solution in the   | 1X,I2.2, ':',|
+     |                | this SINEX_TROP file              | I3.3,':',I5.5|
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Observation    | Technique(s) used to generate the |   1X,A1      |
+     | Code           | SINEX solution                    |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Solution       | Marker name if this is a combined |   1X,A4      |
+     | Contents       | solution file and contains only   |              |
+     |                | one site or 'MIX' if it is a      |              |
+     |                | submission file containing more   |              |
+     |                | than one site                     |              |
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          |     64       |
+                                                          |______________|
+
+
+
+
+
+
+
+      ___________________________________________________________________
+     |_____________F_O_O_T_E_R___L_I_N_E_________________________________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | File Identifier| %=ENDTRO                          |     A8       |
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          |      8       |
+                                                          |______________|
+
+
+
+
+2. TROP/STA_COORDINATES Block (Mandatory)
+ 
+  Description
+ 
+  This block provides the coordinates of the sites. For the combination
+  result  it also gives some statistical information. 
+  Contents:
+
+      ___________________________________________________________________
+     |_______________TROP/STA_COORDINATES__D_A_T_A__L_I_N_E______________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | Site Code      | Call sign for a site.             |   1X,A4      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Point Code     | Physical monument used at a site  |   1X,A2      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Solution ID    | Solution number to which the input|   1X,A4      |
+     |                | in this data line is referred to. |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Observation    | Observation technique used.       |   1X,A1      |
+     | Code           |                                   |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Coordinates    | x,y,z-coordinate of a site        | 3(1X,F12.3)  |
+     |                | of SINEX_TROP format used.        |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | System         | Terrestrial Reference System Code |   1X,A6      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Remark         | A remark used to identify the     |   1X,A5      |
+     |                | origin of the coordinates         |              |
+     |                | (AC acronym or 'Mean')            |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Standard       | Standard deviation for x,y,z      |  3(1X,I2)    |
+     | Deviation      | in [mm] (Used only for Mean)      |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Counter        | Number of ACs used for Mean       |    1X,I2     |
+     |                | (Used only for Mean)              |              |
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          |     79       |
+                                                          |______________|
+
+3. TROP/DESCRIPTION Block (Mandatory)
+ 
+  Description
+ 
+  This block gives important parameters from the analysis and defines
+  the fields in the block 'TROP/SOLUTION'. 
+
+  Contents:
+
+      ___________________________________________________________________
+     |__________________TROP/DESCRIPTION__D_A_T_A__L_I_N_E_______________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | Information    | Describes the type of information |   1X,A29     |
+     | Type           | present in the next field. May    |              |
+     |                | take one the following values:    |              |
+     |                |                                   |              |
+     |                | 'SOLUTION_FIELDS_1':    (7(1X,A6))|              |
+     |                |   Names of fields in solution     |              |
+     |                |    (see below)                    |              |
+     |                | 'SOLUTION_FIELDS_2':    (7(1X,A6))|              |
+     |                |   Used if more than 7 fields      |              |
+     |                |   must be coded                   |              |
+     |                | 'SAMPLING TROP':          (1X,I22)|              |
+     |                |   Solution sample rate [sec]      |              |
+     |                |***********************************|              |
+     |                | Only for submissions:             |              |
+     |                | 'SAMPLING INTERVAL':      (1X,I22)|              |
+     |                |   Data sampling interval [sec]    |              |
+     |                | 'TROP MAPPING FUNCTION':  (1X,A22)|              |
+     |                |   Name of mapping function used.  |              |
+     |                | 'ELEVATION CUTOFF ANGLE': (1X,F22)|              |
+     |                |   Elevation cutoff angle [deg]    |              |
+     |                |                                   |              |
+     |                |                                   |              |
+     |                |***********************************|              |
+     |                | Only for combined solution:       |              |
+     |                | 'BIAS FROM INTERVAL':(12X,I5,X,I5)|              |
+     |                |   Begin and end of interval for   |              |
+     |                |   bias computation [yyddd]        |              |
+     |                | 'DELETE FACTOR':          (1X,F22)|              |
+     |                |   Limit (factor*sigma) for editing|              |
+     |                |   of trop estimates               |              |
+     |                | 'CONVERSION FACTORS':     (1X,A22)|              |
+     |                |   Factors used during conversion  |              |
+     |                |   from ZPD into PWV               |              |
+     |                |                                   |              |
+     |                |***********************************|              |
+     |                |                                   |              |
+     |                | The above fields may be in any    |              |
+     |                | order.                            |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Information    | Relevant information for the type |format is     |
+     |                | indicated by the previous field.  |type-dependent|
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          |     53       |
+                                                          |______________|
+     Fields   TROTOT - Total zenith path delay [mm]
+              TROWET - Wet zenith path delay [mm]
+              PWV    - Precipitable water vapor [mm]
+              STDDEV - stddev of the values in the column before
+              PRESS  - Pressure (mbar)
+              TEMDRY - Dry temperature (deg Celsius)
+              HUMREL - Relative Humidity (percent)
+              #ACTAK - Number of ACs taken into account for given epoch
+              #ACDEL - Number of ACs deleted for given epoch
+
+              DSTAX  - Difference to given Sta coordinate in [mm]
+              DSTAY  - Difference to given Sta coordinate in [mm]
+              DSTAZ  - Difference to given Sta coordinate in [mm]
+                  This differences are only used for the combined product
+                  where the history of station coordinates from day to day
+                  is given by this differences
+
+
+
+
+
+
+
+4. TROP/SOLUTION Block (Mandatory)
+ 
+  Description
+ 
+  This block contains the solution for all epochs. 
+  Contents:
+
+      ___________________________________________________________________
+     |___________________TROP/SOLUTION__D_A_T_A__L_I_N_E_________________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | Marker         | Name of the marker                |   1X,A4      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Time           | Time epoch of the solution        | 1X,I2.2, ':',|
+     |                | (Middle of data interval) (**)    | I3.3,':',I5.5|
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Values         | Space separated fields of variable| no format    |
+     |                | length . Number and order of      |              |
+     |                | fields are given in the block     |              |
+     |                | TROP/DESCRIPTION                  |              |
+     |                | Readable by:                      |              |
+     |                | read(line(20:),*)(val(i),i=1,n)   |              |
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          | variable <80 |
+                                                          |______________|
+       (**) The data intervals should be 30, 60 or 120 minutes
+            starting at 00:00 UT (smaller intervals, which are
+            integer parts of 30 minutes are possible)
+
+5. CENTERS/INFO_MODEL Block  
+ 
+  Description
+ 
+  This block contains the information about the parameters used
+  by the contributing Analysis Centers. 
+  Contents:
+
+      ___________________________________________________________________
+     |_________________CENTERS/INFO_MODEL__D_A_T_A__L_I_N_E______________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | Analysis Center| Name of Analysis Center           |   1X,A3      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Observation    | Observation technique used.       |   1X,A1      |
+     | Code           |                                   |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Cutoff angle   | Elevation cutoff angle used       |   1X,I3      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Data rate      | Sampling rate for used data       |   1X,I4      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Trop rate      | Sampling rate for trop estimates  |   1X,I4      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Mapping funct. | Mapping functions used            |   1X,A29     |
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          |     51       |
+                                                          |______________|
+
+
+6. CENTERS/INFO_SOLUTION 
+ 
+  Description
+ 
+  This block contains for the site in the product file the information
+  about the data and biases for the contributing Analysis Centers.
+
+  Contents:
+
+      ___________________________________________________________________
+     |___________________TROP/SOLUTION__D_A_T_A__L_I_N_E_________________|
+     |                |                                   |              |
+     |__Field_________|______Description__________________|___Format_____|
+     |                |                                   |              |
+     | Analysis Center| Name of Analysis Center           |   1X,A3      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | # of days      | Number of days used by the AC     |   1X,i2      |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Day_code       | Flag for each day (0 or 1)        |   1X,7I1     |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | # of Biases    | Number of biases for the interval |   1X,I2      |
+     |                |    ( 1=weekly; 7=daily )          |              |
+     |________________|___________________________________|______________|
+     |                |                                   |              |
+     | Biases         | Biases for each day in [mm]       |  7(1X,F6.1)  |
+     |________________|___________________________________|______________|
+                                                          |              |
+                                                          |     67       |
+                                                          |______________|
+                            A P P E N D I X  II
+
+*******************************************************************************
+*******************************************************************************
+**                                                                           **
+**            Example for Submissions of Trop Estimates                      **
+**                                                                           **
+*******************************************************************************
+*******************************************************************************
+----|---1|0---|---2|0---|---3|0---|---4|0---|---5|0---|---6|0---|---7|0---|---8|
+
+%=TRO 0.01 GFZ 96:999:88888 GFZ 97:034:00000 97:034:86399 P MIX
++FILE/REFERENCE
+ DESCRIPTION         GeoForschungsZentrum Potsdam, Dept.1
+ OUTPUT              Daily trop estimates
+ CONTACT             Gerd Gendt; gend@gfz-potsdam.de
+-FILE/REFERENCE
+*
++TROP/DESCRIPTION
+*_________KEYWORD_____________ __VALUE(S)______________________
+ ELEVATION CUTOFF ANGLE                            20
+ SAMPLING INTERVAL                                360
+ SAMPLING TROP                                   7200
+ TROP MAPPING FUNCTION         SAASTAMOINEN
+ SOLUTION_FIELDS_1             TROTOT STDDEV
+-TROP/DESCRIPTION
++TROP/STA_COORDINATES
+*SITE PT SOLN T __STA_X_____ __STA_Y_____ __STA_Z_____ SYSTEM REMRK
+ KOSG  A    1 P  3899225.255   396731.823  5015078.339 ITRF94 GFZ
+ MADR  A    1 P  4849202.480  -360329.112  4114913.095 ITRF94 GFZ
+ MATE  A    1 P  4641949.719  1393045.289  4133287.342 ITRF94 GFZ
+...
+-TROP/STA_COORDINATES
++TROP/SOLUTION
+*SITE ____EPOCH___ TROTOT STDEV  
+ KOSG 97:033:18000 2371.9   0.5  
+ KOSG 97:033:54000 2392.5   0.5   
+ KOSG 97:033:75600 2400.4   1.0  
+...
+-TROP/SOLUTION
+%=ENDTRO
+
+
+*******************************************************************************
+*******************************************************************************
+**                                                                           **
+**            Example for Combination Product                                **
+**                                                                           **
+*******************************************************************************
+*******************************************************************************
+----|---1|0---|---2|0---|---3|0---|---4|0---|---5|0---|---6|0---|---7|0---|---8|
+
+%=TRO 0.01 GFZ 97:056:38370 COM 97:033:00000 97:039:86399 P ALGO
++FILE/REFERENCE
+ DESCRIPTION         GeoForschungsZentrum Potsdam, Dept.1
+ OUTPUT              COMBINATION OF TROP ESTIMATES FROM ALL ANALYSIS CENTERS
+ CONTACT             Gerd Gendt; gend@gfz-potsdam.de
+-FILE/REFERENCE
+*
++TROP/STA_COORDINATES
+*SITE PT SOLN T __STA_X_____ __STA_Y_____ __STA_Z_____ SYSTEM REMRK SDEV„mm” NC
+ ALGO  A    1 P   918129.512 -4346071.247  4561977.825 ITRF94 Mean   5  4  1  4
+-TROP/STA_COORDINATES
+*-------------------------------------------------------------------------------
++SITE/ID
+ ALGO  A 40104M002 P Algonquin Park, Canada 281 55 43.1  45 57 20.9   200.0
+-SITE/ID
+*-------------------------------------------------------------------------------
++SITE/RECEIVER
+*SITE PT SOLN T _DATA_START_ __DATA_END__ ____DESCRIPTION_____ _S/N_ _FIRMWARE__
+ ALGO  A    1 P 95:279:77400 00:000:00000 ROGUE SNR-8000             226 3.2.32.
+-SITE/RECEIVER
+*-------------------------------------------------------------------------------
++SITE/ECCENTRICITY
+*                                             ___ARP___to__BENCHMARK_(m)
+*SITE PT SOLN T _DATA_START_ __DATA_END__ AXE ___UP___ _NORTH__ __EAST__
+ ALGO  A    1 P 95:280:00000 00:000:00000 UNE   0.1000   0.0000   0.0000
+-SITE/ECCENTRICITY
+*-------------------------------------------------------------------------------
++SITE/ANTENNA
+*SITE PT SOLN T _DATA_START_ __DATA_END__ ____DESCRIPTION_____ _S/N_
+ ALGO  A    1 P 94:139:00000 00:000:00000 DORNE MARGOLIN T       173
+-SITE/ANTENNA
+*-------------------------------------------------------------------------------
++SITE/GPS_PHASE_CENTER
+*                           ____L1-ARP(m)_______ ____L2-ARP(m)_______
+*____DESCRIPTION_____ _S/N_ __up__ north_ _east_ __up__ north_ _east_ AZIMU_ELEV
+ DORNE MARGOLIN T     ----- 0.1100 0.0000 0.0000 0.1280 0.0000 0.0000 IGS_01
+-SITE/GPS_PHASE_CENTER
+*-------------------------------------------------------------------------------
++TROP/DESCRIPTION
+*_________KEYWORD_____________ __VALUE(S)________________________
+ SAMPLING TROP                                   7200
+ BIAS FROM INTERVAL                       97033 97039
+ DELETE FACTOR                                    2.5
+ CONVERSION FACTORS             2.2765   22.1 3.739e5
+ SOLUTION_FIELDS_1             TROTOT STDDEV PWV    STDDEV PRESS  TEMDRY HUMREL
+ SOLUTION_FIELDS_2             #ACTAK #ACDEL DSTAX  DSTAY  DSTAZ
+-TROP/DESCRIPTION
+*-------------------------------------------------------------------------------
++CENTERS/INFO_SOLUTION
+*_AC #D DAY_COD #B _BIAS_ _BIAS_ _BIAS_ _BIAS_ _BIAS_ _BIAS_ _BIAS_
+ NRC  7 1111111  1    6.4    6.4    6.4    6.4    6.4    6.4    6.4
+ ESA  7 1111111  1   -6.3   -6.3   -6.3   -6.3   -6.3   -6.3   -6.3
+ GFZ  6 0111111  1   -4.7   -4.7   -4.7   -4.7   -4.7   -4.7   -4.7
+ JPL  7 1111111  1   -1.5   -1.5   -1.5   -1.5   -1.5   -1.5   -1.5
+-CENTERS/INFO_SOLUTION
+*-------------------------------------------------------------------------------
++CENTERS/INFO_MODEL
+*AC_ T CUT DATA TROP __TROP_MAPPING_FUNCTION______ 
+ NRC P  15  450 3600 LANYI                         
+ ESA P  20  360 7200 not given                     
+ GFZ P  20  360 3600 SAATAMOINEN                    
+ JPL P  15  300  300 LANYI                           
+-CENTERS/INFO_MODEL
+*-------------------------------------------------------------------------------
++TROP/SOLUTION
+*SITE ___EPOCH____ TROTOT _SIG PWV_ SIG PRESS_ _TEMP _HUMI #T #D DSTX DSTY DSTZ
+*day  33
+ ALGO 97:033:03600 2358.9  1.7  3.7 0.3 1026.1  -1.8  87.5  1  0    0    0    0
+ ALGO 97:033:10800 2355.1  1.4  3.1 0.2 1026.1  -2.0  88.2  1  0    0    0    0
+...
+*day  34
+ ALGO 97:034:03600 2351.7  1.6  2.8 0.2 1025.6  -2.3  89.2  1  0    1    2    1
+ ALGO 97:034:10800 2355.1  1.4  3.1 0.2 1026.1  -2.0  88.2  1  0    1    2    1
+...
+-TROP/SOLUTION
+%=ENDTRO
+
+----|---1|0---|---2|0---|---3|0---|---4|0---|---5|0---|---6|0---|---7|0---|---8|
+

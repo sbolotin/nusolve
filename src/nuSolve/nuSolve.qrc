@@ -1,0 +1,16 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/NVI_logo.png</file>
+    <file>images/pattern_1.png</file>
+    <file>images/pattern_2.png</file>
+    <file>images/pattern_3.png</file>
+    <file>images/pattern_4.png</file>
+    <file>images/pattern_5.png</file>
+    <file>images/pattern_6.png</file>
+    <file>images/icon_1.png</file>
+    <file>images/icon_2.png</file>
+    <file>images/icon_2.5.png</file>
+    <file>images/icon_2.6.png</file>
+    <file>images/icon_2.7.png</file>
+</qresource>
+</RCC>

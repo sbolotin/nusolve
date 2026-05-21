@@ -1,0 +1,137 @@
+#!/bin/bash
+
+
+executor="/sgpvlbi/progs/nusolve/bin/nuSolve"
+executor="/home/slb/SgLib/src/nuSolve/nuSolve"
+executor="nuSolve"
+
+
+
+#
+# Unset the debug messages:
+debug="yes"
+debug=""
+
+
+#
+#
+selfName=`basename "$0"`
+usage()
+{
+    echo ""
+    echo "Usage:"
+    echo "$selfName [-f Filter] [-b Band] [-l -s -r] <DATABASE>"
+    echo ""
+    echo "Where:"
+    echo "      <DATABASE>  -- A name of database to process, mandatory."
+    echo "      -f Filter   -- Type of observation to use, one of: 'all' (default), 'good' or 'used'."
+    echo "      -b Band     -- A one char band key (default is 'X')."
+    echo "      -l          -- Report baselines (default is on)."
+    echo "      -s          -- Report stations (default off)."
+    echo "      -r          -- Report sources (default off)."
+    echo ""
+}
+
+scriptName="snrStat.js"
+
+
+
+filter="all"
+doObj=""
+
+doBln="N"
+doStn="N"
+doSrc="N"
+bandKey=""
+
+#
+#
+# Parse the command line arguments:
+while getopts ':lb:srf:' opt; do
+  case "$opt" in
+    l)
+      test -n "$debug" && echo "Processing option 'b'"
+      doBln="Y"
+      ;;
+
+    s)
+      test -n "$debug" && echo "Processing option 's'"
+      doStn="Y"
+      ;;
+
+    r)
+      test -n "$debug" && echo "Processing option 'r'"
+      doSrc="Y"
+      ;;
+
+    f)
+      filter="$OPTARG"
+      test -n "$debug" && echo "The filter is set to ${filter}"
+      ;;
+
+    b)
+      bandKey="$OPTARG"
+      test -n "$debug" && echo "The bandKey is set to ${bandKey}"
+      ;;
+
+    :)
+      echo "$OPTARG"
+      usage
+      exit 1
+      ;;
+
+    ?)
+      usage
+      exit 1
+      ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+
+
+
+if [[ "$doBln" == "N" && "$doStn" == "N" && "$doSrc" == "N" ]] # the default
+then
+    doObj="Y N N"
+else
+    doObj="$doBln $doStn $doSrc"
+fi
+
+
+# convert all to lowercase:
+filter=`echo "$filter"   | tr '[:upper:]' '[:lower:]'`
+# convert bandKey to uppercase:
+bandKey=`echo "$bandKey" | tr '[:lower:]' '[:upper:]'`
+
+test -n "$debug" && echo "filter is '$filter'"
+test -n "$debug" && echo "doObjs is '$doObj'"
+test -n "$debug" && echo "bandKey is '$bandKey'"
+
+
+
+# basic check:
+#
+if [ -n "$1" ]
+then
+    database=$1
+    test -n "$debug" && echo "..debug: input database is $database"
+else
+    echo "Error: the database name is not specified"
+    usage
+    exit 1
+fi
+
+
+$executor -t $scriptName $database $filter $doObj $bandKey
+rc=$?
+
+#
+test -n "$debug" && echo "rc = $rc"
+
+
+exit $rc
+
+
+
+
+

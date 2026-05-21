@@ -1,0 +1,72 @@
+#! /bin/sh
+
+#
+# where the nuSolve sources are:
+#
+#path2Origin="/home/slb/src/nusolve"
+path2Origin="../../.."
+#
+#
+
+currentDir=$(pwd)
+
+srcSgDir="src/SgLib"
+srcL2aDir="src/log2ant"
+docDir="docs/UserGuides/"
+
+
+#path2Origin="../../.."
+#cmd='ln -s'
+
+
+path2Origin="../.."
+cmd='cp'
+
+
+
+
+sfx="h cpp"
+coreNamesSg="SgAttribute SgConstants SgIdentities SgIoExternalFilter SgLogger SgMeteoData SgMJD SgStnLogCollector SgVersion SgVex"
+coreNamesL2a="log2ant"
+
+for n in ${coreNamesSg}
+do
+    for s in ${sfx}
+    do
+        f="$n.$s"
+        echo "copying $f"
+#       cp $path2Origin/${srcSgDir}/$f ${currentDir}/${srcSgDir}
+#       ln -s $path2Origin/${srcSgDir}/$f ${currentDir}/${srcSgDir}
+        ${cmd} $path2Origin/${srcSgDir}/$f ${currentDir}/${srcSgDir}
+    done
+done
+
+for n in ${coreNamesL2a}
+do
+    for s in ${sfx}
+    do
+        f="$n.$s"
+        echo "copying $f"
+#       cp $path2Origin/${srcL2aDir}/$f ${currentDir}/${srcL2aDir}
+#       ln -s $path2Origin/${srcL2aDir}/$f ${currentDir}/${srcL2aDir}
+        ${cmd} $path2Origin/${srcL2aDir}/$f ${currentDir}/${srcL2aDir}
+    done
+done
+#cp $path2Origin/${srcL2aDir}/l2aVersion.cpp ${currentDir}/${srcL2aDir}
+#ln -s $path2Origin/${srcL2aDir}/l2aVersion.cpp ${currentDir}/${srcL2aDir}
+${cmd} $path2Origin/${srcL2aDir}/l2aVersion.cpp ${currentDir}/${srcL2aDir}
+${cmd} $path2Origin/${srcL2aDir}/README ${currentDir}/${srcL2aDir}
+
+
+
+
+if [ ! -d $docDir ]
+then
+    mkdir -p $docDir
+fi
+
+#cp -f $path2Origin/docs/UserGuides/log2antUserGuide.pdf $docDir && echo "copying docs/UserGuides/log2antUserGuide.pdf"
+#ln -s $path2Origin/docs/UserGuides/log2antUserGuide.pdf $docDir && echo "copying docs/UserGuides/log2antUserGuide.pdf"
+${cmd} $path2Origin/docs/UserGuides/log2antUserGuide.pdf $docDir && echo "copying docs/UserGuides/log2antUserGuide.pdf"
+
+

@@ -1,0 +1,386 @@
+\documentclass [10pt,letterpaper]{report}
+%\documentclass[10pt,letterpaper]{article}
+%\documentclass[10pt,letterpaper,twocolumn]{article}
+%
+%\documentclass[10pt,letterpaper,twocolumn]{report}
+%\documentclass[10pt,letterpaper]{report}
+%
+%\usepackage[greek,english]{babel}
+\usepackage[greek,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{wrapfig}
+
+
+\textheight     =  8.4in
+\textwidth      =  6.8in
+%\parindent      =  0.0cm
+
+\topmargin      =  -0.2in
+\oddsidemargin  =  -0.2in
+\evensidemargin =  -0.2in
+%\hoffset        =  0.0cm
+%\voffset        =  0.0cm
+
+\newcommand{\nuSolve}{\greektext n\latintext Solve}
+\newcommand{\thisVersion}{0.1.2}
+
+\graphicspath{{graphics/}}
+
+\begin{document}
+
+\title{log2ant-\thisVersion{}: User Guide}
+
+\author{
+Sergei Bolotin,
+Karen Baver,
+John Gipson,
+David Gordon,
+Daniel MacMillan
+}
+
+\date{\today}
+
+
+\maketitle
+
+\tableofcontents
+
+\def\leftSp      {48mm}
+\def\riteSp     {113mm}
+
+
+
+\chapter{Introduction}
+\label{intro}
+
+This document describes how to use the utility log2ant.
+
+The utility performs extracting various sensors reading from a station log
+file and store them in an ASCII file.
+
+The utility log2ant is distributed in nusolve package that contains \nuSolve{}
+software and utilities vgosDbMake, vgosDbCalc, vgosDbProcLogs and log2ant. Each of the
+utilities has its own version number that can differ from distribution version,
+e.g., the first release of log2ant-0.0.1 appeared in nusolve-0.7.2 package.
+
+The guide covers \thisVersion{} version of the software. Since log2ant
+is a simple utility we do not expect large modifications of the
+user guide version from version.
+
+\section{Requirements}
+\label{intro_reqs}
+
+See \emph{\nuSolve{} User Guide} for the requirements.
+
+
+\section{Changes from previous versions}
+\label{intro_changes}
+
+This section covers changes in the software and the user guide from version to version.
+
+
+\subsection{Changes in version 0.1.3}
+Support of ANTCAL version 2 format was added.
+
+\subsection{Changes in version 0.1.2}
+Nothing essential was changed.
+
+\subsection{Changes in version 0.1.1}
+Nothing essential was changed.
+
+\subsection{Changes in version 0.1.0}
+Regular expressions to parse modern log files were updated. An empty string filler was
+replaced from "n/a" to "DUMMY".
+Values of dot2pps records are extracted and reported in an ANTCAL file.
+Frequencies of PCAL sensors are calculated and reported in an ANTCAL file.
+
+\subsection{Changes in version 0.0.5}
+Nothing essential was changed.
+
+\subsection{Changes in version 0.0.4}
+Nothing essential was changed.
+
+\subsection{Changes in version 0.0.3}
+
+The command line arguments parser has switched to ARGP from GNU C Library.
+
+Processing of log files was improved, the regular expressions were updated.
+
+
+\subsection{Changes in version 0.0.2}
+An ability to extract SEFD evaluation from log files is added. SEFD is calculated
+by Field System as a result of observing a selected source (using procedure {\it onoff}).
+Also, processing DBBC3 dump files is implemented (thanks to Eskil Varenius, Onsala Space Observatory).
+
+A command line option to redirect utility's log output is added.
+Section \emph{\ref{section_invokation} Invoking log2ant} was modified to reflect
+these changes.
+
+The utility can process a log where channel setup is changing. That could be useful
+to process log files of single dish observations.
+
+Support for LOG-ANTAB output format is suspended.
+
+A few bugs were fixed.
+
+\subsection{Changes in version 0.0.1}
+Initial release.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+\chapter{Installation}
+
+The source codes of log2ant is distributed along with \nuSolve{}
+software. The latest stable version of the software one can find at
+{\tt https://sourceforge.net/projects/nusolve} with a name like
+{\tt nusolve-1.2.3.tar.gz}. Since the software is still in an active
+development phase, we recommend you use the latest version.
+
+The utility is compiled during compilation of \nuSolve{} software. Please
+refer to \nuSolve{} User Guide how to configure, compile and install the
+software.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+\chapter{Using log2ant}
+\section{Invoking log2ant}
+\label{section_invokation}
+To invoke log2ant just type (specifying if necessary the full path
+to the executable) program name and a file name of a field system log of a station:
+\begin{verbatim}
+> log2ant <FS log file>
+\end{verbatim}
+\noindent
+where <<FS log file>> is a name of input file. The input file can be compressed with
+gzip or bzip2, the utility will automatically decompress the file if gzip or bzip2
+compressors are installed on you system and are in your {\tt \$PATH}. It is expected
+that the type of compressed file is determined by the extension. If the file name
+ends with <<.gz>>, log2ant assumes it was compressed with gzip, if it ends with
+<<.bz2>>, bzip2 compressor will be used.
+
+The utility also accepts command line arguments. To get the list of these
+arguments, type
+
+\begin{verbatim}
+> log2ant --help
+\end{verbatim}
+\noindent
+Here are command line arguments that are available at the time of writing:
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{General options:}\\
+{\tt -s, -{}-station-name=STRING}  & Set a name of a station to STRING.\\
+\end{tabular}
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{Input control:}\\
+{\tt -3, -{}-DBBC3-dump=STRING}    & Use a file STRING as a DBBC3 dump file.\\
+\end{tabular}
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{Output control:}\\
+{\tt -c, -{}-compress=STRING}      & Use a compressor STRING (gzip or bzip2) to squeeze output ANTCAL file.\\
+{\tt -o, -{}-output=STRING}        & Set a name of output ANTCAL file to STRING.\\
+\end{tabular}
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{Time interval options:}\\
+{\tt -b, -{}-t-begin=STRING}       & Set an epoch of the first observation to STRING, data before STRING will be ignored.\\
+{\tt -e, -{}-t-end=STRING}         & Set an epoch of the last observation to STRING, data after STRING will be ignored.\\
+\end{tabular}
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{Data filter:}\\
+{\tt -a, -{}-all}                  & Report all collected data (i.e., both data\_valid on and off intervals).\\
+{\tt -t, -{}-data-type=STRING}     & Extract only the specified type of data. STRING can be: cbl (cable calibration), dat
+(data=on/off), fmt (fmt2gps), met (meteorological parameters), phc (phase calibration), sefd (SEFD evaluation),
+tpc (DBBC3 TPC), tpi (TPI), tsys (TSYS). There can be more than one "-t" option, e.g.: -t dat -t tsys.\\
+{\tt -u, -{}-strip-unused-sensors} & Do not output sensors that are not in a log file for some particular time.\\
+\end{tabular}
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{Debug output:}\\
+{\tt -l, -{}-log-file=STRING}      & Store log2ant's output in a file STRING, the default is "log2ant.log".\\
+{\tt -v, -{}-verbose=NUM}          & Set a level of log output to NUM: 0 (errors only), 1 (+warnings), 2 (+info) and 3 (+debug output). Default is 1.\\
+\end{tabular}
+\vspace{5mm}
+
+\begin{tabular}{p{\leftSp}p{\riteSp}}
+\multicolumn{2}{c}{Operation modes:}\\
+{\tt -?, -{}-help   }              & Give this help list.\\
+{\tt     -{}-usage  }              & Give a short usage message.\\
+{\tt -V, -{}-version}              & Print program version.\\
+\end{tabular}
+\vspace{5mm}
+
+\noindent
+The options expect the following meaning.
+
+The option <<-3 DBBC3.dump>> specifies a file name of the corresponding DBBC3 dump file.
+The software parses such a file when it is available along with the FS log file. For
+example,
+\begin{verbatim}
+> log2ant -3 vo0202oe.dump.gz vo0202oe.log.gz
+\end{verbatim}
+\noindent
+will process the Field System log file {\tt vo0202oe.log.gz} and extract data from the DBBC3
+dump file {\tt vo0202oe.dump.gz}.
+
+The option <<-a>> tells log2ant to collect all
+readings from a log file. Without this option it will collect data only between
+data\_valid=on and data\_valid=off records in a log file.
+
+The option <<-b tBegin>> is necessary when a log file contains records from several
+sessions. When log2ant parses a log file, it has this information from a database.
+The utility log2ant has no such information, so in some cases it is useful to provide
+epoch of start of the session. It expects an epoch of first observations, tBegin, in the
+same format as it was used in a log file. E.g.:
+\begin{verbatim}
+> log2ant -b 2020.021.17:40:16.09 /500/sessions/2020/vo0021/vo0021gs.log
+\end{verbatim}
+
+\noindent
+also, a user can use more human notation providing year, month and day instead of
+Field System format:
+
+\begin{verbatim}
+> log2ant -b 2020.01.21.17:40:16.09 /500/sessions/2020/vo0021/vo0021gs.log
+\end{verbatim}
+
+The option <<-c>> turns on using a compressor for the output file. Currently, two
+compressors are supported: gzip (<<-c gz>>) and bzip2 (<<-c bz2>>). In addition, if
+a user specifies output file name and the name ends with <<.gz>> or <<.bz2>>,
+the corresponding compressor will be used automatically and the option <<-c>> is
+not necessary.
+
+The option <<-e tEnd>> is the similar to <<-b>> option and sets the end of the session.
+Usually, after the last observation of a session there are measurements of cable length
+with and without additional cable to determine a cable sign. So, the utility reads records
+form a log file up to tEnd + 5 minutes.
+
+%The option <<-f>> controls format of output file. Currently, two types are implemented:
+%ANTCAL (default) and LOG-ANTAB.
+
+The option <<-o>> specifies a file name of the output. By default, log2ant will try
+to write the file in the same directory where the log file is, modifying name:
+".log" is replaced with ".anc" and underscore char, "\_", is added before last two
+chars of the name. E.g., if input file name is "vo0021gs.log", then the default
+output file name will be "vo0021\_gs.anc".
+
+Sometimes a station name in a log file is not correct or not present at all. In such cases
+a user can specify station name using option <<-s stationName>>.
+
+The option <<-t dataType>> controls what type of data should be written in the output file.
+The following types are known to the utility:
+
+\begin{tabular}{ll}
+{\tt  cbl}  & cable calibrations (converted to seconds)\\
+{\tt  dat}  & data\_valid=on records\\
+{\tt  fmt}  & fmt2gps readings\\
+{\tt  met}  & meteorological parameters\\
+{\tt  phc}  & phase calibrations\\
+{\tt sefd}  & evaluations of SEFD\\
+{\tt  tpc}  & DBBC3 tpc readings\\
+{\tt  tpi}  & tpi readings\\
+{\tt tsys}  & calculated by FS tsys values\\
+\end{tabular}
+
+\noindent
+Each of type data can be combined with another one. For example:
+
+\begin{verbatim}
+> log2ant -t cbl -t met /500/sessions/2020/vo0021/vo0021gs.log
+\end{verbatim}
+
+\noindent
+will extract only cable calibrations and meteorological parameters. If this option is not
+provided, all found data will be reported.
+
+The option <<-v>> tunes the level of log output. The possible levels are: error (0),
+warning (1), informational (2) and debug (3) messages. Currently by default the log level
+is set to 1, that means that only error and warning messages will be displayed.
+
+
+\section{ANTCAL format}
+\label{section_antcal_format}
+
+The format ANTCAL is currently in a developing stage. In future it could be extended.
+Current version of the format is available in nusolve distribution in 
+{\tt docs/antcal\_specs\_???.txt}.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+\chapter{Concluding remark}
+\label{chapt_concluding_remark}
+Currently, this document is in the developmental stage, its content could change
+time from time. Check for new versions at the ftp site:
+
+\begin{verbatim}
+      https://sourceforge.net/projects/nusolve
+\end{verbatim}
+
+\noindent
+If you have questions or suggestions that will improve the software or
+the User Guide, please e-mail us at:
+
+\begin{verbatim}
+      <mailto:sergei.bolotin@nasa.gov>
+\end{verbatim}
+
+%\noindent
+%Happy !
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%
+%\begin{thebibliography}{99}
+%
+%\bibitem{Bolotin2010}
+%S. Bolotin, J. Gipson, D. MacMillan: ``Development of a New VLBI Data
+%Analysis Software". In: International VLBI Service for Geodesy and
+%Astrometry 2010 General Meeting Proceedings, edited by D. Behrend and K.
+%Baver, NASA/CP-2010-215864, 197-201, 2010.
+%
+%
+%\bibitem{Bolotin2011}
+%S. Bolotin, J. Gipson, D. Gordon, D. MacMillan: ``Current Status of
+%Development of New VLBI Data Analysis Software". In: Proceedings of the
+%20th Meeting of the European VLBI Group for Geodesy and Astrometry,
+%edited by W. Alef, S. Bernhart, A. Nothnagel, Schriftenreihe des
+%Instituts f\"ur Geod\"asie und Geoinformation der Universit\"at Bonn,
+%Nr. 22, ISSN 1864-1113, 86-88, 2011.
+%
+%
+%\bibitem{Bolotin2012}
+%S. Bolotin, K. Baver, J. Gipson, D. Gordon, D. MacMillan: ``The First
+%Release of $\nu$Solve". In: International VLBI Service for Geodesy and
+%Astrometry 2012 General Meeting Proceedings `Launching the
+%Next-Generation IVS Network', edited by D. Behrend and K. Baver,
+%NASA/CP-2012-217504, 222-226, 2012.
+%
+%
+%\end{thebibliography}
+
+
+\end{document}
+
+

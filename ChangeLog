@@ -1,0 +1,2382 @@
+Fri Feb 21 10:41:55 EST 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * The whole source tree: an initial release.
+
+Thu Mar 13 13:44:56 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * nuSolve/NsStartupWizard.cpp: added creation of the home dir if
+          it does not exist.
+
+Tue Apr  1 12:56:30 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * SgLib/SgVlbiBaselineInfo.cpp: modified a procedure of ambiguity
+          resolutions, now it adjusts excluded observations too.
+
+Tue Apr  1 13:47:49 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * SgLib/SgVlbiStationInfo.cpp: modified a procedure of calculation
+          of a clock break offset: now it takes into account actual numbers
+          of polynomial coefficients of the stations clocks.
+
+Mon Apr  7 13:47:51 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * README: made it a little bit verbose.
+
+Mon Apr  7 14:51:37 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * INSTALL.local: updated info about use of shared libraries and
+          configuring nuSolve to use netCDF.
+
+Wed Apr 23 14:33:02 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various source files: added loadIntermediateResults() and
+          saveIntermediateResults() methods to save/restore the state and
+          intermediate results.
+        * various source files: added ability to set up clocks and zenith delay
+          parameters for each station individually.
+
+Mon Apr 28 17:29:06 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various source files: added an option that allows a user to specify how
+          frequently the software have to save the intermediate results.
+
+Thu May  8 10:40:38 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various source files: added support for CALC-11 output.
+
+Wed May 14 16:55:18 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * SgConstants.h, SgConstants.cpp, SgSolutionReporter.cpp: added correct
+          calculation of the nutation offsets in the spoolfile output.
+
+Tue Jun  3 14:50:08 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVersion.cpp, src/nuSolve/NsVersion.cpp: updated versions
+          for the release.
+        * Makefile.am: added User Guide (docs/user_guide/user_guide.pdf) to the
+          list of distributed files.
+
+Thu Jun  5 16:05:21 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: updated description of the user-visible changes.
+
+Mon Jun  9 15:44:11 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: correct dealing with CLK_CNST and
+          ATM_CNST LCODEs in procedures of reading and writing DBH files.
+
+Mon Jun  9 16:26:09 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added displaying of CALC version
+          for each band in "General Info" tab.
+
+Thu Jun 12 14:24:26 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: fixed a bug in the plot of station
+          depended data.
+        * src/SgLib/SgVlbiObservation.cpp: removed piece of test code.
+        * configure.ac: updated version of the distribution.
+        * src/SgLib/SgVersion.cpp, src/nuSolve/NsVersion.cpp: refreshed versions
+          for a release.
+
+Mon Jun 16 17:07:56 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/{SgVlbiSession.{h,cpp},SgVlbiSessionUtilities.cpp}: updated
+          evaluation of ambiguity multipliers.
+
+Mon Jun 23 17:56:50 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various source files: fixed memory leaks detected with LeakTracer.
+
+Tue Jun 24 11:50:43 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: updated version of the distribution: 0.1.5.
+        * src/SgLib/SgVersion.cpp, src/nuSolve/NsVersion.cpp: refreshed versions
+          for a release.
+
+Thu Jun 26 14:38:32 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: updated the communication with
+          catalog interface.
+        * src/SgLib/SgVersion.cpp, src/nuSolve/NsVersion.cpp: refreshed version
+          numbers for a release.
+        * configure.ac: updated version of the distribution: 0.1.6.
+
+Mon Jul  7 16:38:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: modified a procedure of
+          resolving group delay ambiguities to work in an automatic data
+          processing mode.
+
+Tue Jul 22 16:32:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: added network ID session attribute. Added set up of
+          actions that need to be performed as a function of network ID.
+
+Mon Aug 11 16:44:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: added parsing of history
+          records to figure out for which station manual phase calibrations
+          were applied.
+
+Tue Aug 12 16:32:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: added automatic set up
+          of clock reference station (for databases of Version 3).
+
+Thu Aug 14 16:24:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: added an ability to reset all editing information.
+
+Mon Aug 18 16:08:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: added a procedure to
+          detect clock breaks at an INT-type session.
+
+Tue Sep 16 16:56:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: added a warning when a clock
+          break is detected for a station that is a reference clock station.
+
+Thu Sep 18 16:16:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: added an option to select how to parameterize INT
+          session while reweighting/outlier processing in an automatic mode,
+          a user can select dUT1 or baseline length.
+        * src/nuSolve/NsSessionEditDialog.cpp: added an ability to list all
+          potentially good but deselected observations;
+
+Fri Sep 19 11:10:22 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVersion.cpp, src/nuSolve/NsVersion.cpp: refreshed version
+          numbers for a release.
+        * configure.ac: updated version of the distribution: 0.1.7.
+
+Mon Sep 22 16:02:47 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: put creation of the reporter before
+          execution of session post read actions. Also, added call to generation
+          of spoolfile output when the actions have been performed.
+
+Mon Sep 23 16:16:47 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: the threshold for outliers processing is now
+          stored/restored to/from settings.
+        * various files: the general config remember last modified network ID.
+        * various files: added an option do not normalize residuals; the residuals
+          just scaled by WRMS (band or baseline).
+
+Thu Sep 25 14:59:43 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgTaskConfig.cpp: modified SgTaskConfig::evaluatePath2(),
+          user now can safely (the application will not crash) provide empty
+          names for files in config.
+        * various files: the executable nuSolve accepts an argument "-n": to
+          skip automatic processing even if a session is eligible for it.
+
+Fri Sep 26 16:32:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: added "session setup" as a separate option. The option
+          performs set up of a reference clock station, checking for manual phase
+          cals, etc. and can be configured separately for each type of network.
+
+Tue Sep 30 16:06:05 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: added need2runAutomaticDataProcessing()
+          method to SgVlbiSession. It checks history records and tries to determine
+          is the automatic processing need to be invoked. If a session already
+          processed, we do not want to run automatic processing again.
+
+Tue Oct  7 16:25:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/nuSolve.cpp: added support for multiple configurations
+          for one user.
+
+Thu Oct  9 16:32:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: modified post read
+          actions for INT sessions.
+
+Fri Oct 10 16:56:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiStationList.cpp: added display of value and
+          standard deviations of baselines clock offsets at the baseline list
+          window.
+
+Tue Oct 14 14:16:55 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added a warning message window
+          if a session does not has any clock reference station.
+
+Mon Oct 20 16:56:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiBand.cpp: SgVlbiBand::collectStatistics(): added a
+          10ps limit to WRMS for calculation non-normalized residuals. It
+          stabilizes automatic data procession of INT sessions with small WRMS.
+
+Thu Oct 23 16:16:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSetupDialog.cpp: fixed a bug: field lePath2Home_
+          never was used. Added also check for the directory and creation of
+          it if it is necessary.
+
+Fri Oct 24 16:44:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: in the automatic mode a warning
+          message about clock break at the clock reference station is suppressed.
+        * src/SgLib/SgVlbiObservation.cpp: modified use of high frequency ERP
+          contributions and external model, now it works in the same way as in
+          interactive SOLVE.
+
+Mon Oct 27 16:25:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiTaskConfig.cpp: make it impossible use of high frequency
+          ERP contributions and external model simultaneously.
+        * src/SgLib/SgVlbiBaselineInfo.cpp: modified calculation of ambiguity
+          spacings for one-baseline sessions.
+
+Tue Oct 28 16:01:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiTaskConfig.cpp(+): added an ability to change
+          a name of the eccentricity file;
+
+Tue Nov  4 16:16:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPiaReport.cpp: added a window with summary about
+          automatic processing.
+
+Mon Nov 10 16:49:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/<various files>: added use of a priori clock offsets/rates.
+        * src/nuSolve/<various files>: added save/restore size of the Main
+          window.
+
+Thu Nov 13 16:04:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: modified content of the string
+          that passed as a catalog history record.
+
+Thu Nov 20 16:00:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/<various files>: reworked use of obs. dependent
+          contributions.
+
+Mon Nov 24 16:32:00 EDT 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added output of residuals in a
+          "spoolfile" format.
+
+Tue Dec  2 16:36:00 EST 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added results of source positions
+          estimation to the spoolfile output.
+
+Wed Dec  3 16:16:00 EST 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added results of axis offsets estimation
+          to the spoolfile output.
+
+Thu Dec  4 16:49:00 EST 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/<various files>: added an ability to select for which station(s)
+          axis offsets have to be estimated.
+
+Thu Dec 11 16:20:51 EST 2014 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * <various files>: redesigned use of history records.
+
+Tue Jan  6 16:49:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified spoolfile output to remove
+          reports about deselected stations in parameter estimation part.
+        * src/SgLib/SgGuiVlbiStationList.cpp: fixed a bug in displaying of flag
+          of estimation of station axis offset on tab "Stations (List)".
+
+Thu Jan  8 16:04:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.{h,cpp}: added an "alternative title name"
+          feature for a plot branch, it is shown if only one branch is highlighted.
+        * src/nuSolve/NsSessionEditDialog.cpp: added display of a baseline name
+          and ambiguity info if only one baseline is selected on the baseline plot.
+
+Fri Jan  9 16:09:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: modified import of a session from
+          database files, add a warning message if an observation has "bad" (NAN
+          or INF) value in one standard deviations LCODEs.
+
+Mon Jan 12 16:36:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/<various files>: synchronized number of polynomials of station
+          clock model and the number of polynomials of the corresponded PWL model.
+          Modified the spoolfile output to include in the report values from both
+          sets of polynomials.
+
+Tue Jan 13 16:01:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSingleSessionTaskManager.cpp: added info on number of
+          observations and parameters to log output.
+        * src/nuSolve/NsSessionEditDialog.cpp: added values of SNR to the observation
+          info display.
+
+Wed Jan 14 16:02:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added info on number of observations
+          and estimated parameters to session edit window.
+
+Thu Jan 15 16:49:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgBreakModel.{h,cpp}: added standard deviations to a parameter
+          break model.
+        * src/SgLib/SgVlbiSessionUtilities.cpp: the standard deviations of the
+          estimated clock breaks are saved along with the corresponding magnitudes.
+        * src/SgLib/SgGuiVlbiStationList.cpp: added GUI to display the std.devs of
+          clock break magnitudes.
+        * src/SgLib/SgSolutionReporter.cpp: added report on clock breaks to the
+          spoolfile output.
+
+Thu Jan 22 16:25:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: added calculation and storing of
+          used a priori Earth rotation parameters.
+        * src/SgLib/SgSolutionReporter.cpp: added actual values of a priori ERP.
+
+Thu Feb  3 16:02:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgEstimatorTst.{h,cpp}: added calculation of a condition number
+          of the working matrix, the estimator stores the largest condition number.
+        * src/SgLib/SgSolutionReporter.cpp: added to the report the condition number
+          of the working matrix.
+
+Wed Feb  4 17:26:14 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: updated version of the distribution: 0.2.1.
+
+Thu Feb  5 11:55:45 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: updated information about the distribution.
+
+Thu Feb 12 17:25:00 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/<various files>: added check for a mixed channels setup, added
+          a warning message if the software detects the mixed channels setup.
+
+Thu Feb 26 14:42:59 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservation: modified use of quality codes when the
+          software processes ionosphere free combination observables.
+
+Tue Mar 24 14:08:17 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/{NsSetup.{cpp,h},{NsMainWindow,nuSolve}.cpp}: added save/restore
+          desktop position of the main window.
+
+Tue Mar 24 14:35:16 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/{SgPwlStorageBSpline,SgPwlStorageIncRates}.cpp: modified use of
+          polynomial coefficients if a step of PWL model is equal to the interval of
+          input data.
+
+Tue Jun 30 17:01:00 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added fringe error codes to the
+          baselines plot. Added info about the fringe error codes to the observation
+          info window.
+
+Thu Jul  3 17:49:00 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/*: added sources for vgosDbMake utility.
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: import a new session from correlator
+          output (Mk4 format, using HOPS).
+        * src/SgLib/{SgNetCdf.{h,cpp},SgOpenDb*,SgVlbiSessionIoOdbInput.cpp}: added
+          support for vgosDb output of a session imported from correlator output.
+
+Mon Jul  6 13:32:40 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified output in a spoolfile format to
+          handle sessions with 1K+ observations at one baseline.
+
+Tue Jul 28 13:12:44 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/{SgPwlStorageBSpline,SgPwlStorageIncRates}.cpp: modified evaluation
+          of std.deviation to include contribution from all coefficients.
+
+Fri Aug 14 17:09:00 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgKombFormat.{h,cpp}: added support for input observations from KOMB
+          files.
+
+Fri Aug 21 17:49:00 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+
+Tue Sep  1 17:16:05 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: modified input filters: if there are
+          more than one fringe file for an observation, the software picks up the file
+          from the latest fourfit run.
+
+Wed Sep  2 13:32:40 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: fixed a bug that caused a crash while saving
+          a database with one band.
+
+Thu Sep  3 14:10:31 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: modified calculation of the effective
+          ionosphere frequencies to take into account width of channels.
+
+Tue Sep 14 16:16:00 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added an ability to process observations
+          that have more than one correlator root file in a scan directory.
+
+Tue Sep 22 15:45:31 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSetup.{c,hpp}: added a flag have2LoadImmatureSession_;
+        * src/nuSolve/nuSolve.cpp: added a command line argument "-a";
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: added ability to import sessions with
+          incomplete set of data (will be useful for "artificial" observations
+          prepared for tests and comparisons).
+
+Wed Sep 30 10:03:34 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * multiple files in src/nuSolve and src/nuSolve: added "interactive SOLVE style"
+          clock break model. A user can choose a model for particular clock break, clock
+          breaks with different models can be combined in one solution.
+
+Mon Oct  5 14:58:12 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: corrected data type for the LCODE "RECSETUP".
+          Added a complain if expected and read types mismatch.
+
+Tue Oct  6 17:06:55 EDT 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservation.cpp, SgBreakModel.{h,cpp}: added inclusion of clock
+          break parameters to the parameter list used for evaluation of chi2.
+        * src/SgLib/SgGuiVlbiStationList.cpp: fixed discrepancy in displaying clock breaks.
+        * src/SgLib/SgSolutionReporter.cpp: made output of clock breaks sorted in time
+          order.
+
+Mon Nov 30 17:03:12 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: added storing into a database a priori
+          clock model parameters using the old approach.
+
+Tue Dec  1 14:26:45 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: added extracting from a database a priori
+          clock model parameters using the old approach.
+        * src/SgLib/SgVersion.cpp, src/nuSolve/NsVersion.cpp: updated versions for
+          the new release.
+        * configure.ac: updated version of the distribution: 0.2.2.
+        * INSTALL.local: added notes on compiling vgosDbMake utility.
+        * NEWS: updated information about the distribution.
+
+Fri Dec 11 11:28:59 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: removed mentioning of MAX_CHAN_PP.
+
+Fri Dec 11 15:56:32 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * tests/FRN_dump.cpp: removed mentioning of MAX_CHAN_PP.
+        * src/vgosDbMake/Makefile.am: added the directory "images" to the distribution.
+
+Fri Dec 18 14:54:10 EST 2015 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs: added the directory, put there with source files.
+        * Makefile.am, configure.ac: adjusted the files to include vgosDbProcLogs
+          sources.
+
+Fri Feb 19 16:49:00 EST 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiStationInfo.cpp.cpp: added reading station logs functionality.
+
+Thu Feb 25 11:18:07 EST 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgTaskManager.cpp: added constraints for clocks in PWL mode.
+        * src/SgLib/SgTaskConfig.cpp: sets default values for SOLVE's compatibility
+          to `true'.
+
+        * {tests,src/SgLib}/Makefile.am: added "@HOPS_INCLUDES@" to AM_CPPFLAGS.
+
+Wed Mar  9 11:09:48 EST 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiStationList.cpp: replaced column title "Clk.Order" with correct
+          "#Clk.Terms".
+
+Tue Mar 22 11:45:27 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoOdbInput.cpp: inverted a sign for a priori UT1 values,
+          they are still (TAI-UTC).
+
+Thu Apr 21 14:53:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: updated version of the distribution: 0.2.3.
+
+Thu May 19 16:49:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.{h,cpp}: the pushbuttons "IonoC" and "Iono0" are
+          now members of the class and they are enabled/disabled depending on presence of
+          ionosphere corrections.
+
+Tue May 24 10:01:05 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDb.{h,cpp}: added check and expansion of convolved dimensions.
+
+Thu May 26 12:01:01 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbStoreObs.cpp: fixed a bug for output correlator info in the
+          case of GSI type of correlator data.
+
+Fri May 27 10:09:05 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbStoreSession.cpp: adjusted creation of the wrapper file name
+          for a new session.
+
+Tue May 31 10:19:22 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified an indicator of deselected observations
+          in the case of a session that has only one band (no complains about bad ionosphere).
+
+Tue May 31 12:52:07 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added patterns to skip strings of a log file,
+          it will decrease processing time for the VGOS stations.
+
+Tue May 31 16:28:30 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservation.{h,cpp}: added dTec value and its standard variation.
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added extraction of dTec and dTecStdDev
+          from the fringe files.
+        * src/SgLib/SgVlbiSessionIoOdb*.cpp: added I/O operations for dTec and dTecStdDev.
+        * src/SgLib/SgOpenDb*.{h,cpp}: added I/O operations for dTec and dTecStdDev.
+        * src/nuSolve/NsSessionEditDialog.cpp: added dTec and dTecStdDev to the baseline
+          plot.
+
+Wed Jun  1 12:15:46 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbLoadSession.cpp: it is ok for ClockSetup.nc and AtmSetup.nc
+          do not contain "interval" or "rate constraints" (e.g., for short sessions,
+          like INT).
+        * src/SgLib/SgOpenDb.cpp: added workaround for the case when EffFreq file is
+          available only with "_kDB" attribute (first met in 14SEP02XU).
+
+Thu Jun  2 17:30:42 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added workaround for problems in VLBA log
+          files.
+
+Fri Jun  3 11:57:56 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added workaround for duplicate scans and
+          faked observations.
+
+Mon Jun  6 17:49:09 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgAPrioriData.cpp: fixed a bug in sorting epochs of a priori data.
+
+Wed Jun  8 16:58:01 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiNetworkId.cpp: extended set of patterns for "IVS-R&D" NID.
+
+Wed Jun  8 17:27:36 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added workaround for calculating cable cal
+          outliers for the case if the readings are the same.
+
+Thu Jun  9 14:26:05 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbLoadObs.cpp: added reading fringe error codes from CorrInfo
+          file.
+        * src/SgLib/SgVlbiSessionIoOdbInput.cpp: reworked reading of fringe error codes
+          and exclusion of bad observables. The software will assign the error code "Z"
+          if ambig. spacing <= 0 (sometimes it happens in old databases).
+
+Fri Jun 10 11:49:34 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: commented out "tape" pattern for old FS. Added
+          10min limits for extrapolation of meteo parameters.
+
+Mon Jun 13 16:56:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified filters to import data from "strange"
+          log files.
+
+Tue Jun 14 17:46:35 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added reg.exps to use "/tape/" marks of the
+          data on/off switches.
+
+Thu Jun 16 15:59:12 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbLoadSession.cpp: made possible for the variable "ScanName" from
+          Scan/ScanName.nc and various variables from Solve/CalibrationSetup.nc have changing
+          dimensions.
+
+Thu Jun 16 16:54:14 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDb.cpp: added complains if a group delay for the sideband is present,
+          but one of other essential values (e.g., ambiguity spacings) is missed.
+
+Thu Jun 16 17:42:39 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added workaround for the case when a scan name
+          has been cut to 10 chars in a database (e.g., "094-1549_0552+398" => "094-1549_0").
+
+Fri Jun 17 10:22:20 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbLoadObs.cpp: removed "mandatory" attribute for SBDelaySig, if
+          std.dev of the single band delays are missed in SBDelay_bS.nc, set them to 1ns.
+
+Tue Jun 21 11:24:05 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified parsing procedure to take into account
+          cases when old and new FS format are mixed in a log file (like 1998/na253/na253ft.log).
+
+Tue Jun 21 13:37:15 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDb*.cpp: modified treatment of station names that contain a space
+          char (" "). In a wrapper file and corresponded directory names the space char is
+          replaced by underscore (" " => "_": "NRAO85 3" => "NRAO85_3").
+
+Thu Jun 23 17:49:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDb*.cpp: made reading of CorrInfo-*.nc files aware of a correlator
+          type.
+
+Tue Jun 28 18:58:38 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDb*: added correlator-type dependent input of CorrInfo.nc,
+          ChannelInfo.nc and PhaseCalInfo.nc files.
+
+Wed Jun 29 13:05:48 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDbLoadSession.cpp: removed the "mandatory" flag for FlybyFlag and
+          FlybyList variables of the file CalibrationSetup.nc.
+
+Wed Jun 29 15:39:13 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgOpenDb.cpp: added check for special dimensions "NumObs" and "NumScans"
+          in checkFormat().
+
+Fri Jul  1 14:45:50 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: replaced prime band with active band in the
+          report. Now a user can generate report for S-band too, if it is necessary.
+
+Wed Jul  6 17:59:18 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgLogger.{cpp,h}: added supplement loggers.
+
+Thu Jul  7 14:53:16 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoOdbOutput.cpp: added filters to the supplement log to
+          remove technical information. Appended content of the supplement log to the
+          history output.
+        * src/vgosDbProcLog/vgosDbProcLog.cpp: added supplement log.
+
+Tue Jul 12 16:55:31 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiBand.{cpp,h}: added an attribute "has ambigs"; the selfcheck()
+          will set this attribute if at least one observable of a band has non zero
+          ambiguity spacing.
+        * src/nuSolve/NsSessionEditDialog.cpp: set disabled the button "Ambig" if a band
+          does not have the attribute "has ambigs".
+
+Wed Jul 13 16:49:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLog/vgosDbProcLog.cpp: added another supplement logger to save
+          log in a separate file for each session.
+
+Thu Jul 14 16:09:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLog/VpSetup.{h,cpp}: added a setup for the supplement logger.
+        * src/vgosDbProcLog/VpStartupWizard.cpp: added GUI to configure the supplement
+          logger.
+
+Fri Jul 15 16:36:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/*.{h,cpp}: added the supplement loggers (to save log in the history
+          part of the vgosDb and in a separate log file). Added configuration and GUI to set
+          it up.
+
+Mon Jul 18 16:01:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added extraction of operator's comments from
+          station log files.
+
+Wed Jul 20 16:41:57 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added check of time order for weather measurements.
+          The operators sometimes just add all measurements in the end of a session.
+        * src/nuSolve/NsSessionEditDialog.cpp: added highlights for operator's comments.
+
+Fri Jul 22 16:25:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified filters for operator's comments from
+          station log files.
+
+Wed Jul 27 17:20:29 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/*/??StartupWizard.cpp: replaced all watermark pixmaps, the new images are
+          copyright clean.
+
+Mon Aug  1 15:32:11 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiTaskConfig.cpp: rearranged contribution's checkboxes to make
+          the window more compact.
+        * src/nuSolve/NsSessionEditDialog.cpp: rearranged widgets on "General" tab
+          to make the window more compact.
+
+Tue Aug  2 16:37:53 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLog/vgosDbProcLog.cpp: added user ID to the history output.
+        * src/vgosDbMake/vgosDbMake.cpp: added user ID to the history output.
+
+Wed Aug  3 16:43:06 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiBaselineInfo.{h,cpp}: added values of typical ambiguity spacings
+          and typical number of channels. Added calculation of these values in ::selfCheck()
+          method;
+        * src/SgLib/SgVlbiBaselineInfo.cpp:: added display of typical ambiguity spacings and
+          number of channels in the list (for Band view).
+
+Thu Aug  4 17:21:51 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified output of "Flyby Status" section.
+
+Fri Aug  5 17:47:49 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified output of estimated ERP parameters.
+
+Mon Aug  8 16:22:34 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/vgosDbMakeUserGuide.tex: finished the preliminary version of
+          the guide.
+
+Tue Aug  9 15:49:33 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/vgosDbProcLogUserGuide.tex: finished the preliminary version
+          of the guide.
+        * configure.ac: updated version of the distribution: 0.3.0.
+
+Thu Aug 11 17:30:18 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: modified group delay ambiguity resolving.
+        * src/nuSolve/NsSetup.{h,cpp}: added session editor window width and height to
+          the setup.
+        * src/nuSolve/NuSolve.cpp: added save/restore of the width and height.
+        * src/nuSolve/NsSessionEditDialog.cpp: added use of the width and height.
+
+Mon Aug 22 17:52:53 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various source files: renamed "SgOpenDb" object into "SgVgosDb", plus methods,
+          variables, comments, etc..
+
+Tue Aug 23 13:20:30 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservation.cpp: updated the isEligible() method: should work
+          with one-band files.
+        * src/SgLib/SgVersion.cpp: updated version number: 0.3.1, the name is the same.
+        * configure.ac: updated version of the distribution: 0.3.1.
+
+Thu Aug 25 15:11:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiStation.{h,cpp}: added parallactic angle to the station structure.
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: added reading the parallactic angle values.
+        * src/nuSolve/NsSessionEditDialog.cpp: added displaying the parallactic angles on
+          the station plots.
+
+Thu Aug 25 16:53:25 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservable.cpp: added calculation of phase delay.
+
+Thu Aug 25 18:31:08 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservable.{h,cpp}: removed from the data structure values of
+          ambiguity spacing and number of ambiguities for the group delays.
+        * src/SgLib/SgVlbiMeasurement.{h,cpp}: added to the data structure values of
+          ambiguity spacing and number of ambiguities. Updated other parts of the sources
+          to reflect the changes.
+
+Fri Aug 26 11:52:50 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified counting of good observations for
+          the case when only one database (with one band) is loaded.
+        * src/SgLib/SgVersion.cpp: updated version number: 0.3.2, the name is still the
+          same.
+        * configure.ac: updated version of the distribution: 0.3.2.
+
+Thu Sep  1 16:36:41 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: added phase delays. Added evaluation of phase calibration
+          contributions to the group and phase delays, added plots for these values.
+
+Fri Sep  2 14:05:34 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiBaselineList.cpp: added display of baseline length.
+        * src/SgLib/SgGuiPlot.{h,cpp}: added value-type dependent titles.
+
+Thu Sep  8 17:36:32 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/*BaselineList.{h,cpp}: added "use ionosphere corrections" attribute
+          for group and phase delays. Added GUI to change the attributes.
+        * src/SgLib/SgSolutionReporter.cpp: adjusted report on use the ionosphere
+          corrections.
+
+Tue Sep 13 12:17:33 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/*/*Version.cpp: increment version numbers.
+        * configure.ac: updated version of the distribution: 0.3.3.
+        * nusolve-0.3.3.tar.gz: the package was released.
+
+Wed Nov  2 17:23:30 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: fixed a bug in calculation of standard deviation
+          for latitude of baseline section.
+
+Thu Nov  3 17:56:08 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added report on baselines variations when station
+          coordinates have been estimated.
+
+Mon Nov  7 16:09:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added report on baselines variations when baseline
+          vectors have been estimated.
+
+Fri Nov 18 16:16:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc/*, src/Makefile.am, src/configure.ac: added source tree for
+          vgosDbCalc.
+
+Mon Nov 28 14:06:45 EST 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgEccRec.cpp: fixed a bug in order of coordinates assigning for "NEU"
+          type of eccentricities (thanks to Tetsuya HARA, GSI/AES for noting it).
+
+Tue Jan 31 13:00:00 EST 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: updated version of the distribution: 0.4.0.
+
+Thu Feb  2 16:49:00 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc: the sources of the vgosDbCalc utility were developed.
+
+Fri Feb  3 13:17:05 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservable.{h,cpp}: added isRestorable() method.
+        * src/SgLib/SgVlbiSessionUtilities.cpp: modified outlier restoration procedure.
+
+Tue Feb 14 13:41:24 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * INSTALL.local: added notes on vgosDbCalc installation.
+
+Wed Feb 15 16:16:00 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/vgosDbCalcUserGuide.pdf: made a preliminary version of the guide.
+
+Thu Feb 16 16:04:18 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added set up of a coordinate reference station
+          and increase of the order of polynomial clock models for station for a "native"
+          session.
+        * src/SgLib/SgGuiPlotter.cpp: added check for close max and min values. Sometimes,
+          a constant value can have "fluctuations" due to computer round offs.
+        * src/vgosDbCalc/vgosDbCalc.cpp: modified guessSessionName() function, now it checks
+          for non-absolute paths too.
+
+Fri Feb 17 10:45:06 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added check for computer round offs problem in
+          evaluating rms for meteorological parameters.
+        * src/SgLib/SgVlbiNetworkId.cpp: added "VGOS" network to a list of known networks.
+
+Thu Feb 23 14:22:46 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc/vgosDbCalc.cpp: added printing info about the used a priori files
+          into the history part of the vgosDb tree.
+
+Mon Feb 27 13:55:20 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/nuSolveUserGuide.tex: updated content of the guide.
+        * src/*/*Version.cpp: updated versions.
+        * NEWS: added description of the release 0.4.0.
+
+Tue Feb 28 15:20:28 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/{nuSolve.,nuSolve_resources}.cpp: added a window icon for the application.
+
+Thu Mar  2 13:14:17 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSession.cpp: in selfCheck() made set up of identities in a chronological
+          order.
+
+Mon Mar  6 16:52:35 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files in src/SgLib/ and src/nuSolve: added "Novice user" mode.
+
+Thu Mar 16 16:16:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils.cpp: modified evaluateEffectiveFreqs() function.
+
+Fri Mar 17 13:17:14 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionInfo.h: added an attribute "Attr_FF_CREATED" -- the session
+          has been imported from correlator output.
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: moved vgosDb output of the ionosphere effective
+          frequencies to the block where all ionosphere data are processed. As a consequence,
+          the effective freqs are stored after nuSolve run, not vgosDbMake as it was before.
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: the effective frequencies are not mandatory
+          data now, it is ok if they are missed.
+
+Thu Mar 23 14:04:41 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgPwlStorageBSplineQ.{h,cpp}: added implementation of quadratic B-splines
+          for the piecewise parameters.
+        * src/SgLib/SgPwlStorageBSpline.{h,cpp}: renamed to SgPwlStorageBSplineL.{h,cpp}.
+        * src/SgLib/SgTaskConfig.h: adjusted "EstimatorPwlMode" set.
+        * src/SgLib/SgGuiTaskConfig.cpp: modified the list of models for piecewise parameters.
+
+Fri Mar 24 12:31:41 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoNgs.cpp: corrected output of total phase value: it is already in
+          radians, do not need to convert from degrees.
+
+Tue Mar 28 14:42:16 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: modified calculation of a priori ERP: if the
+          external ERP file is outdated, use the internal a priori values.
+
+Fri Apr 14 10:54:58 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/nuSolve.cpp: added command line mode; modified arguments.
+
+Mon Apr 17 13:43:56 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSetupDialog.cpp: added configuration of the aux logs.
+        * src/SgLib/SgVersion.cpp: updated version info.
+        * src/vgosDbMake/VmVersion.cpp: updated version info.
+        * src/vgosDbCalc/VcVersion.cpp: updated version info.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version info.
+        * src/nuSolve/NsVersion.cpp: updated version info.
+
+Tue Apr 18 13:32:59 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSetupDialog.{cpp,h}: split "Paths" tab on two tabs: "Directories"
+          and "Options".
+        * src/nuSolve/nuSolve.cpp: added file checking for the command-line mode; added
+          use of the setup's database directory for searching the database.
+
+Thu Apr 20 10:23:04 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: added guessWrapperFileNameBySession(...) and
+          guessSessionByWrapperFileName(...).
+
+Fri Apr 21 12:41:50 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/nuSolve.cpp: added use of vgosDb data in the command-line mode. Added
+          new command line argument, -f, that specifies input data format.
+
+Thu Apr 27 09:44:24 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: fixed a bug in calculation of ionosphere
+          effective frequencies.
+        * src/nuSolve/NsSetup.{cpp,h}: added an option for execution of an external command.
+        * src/nuSolve/NsSetupDialog.{cpp,h}: added GUI to modify the execution of an external
+          command.
+        * src/nuSolve/nuSolve.cpp: added execution of a command after saving a session.
+
+Fri Apr 28 09:26:19 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/nuSolve.cpp: added arguments (session and user attributes) to the
+          post-save command.
+
+Mon May  1 15:40:03 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: updated the content.
+        * src/SgLib/SgVersion.cpp: updated version date.
+        * src/vgosDbMake/VmVersion.cpp: updated version date.
+        * src/vgosDbCalc/VcVersion.cpp: updated version date.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version date.
+        * src/nuSolve/NsVersion.cpp: updated version date.
+
+Thu May 11 12:57:36 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiBaselineList.cpp: added sort of the baseline list items by
+          normalized baseline clock offsets.
+
+Fri May 19 16:49:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.*,SgVlbiSessionIoVdbInput.cpp,SgVlbiSessionIoVdbOutput.cpp:
+          modified vgosDb I/O, get rid of hard coded band dependent variables.
+
+Wed May 24 17:04:00 EDT 2016 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac, Makefile.am: added an option "--enable-vgosDbMake-only" to the
+          configure script: build only vgosDbMake software (no nuSolve, vgosDbCalc and
+          vgosDbProcLogs will be created).
+
+Tue May 30 16:25:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: fixed a bug in configuration of
+          automatic data processing.
+
+Thu Jun  1 17:09:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: implemented output of a list of observations that
+          are not in the solution.
+        * src/SgLib/SgTaskConfig.{h,cpp}: added an option to generate output of a list of unused
+          observations.
+        * src/SgLib/SgGuiTaskConfig.{h,cpp}: added GUI for the option for the list of
+          unused observations.
+
+Fri Jun  2 11:00:15 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: modified suppressNotSoGoodObs() procedure,
+          now it turns off only usable observations.
+
+Tue Jun  6 12:42:05 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/nuSolveUserGuide.tex: updated content of the guide.
+
+Thu Jun  8 17:04:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added "Usable/Excluded/Processed"
+          attributes to the observation info window.
+
+Fri Jun  9 09:45:02 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/nuSolve.cpp: added "-m" option: force exec of automatic processing.
+
+Fri Jun  9 12:19:48 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added another format for the not used obs list.
+
+Tue Jun 13 09:44:14 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: updated the content.
+        * src/SgLib/SgVersion.cpp: updated version date.
+        * src/vgosDbMake/VmVersion.cpp: updated version date.
+        * src/nuSolve/NsVersion.cpp: updated version date.
+        * configure.ac: updated version of the distribution: 0.4.3.
+
+Wed Jun 14 17:00:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/*: added downweighted delays.
+
+Fri Jun 16 11:05:58 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgEstimatorTst*: renamed to `SgEstimator'.
+
+Mon Jun 19 14:22:24 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgTaskConfig.*: split "vlbiObservables_" filed on two: "useDelayType_"
+          and "useRateType_". Updated other sources that use it.
+
+Mon Jun 26 17:01:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/<various files>: added delay rates into processing.
+
+Tue Jun 27 16:46:52 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc/VcCalc2SessionIfc.cpp: changed type "const QString" to "const char*"
+          for obsoleteLcodesA and obsoleteLcodesR arrays. Previously, it cause segmentation fault
+          if the sources were compiled by the old (at least 4.4.7 or older) GCC.
+
+Mon Jul 10 16:31:43 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSession.cpp: fixed a bug in selfCheck() -- added set up for the active
+          observable (otherwise, it does not turn off obs with QC<8 during the first read).
+
+Fri Jul 14 12:52:41 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: now channels on reference and remote site could
+          have different names.
+
+Mon Aug  7 16:49:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: added processing delay rates.
+
+Tue Aug  8 14:28:01 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVersion.cpp: modified the version number and the code name.
+        * src/nuSolve/NsVersion.cpp: modified the version number and the code name.
+
+Wed Aug  9 16:18:50 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionNameDialog.cpp: added a checkbox and a lineEdit widget
+          to allow a user explicitly specify the second database file name.
+        * src/nuSolve/NsSessionEditMonolog.cpp: modified setupCatsDbhFileNames() to
+          check for user specified second database file name.
+
+Wed Aug  9 16:51:16 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: if the delay rates are in a solution,
+          the option "Observable follows plot" is suppressed.
+
+Thu Aug 10 12:25:41 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgMasterRecord.cpp: added "-loc.txt" template for valid master file names.
+          These type of master files should be used for local/non-standard/testing networks.
+
+Thu Aug 10 17:35:58 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSession*.{h,cpp}: added set up of a reference epoch for all estimated
+          parameters of a session.
+
+Fri Aug 11 16:04:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoKomb.cpp: added extraction of reference station clock
+          offsets from KOMB files.
+        * src/SgLib/SgVgosDbStoreStation: added storing of the reference station clock
+          offsets into vgosDb data tree.
+
+Fri Sep  1 15:16:00 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: modified checking for FORTRAN compiler, the script will stop if
+          f77 or gfortran was not found.
+
+Mon Sep 11 13:59:32 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservable.{h,cpp}: added isUsable_ flag and nonUsableReason_
+          attribute; added checkUsability() procedure.
+        * src/nuSolve/NsSessionEditDialog.cpp: data query displays a reason why an observable
+          is unusable.
+
+Tue Sep 12 16:24:19 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.{h,cpp}: modified the plotter. Added ability to display
+          non-usable data separately from deselected observations. Rearranged the control
+          widgets of the plotter. Added "symmetric" ranges option (mostly to fill emerged
+          empty space in the widget).
+        * configure.ac: updated version of the distribution: 0.4.92.
+
+Mon Sep 18 11:00:16 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.{h,cpp}: separated types of data to plot and plot ranges.
+        * src/SgLib/SgSolutionReporter.cpp: fixed a bug that causes a segfault if a user
+          tried to generate a report for the S-band.
+        * src/SgLib/SgVersion.cpp: updated the release date and the version (0.4.93).
+        * configure.ac: updated the version of the distribution: 0.4.93.
+
+Wed Sep 20 09:52:23 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: fixed a bug in data order output.
+
+Mon Sep 25 13:26:42 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgPwlStorageBSplineL.cpp: fixed a bug in calculation number of active
+          parameters. Set number of polynomials to be the same as for incremental rates model.
+        * src/SgLib/SgPwlStorageBSplineQ.cpp: fixed a bug in calculation number of active
+          parameters. Set number of polynomials to be the same as for incremental rates model.
+        * src/SgLib/SgVersion.cpp: updated the release date and the version (0.4.94).
+        * configure.ac: updated the version of the distribution: 0.4.94.
+
+Wed Oct 11 12:57:35 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added warnings if a user in the "User Novice"
+          mode tries to calculate ionospheric corrections with unresolved ambiguities or
+          to resolve ambiguities with applied ionosphere corrections.
+        * docs/UserGuides/*UserGuide.tex: updated content of the guides.
+
+Thu Oct 12 10:59:55 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: added description of the version 0.5.0.
+        * src/SgLib/SgVlbiObservable.cpp: isUsable_ and nonUsableReason_ values are now saved
+          in and restored from an intermediate results file.
+        * configure.ac: version of the release was updated to 0.5.0.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.5.0.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.3.0.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.2.0.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.3.0.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.5.0.
+
+Tue Oct 24 09:39:23 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: fixed a bug in parsing a wrapper file name
+          (reported by Minghui Xu, ShAO). Make possible to provide a wrapper file name
+          from the current directory.
+
+Tue Oct 24 17:24:04 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgPwlStorage.cpp: added calculation of constraint shares.
+        * src/SgLib/SgSolutionReporter.cpp: added output of constraint shares.
+
+Mon Oct 30 11:02:02 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgPwlStorage*.cpp, src/SgLib/SgSolutionReporter.cpp: made constraint
+          statistics compatible with CALC/SOLVE for incremental rates and b-splines
+          implementations of piecewise functions.
+
+Tue Oct 31 14:53:21 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgWrmsable.{h,cpp}: modified calculation of normalized residuals, should
+          be compatible with SOLVE.
+
+Wed Nov  1 11:34:33 EDT 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.5.1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.5.1.
+
+Mon Nov 13 11:35:29 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb.cpp: modified names of "known" dimensions to be in accordance
+          with batch SOLVE.
+
+Tue Nov 14 08:27:42 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbStoreSession.cpp: fixed a bug: Cal-FeedCorrection_b?.nc were
+          not added to a wrapper file.
+
+Tue Nov 14 10:43:33 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb.cpp: fixed a bug: the variable "vUserSup_" had a typo in
+          its name.
+        * configure.ac: version of the release was updated to 0.5.2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.5.2.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.3.1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.5.1.
+
+Fri Nov 17 11:48:56 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiBaselineList.{h,cpp}: if a user modifies aux.sigmas of the
+          baselines, this info is added to the correspondent band's baseline too and
+          will be used in the analysis.
+
+Wed Nov 29 13:20:07 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb.cpp: in parsing of correlator type added "-K5" as a synonym
+          for "-GSI".
+
+Fri Dec  8 13:38:00 EST 2017 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added output for a reference epoch of
+          polynomial models.
+
+Tue Jan 16 14:50:09 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.cpp: various small bugs were fixed.
+
+Fri Jan 19 16:51:11 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4*.{h,cpp}: script proxies were created.
+        * src/nuSolve/NsScrSupport.{h,cpp}: scripting support has been added.
+        * docs/UserGuides/nuSolveUserGuide.pdf: added description of using scripts
+          to the user guide.
+
+Mon Jan 29 16:49:00 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/src/vgosDbMake.cpp: an option "-m map" has been added.
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: reading of a source and station name
+          maps from a file is implemented.
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added use of station and source name
+          maps.
+        * src/SgLib/SgVlbiSessionIoKomb.cpp: added use of station and source name maps.
+
+Thu Feb  1 13:57:56 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiStationInfo.{h,cpp}: added info on origin of cable calibration
+          and meteo data for a station.
+        * src/SgLib/SgVlbiSessionUtils4LogProc.cpp: added extracting info on origin of
+          cable calibration and meteo data.
+        * src/SgLib/SgVgosDb*.cpp: added I/O for the info on origin of cable calibration
+          and meteo data.
+
+Fri Feb 9 16:16:00 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added new command line arguments to
+          choose station(s), type(s) of input, type of data to set to zero.
+        * src/SgLib/SgVlbiSessionUtils4LogProc.cpp: reworked sources to make it possible
+          to clear cable cal and/or meteo data for user specified station(s), read user
+          specified types of files.
+
+Wed Feb 14 14:02:21 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbStoreObs.cpp: occasionally found and fixed a bug: startSec
+          and stopSec were swapped.
+
+Fri Feb 16 10:50:43 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: at the observation info window added
+          statistics (number of total, usable and processed observations, WRMS) for a
+          baseline, a source and stations.
+
+Fri Feb 16 16:14:37 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.{h,cpp}: added an "extended" filter feature.
+        * src/nuSolve/NsSessionEditDialog.cpp: a user now can mark/unmark all observations
+          that were made of a specified source.
+
+Tue Feb 20 15:47:14 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.cpp: modified reaction of switching data sets (all,
+          usable or processed observations) on changing the plot ranges button group.
+        * src/SgLib/SgVlbiSourceInfo.{h,cpp}: added data structures for comments from
+          external a priori file, arc length from a priori source position to the
+          position from external a priori file and from the a priori position to
+          the estimated one.
+        * src/SgLib/SgGuiVlbiSourceList.cpp: added the comments from external a priori
+          files and the length of arcs to the table view.
+
+Tue Feb 27 17:04:00 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added input of external files with cable
+          calibration and meteorological data.
+
+Tue Mar  6 10:33:53 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: modified the regular expression to work with
+          new fringe files naming convention.
+
+Fri Mar 23 15:59:12 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/nuSolveUserGuide.pdf: updated content.
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: for a station name from ClockBreak.nc
+          file added check for station name size and, if necessary, pad it with space chars.
+
+Tue Mar 27 17:09:49 EDT 2018
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.6.0.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.6.0.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.4.0.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.3.0.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.4.0.
+        * configure.ac: version of the release was updated to 0.6.0.
+
+Fri Apr  6 16:49:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4Setup.{h,cpp}: added script proxy for the software set up.
+
+Mon Apr  9 16:01:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added output of estimated source positions in
+          a format of the a priori files.
+
+Tue Apr 10 14:23:52 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: modified a regular expression for a
+          database name.
+        * src/nuSolve/nuSolve.cpp: modified a regular expression for a database name.
+        * src/vgosDbCalc/vgosDbCalc.cpp: modified a regular expression for a database
+          name.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: modified a regular expression for a
+          database name.
+
+Thu Apr 12 14:16:48 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added a command line option "-p, print
+          set up and exit".
+        * src/vgosDbProcLogs/VpSetup.cpp: added output of the software configuration
+          to the standard output.
+
+Fri Apr 13 12:14:58 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: fixed a bug in output: if only one band is
+          available, nuSolve wrote incorrect "UACSUP", "ION CODE" and "ION_BITS" LCodes.
+
+Fri Apr 13 14:00:41 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: added processing the LCode "MSLM ION".
+        * src/SgLib/SgVlbiObservation.{h,cpp}: added GPS ionospheric contribution.
+        * src/SgLib/SgTaskConfig.{h,cpp}: added an option to use GPS ionospheric
+          contribution.
+        * src/SgLib/SgGuiTaskConfig.{h,cpp}: added GUI to control the option of applying
+          the GPS ionospheric contribution.
+
+Mon Apr 16 13:39:16 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: added a command line option "-p, print set up
+          and exit".
+        * src/vgosDbCalc/vgosDbCalc.cpp: added a command line option "-p, print set up
+          and exit".
+        * src/vgosDbMake/VmSetup.{h,cpp}: added output of the software configuration
+          to the standard output.
+        * src/vgosDbCalc/VcSetup.{h,cpp}: added output of the software configuration
+          to the standard output.
+
+Tue Apr 24 16:04:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSingleSessionTaskManager.cpp: added standard value of weight
+          correction standard deviations for delay rates of 100fs/s if rates were not
+          processed in a solution.
+
+Mon May  7 10:30:47 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/nuSolve.cpp: an option "-W, run startup wizard for the system-wide
+          settings" has been added.
+        * src/vgosDbCalc/vgosDbCalc.cpp: an option "-W, run startup wizard for the
+          system-wide settings" has been added.
+        * src/vgosDbMake/vgosDbMake.cpp: an option "-W, run startup wizard for the
+          system-wide settings" has been added.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: an option "-W, run startup wizard for
+          the system-wide settings" has been added.
+
+Tue May  8 11:11:02 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSession.cpp: fixed a bug: parameter configuration for individual
+          station clocks and zenith delays were not properly set up.
+
+Fri May 11 10:38:53 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbStoreStation: corrected generation of a name of the variable
+          Cal-Cable: if in input wrapper file name it had "pcmt" or "cdms" kind and user
+          explicitly asked to read FS log files, the kind part of its name will be removed.
+
+Mon May 14 17:26:28 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/{SgVlbiSessionIoDbh.cpp,SgVlbiSessionIoVdbOutput.cpp}: modified
+          evaluation of values for the delay user flag and the user action suppress
+          parameters.
+
+Thu May 17 13:01:55 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.{h,cpp}: added an attribute "kind" to some variables
+          (data that are produced by CALC).
+
+Fri May 18 16:01:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: changed calculation of the variable
+          "Cal-SlantPathIonoGroupDataFlag". Added filling unused space with space chars in
+          values of the variable "EccentricityMonument" in Apriori/Eccentricity.nc file.
+
+Fri May 25 10:54:27 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4ParametersDescriptor.{h,cpp}: added emitting signals if
+          parameter mode for clocks or zenith delays has changed.
+        * src/nuSolve/NsScrPrx4Session.{h,cpp}: added slots for dispatching changes of
+          parameter mode for clocks or zenith delays and made adjustments of individual
+          station parameters.
+
+Fri May 25 12:11:02 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbLoadSession.cpp: corrected name of the variable "ReferenceClock"
+          in "Solve/ClockSetup.nc".
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: added storing station clocks and zenith
+          individual parameters set up.
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: added extracting station clocks and zenith
+          individual parameters set up.
+
+Tue May 29 17:58:34 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: fixed a bug that can cause a segmentation
+          fault during loading a session without a set of a priori ERP.
+
+Thu May 31 11:36:29 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: fixed a bug: the file Session/LeapSecond.nc
+          was not created after run of vgosDbCalc.
+
+Fri Jun  1 16:05:57 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: a call of QMessageBox::warning(..) has been added
+          in the case a session already has been saved.
+
+Tue Jun  5 15:35:41 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{h,cpp}: added parsing of FORTLEZA RINEX files.
+
+Fri Jun  8 12:26:58 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: storing clock breaks info has been reworked.
+
+Fri Jun  8 16:42:22 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.cpp: adjusted permissions of directories: added write permission
+          for user's group.
+
+Tue Jun 12 17:04:37 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: updated description of the user-visible changes.
+        * docs/UserGuides/*UserGuide.pdf: updated content of the guides.
+        * configure.ac: version of the release was updated to 0.6.1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.6.1.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.4.1.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.3.1.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.4.1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.6.1.
+
+Tue Jun 26 15:19:27 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionHandler.cpp: the method setupVgosDbFileNames() has been
+          reworked.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: reworked determination of wrapper file
+          name and path to it from a session name.
+
+Fri Jul  6 13:08:50 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: getDataFromVgosDb(), a bug in filling
+          the UT1-TAI value table has been found and fixed: CALC (historically) provides
+          TAI-UT1 values, so these values should be taken with a reversed sign. Thanks
+          to Takahiro Wakasugi (GSI, Japan) for noting it.
+
+Wed Jul 11 16:01:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added reportStochasticEstimations() to export
+          in ASCII files estimation of the following stochastic parameters: EOP, wet zenith
+          delays and atmospheric gradients.
+        * src/nuSolve/NsSessionHandler.cpp: added a method generateReport4StcPars() to dump
+          the stochastic parameters.
+        * src/nuSolve/NsSessionEditDialog.cpp: added a slot generateReport4StcPars(), added
+          a shortcut "Ctrl+h" and connected it with the slot.
+        * src/nuSolve/NsScrPrx4SessionHandler.{h,cpp}: added a script proxy to call the
+          method NsSessionHandler::generateReport4StcPars(), so user can call it from a
+          script.
+
+Fri Jul 13 16:04:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added reportTotalZenithDelays() to export in
+          ASCII files total zenith delays for stations.
+        * src/nuSolve/NsSessionHandler.cpp: added a method generateReport4Tzds() to dump
+          values of the total zenith delays.
+        * src/nuSolve/NsSessionEditDialog.cpp: added a slot generateReport4Tzds(), added
+          a shortcut "Ctrl+z" and connected it with the slot.
+        * src/nuSolve/NsScrPrx4SessionHandler.{h,cpp}: added a script proxy to call the
+          method NsSessionHandler::generateReport4Tzds(), so user can call it from a
+          script.
+
+Tue Jul 31 16:49:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: fixed a bug in getDataFromVgosDb(): if
+          number of samples are unavailable, nuSolve considered such data as no channel
+          info provided at all.
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: modified use of LCode "DELUFLAG" in
+          getDataFromDbhImage(), now this info from S-band databases is skipped.
+
+Fri Aug  3 15:34:44 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: modified reading of the applied cable cal
+          sign. Now it can be +1, -1 and 0 (if no cable cal data were provided).
+        * src/SgLib/SgGuiVlbiStationList.cpp: add a column with the applied cable cal
+          signs.
+
+Mon Aug 13 16:49:38 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: converted scan names to lowercase before
+          comparisons. Fixed a bug that can cause a segmentation fault if a scan name
+          appeared again in a log file (e.g., sessions/2017/aua034/aua034yg.log).
+
+Tue Aug 14 14:30:34 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4LogProc.cpp: changed order of reading files: now
+          the FS log files are read after CDMS, PCMT and meteo data files.
+        * src/SgLib/SgStnLogCollector.cpp: fixed a bug: reading external meteo data,
+          the relative humidity data were not scaled by 0.01.
+        * src/SgLib/SgVlbiBaselineInfo.h: added an attribute "Attr_SKIP_WC" (do not
+          perform weight corrections) for SgVlbiBaselineInfo object.
+        * src/SgLib/SgSingleSessionTaskManager.cpp: added checking for baseline's
+          attribute Attr_SKIP_WC during reevaluation of the weight corrections.
+        * src/SgLib/SgGuiVlbiBaselineList.cpp: added GUI to control baseline's attribute
+          Attr_SKIP_WC.
+
+Wed Aug 15 17:55:12 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added range checks for rel.humidity obtained
+          from RINEX files. Added check for extremely rapid changes of meteo data in FS
+          log files. If such anomaly found, software will replace data with default
+          constant values.
+
+Mon Aug 20 16:14:42 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs/VpSetup.{h,cpp}: added a map of default cable calibration
+          signs by station key.
+        * src/vgosDbProcLogs/VpStartupWizard.{h,cpp}: added editor of default cable
+          calibration signs.
+        * src/SgLib/SgStnLogCollector.cpp: added use of the default cable calibration
+          signs.
+
+Tue Aug 21 16:16:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs/VpSetup.{h,cpp}: added a map of RINEX file names and
+          pressure offsets by station key.
+        * src/vgosDbProcLogs/VpStartupWizard.{h,cpp}: added editor for RINEX file
+          names and pressure offsets.
+
+Wed Aug 22 16:14:53 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added use of the RINEX file names and
+          pressure offsets.
+
+Wed Aug 22 16:36:26 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp:
+        * src/vgosDbCalc/VcCalc2SessionIfc.cpp:
+        * src/vgosDbCalc/vgosDbCalc.cpp: modified calling of SgVlbiSession::getDataFromVgosDb():
+          if $DISPLAY is not set, pop up windows with error messages will not be called.
+
+Fri Aug 24 16:44:11 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgTaskConfig.{h,cpp}: added initial and minimal aux standard
+          deviations (reweighting) for delay and delay rates.
+        * src/SgLib/SgGuiTaskConfig.cpp: added GUI to control them.
+        * src/SgLib/SgWrmsable.cpp: added use of minimal aux standard deviations.
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: added use of initial aux standard
+          deviations.
+        * src/SgLib/SgVlbiSessionIoDbh.cpp: added use of initial aux standard
+          deviations.
+
+Mon Aug 27 16:49:00 EDT 2018
+        * src/SgLib/SgVgosDbStoreSession.cpp: if Organization abbreviated name is set,
+          the attribute "_i<Institution>" will be set in a wrapper file name.
+
+Fri Aug 31 13:58:05 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: fixed a bug reported by Arthur Niell:
+          a file with observations status was saved in wrong directory.
+        * NEWS: updated description of the user-visible changes.
+        * docs/UserGuides/*UserGuide.pdf: updated content of the guides.
+        * configure.ac: version of the release was updated to 0.6.2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.6.2.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.4.2.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.3.2.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.4.2.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.6.2.
+
+Tue Sep  4 15:37:43 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsMainWindow.cpp: added statistical info on a solution to the
+          status bar.
+        * src/SgLib/SgVlbiNetworkId.cpp: updated the list of known networks.
+
+Thu Sep  6 14:36:19 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiSourceList.cpp: added number of total scans in a
+          session mode.
+
+Mon Sep 10 14:57:07 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgPwlStorage.h: added verification of index ranges in
+          SgPwlStorage::calcCurrentIdx() (in rare cases can cause segfault).
+
+Thu Sep 20 16:01:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added U- and V- coordinates to the
+          baseline plots.
+        * src/SgLib/SgVgosDbStoreSession.cpp: found and fixed a bug in a procedure
+          of composing a wrapper file: a references to UVFperAsec_b?.nc files were
+          not written.
+
+Fri Sep 21 16:09:00 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb.cpp: added a workaround for the bug with UVFperAsec_b?.nc.
+
+Tue Sep 25 18:06:09 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSession.cpp: added check and removing of sources that have
+          no any observations.
+
+Wed Sep 26 09:00:42 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.6.3.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.6.3.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.4.3.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.3.3.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.4.3.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.6.3.
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user-visible changes.
+
+Thu Oct  4 15:49:09 EDT 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added azimuth and elevation info to the
+          observation info window.
+
+Fri Dec 21 16:16:00 EST 2018 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: added a command line argument to exclude
+          observations with non-empty fringe error codes.
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added filtering observations with
+          non-empty fringe error codes.
+
+Mon Jan  7 16:49:00 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/vgosDbMakeUserGuide.pdf: added description of using the
+          command line argument "-e" -- skipping observations with non-empty fringe
+          error codes.
+
+Tue Jan 15 16:25:00 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbStoreObs.cpp: fixed a bug reported by Minghui Xu (ShAO),
+          values of the geocentric group delays and geocentric rates were swapped.
+
+Thu Jan 17 16:20:51 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: if cable calibrations data are not
+          available turn off use of cable cal by default.
+        * src/SgLib/SgVlbiStation.h: in function resetAllEditings() added taking into
+          account availability of cable cal data. If the data are missed, turn off use
+          of the cable cal.
+
+Fri Jan 18 12:52:46 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilites.cpp: after finishing outlier processing,
+          value of the applied threshold is reported along with number of eliminated
+          or restored points.
+
+Thu Jan 24 18:54:18 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp, NsMainWindow.cpp: added a dialog window
+          to provide a session name for vgosDb format.
+
+Tue Jan 29 15:36:28 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSourceInfo.cpp: set estimation of source coordinates by
+          default to off.
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: if a source have no an good
+          observations, turn it off automatically.
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: added checking of "coordinate
+          estimation" flag.
+
+Thu Feb 28 17:35:53 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.6.4.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.6.4.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.4.4.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.3.4.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.4.4.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.6.4.
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user-visible changes.
+
+Thu Mar 28 11:22:09 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc/vgosDbCalc.cpp: added using the environment variable
+          "TMPDIR" to alternate a path to the temporary files. If /tmp is full,
+          a user can specify another directory for the temporary files.
+
+Thu Mar 28 17:27:14 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: parsing "CDMS" command in a log file has
+          been added.
+        * src/SgLib/SgVlbiSessionUtils4LogProc.cpp: if cable calibration data are
+          from a log file with "CDMS" command, -kCDMS will be added to the netCDF
+          file.
+
+Fri Mar 29 16:11:18 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgNetCdf.cpp: added an option to run in a dry mode: the files
+          are not written, instead names of files that should be created are printed
+          to the standard output.
+        * src/vgosDbMake/vgosDbMake.cpp: added a command line option "-q" to run
+          in dry mode.
+        * src/vgosDbCalc/vgosDbCalc.cpp: added a command line option "-q" to run
+          in dry mode.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added a command line option "-q"
+          to run in dry mode.
+
+Thu May 30 17:49:00 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgNetCdf.cpp, SgVgosDb*.*: minor improvements were made through
+          whole vgosDb I/O module.
+
+Fri May 31 11:39:16 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbStoreSession.cpp: modified the local history file name
+          creation: if a file with such version already exists (provided by another
+          analysis center), then the "_i" attribute will be added.
+
+Mon Jul 29 13:06:52 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: fixed a bug in importing fringe
+          files: previously, the software checked for newest file but did not use
+          it.
+
+Mon Jul 29 18:22:13 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: fixed a bug: cablelong measurements were
+          not converted to seconds (the bug has been introduced in the end of March).
+
+Wed Aug 14 16:25:12 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added checking for last modified
+          time of the correlator report file. If it is less than the current time
+          (could happened if it is on a network and clocks of the server are not
+          correctly set up), the software will adjust it.
+
+Thu Sep 12 14:53:23 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: fixed a bug with output of numbers of
+          usable observations per an object.
+
+Fri Sep 20 15:42:14 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4Setup.h: added property `pwd' to setup -- returns
+          current path.
+
+Wed Oct 30 15:47:16 EDT 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.{h,cpp}: added output of a covariance matrix
+          in a separate ASCII file.
+
+Mon Nov  4 15:17:54 EST 2019 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgTaskConfig.{h,cpp}: added a field "have2outputCovarMatrix_" to
+          SgTaskConfig object.
+        * src/SgLib/SgGuiTaskConfig.{h,cpp}: added GUI to turn on/off an option of
+          making output of a covariance matrix.
+        * src/SgLib/SgSolutionReporter.cpp: output of covariance matrix is performing
+          if config_->getHave2outputCovarMatrix() is set to true.
+
+Fri Jan  3 16:36:00 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: added a command line option "-s" to specify
+          the experiment serial number (if fringe files do not provide correct number);
+        * src/SgLib/SgVlbiSession.cpp: added evaluation of the recording mode string.
+
+Wed Jan 22 16:49:00 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgIoAgv.{h,cpp}, SgIoAgvDriver.{h.cpp}: I/O for vgosDa format has
+          been added.
+
+Fri Jan 31 16:00:01 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4Observation.h: names of some methods has been modified.
+          Added methods to retrieve geocentric delays and rates.
+
+Fri Feb  7 15:19:28 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.{h,cpp}: an ability to select/deselect points with
+          additional keys was added.
+        * src/nuSolve/NsSessionEditDialog.cpp: for the baseline plots the source names
+          can be used as the additional keys to select/deselect the observations.
+
+Wed Feb  5 16:01:00 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSourceInfo.{h,cpp}: finalized data structures for the
+          point like source structure model;
+        * src/SgLib/SgVlbiObservation.cpp: finalized processing of the source structure
+          model.
+        * src/nuSolve/NsScrPrx4Session.{h,cpp}: finalized script interface to deal
+          with the source structure model.
+
+Thu Feb 13 13:41:33 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified verification of meteo parameters,
+          if changes less than 0.1 (we have one digit after dot in meteo readings),
+          the rates of the meteo parameters are not checked.
+
+Tue Feb 25 11:01:01 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.7.0.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.0.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.0.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.0.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.0.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.0.
+
+Fri Feb 28 17:14:28 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbLoadSession.cpp: updated the software fingerprints.
+
+Tue Mar  3 17:30:51 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user visible changes.
+
+Wed Mar  4 12:29:55 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: fixed a bug in the list of arguments
+          of processFringeFile() in the case when no HOPS support is required.
+
+Mon Apr 20 16:19:36 EDT 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: format of "nuSolve_unused_observations_??"
+          file has changed: two columns with fringe error codes are added.
+        * src/SgLib/SgSolutionReporter.cpp: a list with user comments is added. If the
+          list is not empty, the comments will be printed in the top of a spool file.
+        * src/nuSolve/NsSessionHandler.{cpp,h}: an interface to propagate user comments
+          is added.
+        * src/nuSolve/NsScrPrx4SessionHandler.h: a method to provide user comments in
+          a script is added, the comments are printed a spool file.
+
+Fri May  8 17:01:00 EDT 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.7.1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.1.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.1.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.1.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.1.
+
+Wed May 13 18:24:59 EDT 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: added check for DISPLAY variable.
+        * src/vgosDbCalc/vgosDbCalc.cpp: added check for DISPLAY variable.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added check for DISPLAY variable.
+        * configure.ac: added "--enable-scripts" option.
+        * src/nuSolve/NsScrPrx4*.{h,cpp}: script proxies are aware about the
+          "--enable-scripts" option of the configure.
+
+Wed Jul 15 14:10:01 EDT 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: fixed GUI/nonGUI modes for Qt5.
+        * src/vgosDbCalc/vgosDbCalc.cpp: fixed GUI/nonGUI modes for Qt5.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: fixed GUI/nonGUI modes for Qt5.
+
+Thu 1 Sep 2020 04:49:00 PM EDT Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/log2ant: sources for log2ant utility have been elaborated.
+
+Wed 23 Sep 2020 04:50:43 PM EDT Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added an option to generate a list of
+          command to refringe user specified observations.
+
+Fri 9 Oct 2020 04:01:00 PM EDT Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgLogger.{cpp,h}: added an option to print full date if the time
+          stamps are required by a user.
+        * src/SgLib/SgGuiLoggerConfig.{cpp,h}: added GUI support to configure the full
+          date output in the log.
+
+Thu 15 Oct 2020 05:47:03 PM EDT Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservable.cpp: added use of observations with the fourfit
+          error code "H"
+        * src/SgLib/SgGuiTaskConfig.{cpp,h}: added GUI support to configure using of
+          observations with the fourfit error codes "G" and 'H".
+
+Wed 04 Nov 2020 05:44:08 PM EST Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgNetCdf.cpp: fixed a bug with calculation of the stored size of
+          a variable.
+
+Thu Nov 19 17:47:00 EDT 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.7.2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.2.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.2.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.2.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.2.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.2.
+
+Tue Dec  1 10:27:42 PM EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservation.cpp: a bug reported by Grzegorz Klopotek (ETH,
+          Zurich) has been fixed. The bug can cause seg.fault when processing an old
+          database.
+
+Thu Dec  3 01:16:28 PM EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: the misspell in antcal output has been
+          fixed: "*TS_SENSOR" => "*TP_SENSOR".
+        * src/SgLib/SgStnLogCollector.cpp: calculation of the central IF frequency for
+          VGOS setup has been corrected.
+
+Tue Jan  5 11:12:57 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgIoAgvDriver.cpp: added work around a bug in GSI databases.
+          In rare occasions different scans of databases created at GSI (with vgosDbMake)
+          could have the same name.
+        * src/SgLib/SgVlbiSessionUtils4LogProc.cpp: added an ability to use user specified
+          path to input files.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added a command line option to alter
+          a path to input files.
+
+Mon Jan 11 09:27:12 PM EST 2021Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSession.cpp: added verifying scan names for duplicates and
+          correct them if found.
+        * configure.ac: version of the release was updated to 0.7.3rc1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.3rc1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.3rc1.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.3rc1.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.3rc1.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.3rc1.
+
+Tue Jan 19 05:01:00 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.*,SgVlbiSessionIoVdbInput.cpp: adjusted input of sessions
+          produced by S2 correlator.
+
+Mon Feb  8 01:16:48 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: made some regex patterns more generalized.
+
+Tue Feb  9 06:27:37 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified calculation of the sky frequency in
+          the case of rdbe station (noted by Ganesh Rajagopalan, Haysytack Obs., MIT).
+        * src/SgLib/SgStnLogCollector.cpp: added use of "location" regexp (if stn.id
+          is not present).
+
+Tue Feb 16 09:35:05 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: added an option to adjust group delays and
+          rates for clock offset of a reference station (with respect to UTC).
+        * src/SgLib/SgVlbiSessionIoKomb.{h,cpp}: added adjustment of group delays and
+          rates the clock offset of a reference station.
+        * src/SgLib/SgVlbiSessionIoVdbOutput.cpp: modified output of group delays and
+          rates if their values were adjusted, separate files contains the original
+          values.
+        * configure.ac: version of the release was updated to 0.7.3rc2.
+
+Tue Feb 23 10:21:16 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.*,SgVlbiSessionIoVdb*.cpp: added storing and retrieving
+          phase delay ambiguity multipliers (on request from Eskil Varenius, Chalmers
+          University of Technology).
+
+Wed Feb 24 09:56:38 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*.*,SgVlbiSessionIoVdb*.cpp: added storing values of phase
+          delays and their sigmas (on request from Tobias Nilsson, Lantmäteriet, Sweden).
+
+Mon Mar  1 07:02:42 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgIoAgvDriver.cpp: added checking for number of channels, if the
+         number==0 do not created output for the variable.
+
+Wed Mar  3 02:38:04 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: added an option "--with-solve-data" to specify a path to
+          CALC a priori files.
+        * src/vgosDbCalc/calc11/param11.i.in: a template for "param11.i" has been
+          created.
+
+Wed Mar  3 05:39:24 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * Makefile.am: the file has been modified, so the files in data/ are not
+          copied to the standard place during `make install'. They could overwrite
+          user data. If necessary, a user can copy them in proper place manually.
+
+Thu Mar  4 07:54:56 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: added checking for header files and libraries for Qt5 packages,
+          NetCDF and HOPS.
+
+Fri Mar 12 05:01:00 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * scripts/vgosDxConvert: made an initial version of the script.
+
+Fri Mar 19 06:52:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{h,cpp}: added extraction of SEFD evaluations
+          for DBBC3 stations.
+        * src/log2ant/log2ant.cpp: added support of SEFD extraction in command line
+          options.
+
+Tue Mar 22 05:49:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{h,cpp}: modified the sources, SEFD can be
+          extracted from RDBE log files too.
+
+Tue Mar 23 06:09:15 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * scripts/vgosDxConvert: updated the script.
+        * scripts/vgosDx.js: updated the script.
+
+Tue Apr  6 06:00:31 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: modified the script, it should work with --with-qt-* options
+          too.
+
+Fri Apr  9 01:34:08 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: adjusted regExp in
+          SgVlbiSession::checkUseOfManualPhaseCals() to accept station names with a dash.
+
+Tue Apr 13 03:12:35 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: replaced "--with-solve-data" with "--with-calc-data".
+
+Mon Apr 19 07:19:12 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: made `data_valid' records acceptable even
+          if no source/scan name is provided in a log file (should be usable for single
+          dish data).
+
+Tue Apr 20 05:01:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgKombFormat.cpp: added check for NaNs in observables, if found the
+          observation will be discarded.
+
+Wed Apr 21 07:08:59 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added check for non-printable chars in logs
+          files, if found replace them with their printable values (e.g.: "Ctrl-M"->"\0x000D").
+          See for example, sessions/2020/rd2009/rd2009ho.log.
+
+Mon Apr 26 03:00:09 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified channels setup for logs of VGOS
+          stations.
+
+Tue Apr 27 08:01:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{cpp,h}: changed the data structures to be able to
+          process log files with changing frequency setup.
+
+Wed May 26 07:08:23 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{cpp,h}: added ability to split an ID of dual sideband
+          sensor by two separate IDs.
+
+Fri Jun 11 05:01:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * various files: made minor improvements, adjustments, extensions to made a script
+          for automatic procession of INT sessions work properly.
+
+Wed Jun 16 05:54:43 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/log2ant/log2ant.cpp: renamed the command line option argument "-v" to "-d",
+          added a command line option "-v" option to print version number and exit.
+
+Tue Jun 22 02:18:36 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * scripts/autoINT.js: the script is added to the distribution.
+        * configure.ac: version of the release was updated to 0.7.3.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.3.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.3.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.3.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.3.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.3.
+
+Tue Jun 22 09:35:36 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: expanded "data_on" window to the interval
+          [preobs : data_valid=off].
+        * src/SgLib/SgVersion.cpp: updated date of the release.
+        * src/log2ant/l2aVersion.cpp: updated date of the release.
+        * NEWS: ran a spellchecker.
+
+Fri Jun 25 11:58:57 AM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: fixed a bug that prevents reading
+          a database by session name if only one wrapper file is exist (usually
+          when vgosDbCalc is running).
+
+Thu Jul  1 12:06:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: fixed a bug in calculation of standard
+          deviations of baseline components in local system (reported by Minghui Xu).
+
+Wed Jul 14 06:11:34 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{h,cpp}: reworked data structures to accumulate
+          info in [preobs : data_valid=on] and [data_valid=on : data_valid=off]
+          intervals.
+
+Wed Jul 14 06:11:34 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: changed QRegExp to QRegularExpression.
+          Upgraded some of regular expressions. Added parsing of "/lo/rxg,.."
+          strings to extract info on changing frequency setup.
+        * configure.ac: version of the release was updated to 0.7.4rc2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.4rc2.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.0.3rc2.
+
+Tue Jul 27 08:39:45 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb*: added I/O for a priori clock offset/rate;
+        * src/SgLib/SgVlbiSessionIoVdbInput: added reading a priori clock offset/rate;
+        * src/SgLib/SgVlbiSessionIoVdbOutput: added storing a priori clock offset/rate.
+
+Fri Jul 30 12:49:57 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/log2ant/log2ant.cpp: command line arguments parser is now ARGP.
+        * src/nuSolve/nuSolve.cpp: command line arguments parser is now ARGP.
+        * src/vgosDbCalc/vgosDbCalc.cpp: command line arguments parser is now ARGP.
+        * src/vgosDbMake/vgosDbMake.cpp: command line arguments parser is now ARGP.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: command line arguments parser is
+          now ARGP.
+
+Fri Aug 06 04:49:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.cpp: added an ability to store a plot in a file in
+          a raster format.
+
+Mon Aug 23 06:25:05 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: fixed a bug in calculation of a posteriori
+          values of dUT1 and polar motion, the bug affected values by ~half of microsec.
+
+Wed Aug 25 11:22:09 AM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added index of an meteo record in the ANTCAL
+          file output.
+
+Mon Sep 13 04:29:13 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified a regexp for strings to ignored,
+          now it will read strings like "#antcn#/wx/..." (2021/crf123/crf123nt.log).
+
+Tue Sep 14 03:42:03 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc/vgosDbCalc.cpp: fixed a bug in the command line parser that
+          prevented opening of the setup wizard without input database name.
+        * src/vgosDbMake/vgosDbMake.cpp: fixed a bug in the command line parser that
+          prevented opening of the setup wizard without input database name.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: fixed a bug in the command line
+          parser that prevented opening of the setup wizard without input database name.
+
+Tue Sep 14 08:10:14 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added a command line option ("-o") to
+          set order of meteorological parameters.
+        * src/SgLib/SgStnLogCollector.cpp: added an ability to use specified by user
+          order of meteorological parameters.
+
+Tue Sep 14 08:39:51 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified a procedure for log reading, now it
+          will search records for cable sign even if they were made after the end of
+          a session.
+
+Tue Sep 21 05:49:00 PM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgZenithDelay.cpp: fixed a bug in calculation of water vapor
+          pressure. The bug affected a priori wet zenith delays.
+
+Fri Nov  5 11:38:21 AM EDT 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added extraction of procedures and expanding
+          their content in a log file.
+        * configure.ac: version of the distribution was updated to 0.7.4rc3.
+        * src/*/*Version.cpp: updated version of utilities to *rc3.
+
+Thu Nov 18 07:57:31 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/vgosDb*/vgosDb*: fixed processing option "-p", previously it
+          printed incorrect setup.
+        * src/SgLib/SgVlbiSession*: reworked processing correlator name. If it is
+          available from VEX files and not "difx" or "sfxc", use it. Otherwise, use
+          correlator name from a masterfile. A user can override a correlator name
+          using "-r" option. Previously, this option worked only with combination
+          with an alternative database name.
+        * src/SgLib/SgMappingFunction.cpp: added MTT mapping function.
+
+Mon Dec 13 06:00:00 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgTaskConfig.{h,cpp}: added user an option to control wet zenith
+          mapping function type.
+        * src/SgLib/SgGuiTaskConfig.{h,cpp}: added GUI to control type of wet zenith
+          mapping function.
+        * src/nuSolve/NsScrPrx4Setup.{h,cpp}: added user interface in the script mode
+          to control type of wet zenith mapping function.
+
+Tue Jan  4 05:04:00 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgExternalErpFile.{h,cpp}: added parsing of IERS EOP files.
+
+Thu Jan  6 05:49:00 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgExternalErpFile.{h,cpp}: added parsing of USNO EOP files.
+        * src/SgLib/SgVlbiSessionUtilities.cpp: added interpolation for nutation
+          angles and use them in data analysis.
+
+Mon Jan 10 06:00:00 PM EST 2021 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: updated regular expressions to parse the
+          latest log files from Onsala.
+        * src/SgLib/SgVlbiSessionUtilities.cpp: disabled parsing tsys for legacy stations
+          when it was invoked from vgosProcLogs (log2ant should be used instead).
+
+Tue Jan 11 05:53:32 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified output of nuSolve_unused_observations_
+          file: if fourfit error code is not present in a database, a char '.' will be
+          printed in the corresponding column.
+
+Thu Jan 13 05:48:49 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb.cpp: corrected a bug in checking for existing netCDF files;
+          for files in a session root directory (like Head.nc) it worked incorrectly.
+
+Wed Feb  9 04:41:29 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user visible changes.
+        * configure.ac: version of the release was updated to 0.7.4.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.0.3.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.4.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.4.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.4.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.4.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.4.
+
+Fri Feb 18 05:42:14 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgEstimator.{h,cpp}: added use of threads for data update and time
+          propagation routines. Heavily reworked most time consuming procedures.
+        * configure.ac: version of the release was updated to 0.7.5rc1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.5 (rc1).
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.5 (rc1).
+
+Mon Mar  7 08:01:16 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: modified reported name of a database. Previously,
+          a prime band key was used to generate a database name.
+        * configure.ac: version of the release was updated to 0.7.4rc2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.4 (rc2).
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.4 (rc2).
+
+Mon Mar 21 08:55:02 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPlotter.cpp: modified format of output images, for Qt5 version
+          less than 5.12 use ARGB32 format.
+
+Thu Apr 14 03:53:37 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: modified the regular expression for a valid
+          source name in the map for sources: added a dot to the valid chars in a source
+          name.
+
+Mon Apr 18 05:01:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * SgLib/SgVlbiAuxObservation.{h.cpp}: added a storage for cable calibration set.
+          The set is including calibration from the following sources: FS log file, CDMS,
+          PCMT and "default" (== standard cable cal value).
+        * SgLib/SgVlbiStationInfo.{h.cpp}: added using of cable cal set setup.
+        * SgLib/SgVlbiObservation.{h.cpp}: implemented using cable cal set.
+
+Fri Apr 22 05:49:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgIoAgvDriver.{h.cpp}: added export of the cable calibration set in
+          vgosDa format.
+
+Tue Apr 26 05:28:36 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgZenithDelay.cpp: updated calculation of water vapor
+          pressure.
+
+Wed Apr 27 05:16:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * SgLib/SgVlbiStationInfo.{h.cpp}: added an attribute for a station "bad meteo
+          parameters".
+        * src/SgLib/SgZenithDelay.cpp,SgMappingFunction.cpp: "standard" temperature, pressure,
+          and rel.humidity is using if the attribute "bad meteo parameters" is set.
+        * src/SgLib/SgGuiVlbiStationList.cpp: added GUI to control "bad meteo parameter"
+          attribute.
+
+Thu May 19 01:08:57 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbMake/vgosDbMake.cpp: if a correlator name is not found in a
+          masterfile and not specified with "-r" option, set it to analysis center
+          abbreviated ID (will prevent creation of empty Head.nc).
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: modified output of some error messages.
+
+Thu Jun 23 01:42:59 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user visible changes.
+        * configure.ac: version of the release was updated to 0.7.5.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.0.4.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.5.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.5.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.5.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.5.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.5.
+
+Tue Jun 28 04:50:51 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: modified rules to check presence of Qt5 libraries.
+        * tests/getSessionList.cpp: added global variables (driverVersion, progname
+          and msglev), GCC 12.1 linker wants them.
+
+Wed Jun 29 06:24:19 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added a string from parsing log file to warning
+          log messages of setupTpSensor(..).
+
+Tue Jul 12 06:48:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: corrected indices of cableCorrections: if CDMS
+          comes from a FS log file, it is treated as CDMS, not FS_LOG type of cable 
+          calibration data (thanks to Arthur Niell).
+
+Wed Jul 13 05:50:54 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/vgosDb*/vgosDb*: changed vgosDb variable name from "Cal-CableCalibrations"
+          to "Cal-CblCalibrations" so it will not interfere with "Cal-Cable".
+
+Wed Jul 13 06:09:50 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: changed order of cable cal data plot, if
+          multiple cable cal types are available, "Default" is the first one.
+
+Wed Jul 13 07:47:37 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/vgosDb*/vgosDb*: it can read both version of name: "Cal-CableCalibrations"
+          and "Cal-CblCalibrations".
+
+Wed Jul 13 08:07:15 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user visible changes.
+        * configure.ac: version of the release was updated to 0.7.6.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.0.5.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.7.6.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.7.6.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.5.6.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.4.6.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.6.6.
+
+Thu Aug  4 04:38:30 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: in the case if a source name was not provided
+          the software will put in antcal file "DUMMY" instead of space chars (on request
+          from Nlingi Habana).
+
+Tue Aug  9 06:02:01 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added check for nan/inf of diffTEC
+          dispersion (sometimes it happens).
+
+Wed Aug 17 04:01:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * removed sources of CALC in a separate package, updated distribution files.
+
+Wed Aug 31 11:57:38 AM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgConstants.cpp: reworked function calcCip2IAU1980(): removed the
+          old code, added new code and comments.
+
+Mon Sep 12 08:49:36 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgMathSupport.cpp: reworked function fft(): removed the old code,
+          add new code, comments.
+
+Fri Sep 23 12:44:22 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgMathSupport.cpp: added a function that evaluates geodetic coordinates
+          from the Cartesian ones, the algorithm is based on the T.Fukushima's article.
+        * src/SgLib/SgVlbiStationInfo.cpp.{cpp,h}: removed the old function for evaluation
+          of geodetic coordinates due to legal issues.
+
+Thu Oct  6 05:49:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified regexps to process the latest log files
+          (on request from Leonid Petrov).
+
+Tue Oct 11 05:16:00 PM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: added extraction of dot2pps values and storing
+          them output in antcal file (on request from Nlingi Habana).
+
+Thu Oct 13 09:55:20 AM EDT 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: added support of masterfile v2.0 database
+          names.
+        * src/nuSolve/nuSolve.cpp: added support of masterfile v2.0 database names.
+        * src/vgosDbCalc/vgosDbCalc.cpp: added support of masterfile v2.0 database names.
+        * src/vgosDbMake/vgosDbMake.cpp: added support of masterfile v2.0 database names.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added support of masterfile v2.0 database
+          names.
+
+Wed Nov 30 06:48:41 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified regexps to process the log files where
+          onsource records are part of progs. Changed string filler from "n/a" to "DUMMY"
+          (on request from Nlingi Habana).
+
+Thu Dec  8 03:34:05 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * docs/UserGuides/*UserGuide.pdf: refreshed the guides.
+        * NEWS: updated description of the user visible changes.
+        * configure.ac: version of the release was updated to 0.8.0rc1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.8.0rc1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.8.0rc1.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.7.0rc1.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.6.0rc1.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.5.0rc1.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.1.0rc1.
+
+Wed Dec 21 06:30:14 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{cpp,h}: added calculation and report of pcal
+          sensor frequencies (on request from Nlingi Habana).
+
+Fri Dec 23 12:14:05 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: corrected output with the new database name
+          convention.
+
+Fri Dec 23 13:49:00 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * NEWS: updated description of the user visible changes.
+        * configure.ac: version of the release was updated to 0.8.0rc2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.8.0rc2.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.8.0rc2.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.7.0rc2.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.6.0rc2.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.5.0rc2.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.1.0rc2.
+
+Tue Jan  3 6:32:36 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.8.0.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.8.0.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.8.0.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.7.0.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.6.0.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.5.0.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.1.0.
+
+Thu Jan  5 01:33:13 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: for the old naming convention keep dollar
+          sign in a database name in the spool file output.
+        * src/SgLib/SgStnLogCollector.cpp: added workaround for Onsala's log files
+          ("/lo=[parameters]" does not contain value of pcal spacing).
+        * configure.ac: version of the release was updated to 0.8.1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.8.1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.8.1.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.7.1.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.1.1.
+
+Thu Jan 12 12:54:57 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: a suffix "_orig" is added to a default
+          file name of ANTCAL output (on request from Nlingi Habana).
+
+Tue Jan 17 6:26:47 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: added verification of presence of libmsg of new HOPS (starting
+          with the release hops-3.24).
+        * tests/*.cpp: added workaround for old/new HOPS varieties.
+        * src/log2ant/l2aVersion.cpp: added workaround for old/new HOPS varieties.
+        * src/nuSolve/nuSolve.cpp: added workaround for old/new HOPS varieties.
+        * src/vgosDbCalc/vgosDbCalc.cpp: added workaround for old/new HOPS varieties.
+        * src/vgosDbMake/vgosDbMake.cpp: added workaround for old/new HOPS varieties.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: added workaround for old/new HOPS 
+          varieties.
+
+Fri Jan 27 4:49:00 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionHandler.cpp: restored check of a directory with a
+          database name (the code was accidentally removed during implementation the
+          new database name convention).
+
+Mon Jan 31 5:01:00 PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4Logger.h: a return code of a script can be propagated to
+          nuSolve with NsScrPrx4Logger object.
+        * scripts/vgosDx.js: the script now reports a problem with the return code 1,
+          if everything is ok, rc==0.
+
+Wed Feb 1 5:25:00  PM EST 2022 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.8.2-rc1.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.8.2-rc1.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.8.2-rc1.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.1.2-rc1.
+
+Thu Feb  9 11:55:25 AM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiPiaReport.cpp: fixed a typo in unit names of clock polynomial
+          terms (thanks to Willi Probst, BKG).
+
+Fri Feb 24 01:27:41 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/Makefile.am: g++ option "-march=skylake" changed to "-march=native"
+         (thanks to Phillip Haftings, USNO for noticing the problem).
+
+Fri Mar 17 12:01:29 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{cpp,h}: set a frequency of pcal sensor to the filler
+          for the cases when its setup is unknown (on request from Nlingi Habana).
+
+Thu Mar 22 6:09:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/log2ant/log2ant.cpp: main()'s return code has been reworked.
+        * src/vgosDbMake/vgosDbMake.cpp: main()'s return code has been reworked.
+        * src/vgosDbCalc/vgosDbCalc.cpp: main()'s return code has been reworked.
+        * src/vgosDbProcLogs/vgosDbProcLogs.cpp: main()'s return code has been reworked.
+
+Thu Mar 23 5:01:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: the script was modified to take into account a case when a user
+          have Qt installed in a non-standard place and at the same time have binaries
+          (moc) from Qt4 that are installed in standard /usr/bin.
+
+Fri Apr 14 04:24:42 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: fixed a bug: a procedure declaration now is
+          parsing by the software.
+
+Tue Apr 18 04:16:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgMasterRecord.{h,cpp}: added a list of alternative names for
+          masterfiles.
+        * src/SgLib/SgVlbiSession.h,src/SgLib/SgVlbiSessionIo{Agv,Dbh,Fringes,Komb,VdbInput}.cpp:
+          the procedures can provide a list of alternative names for masterfiles.
+        * src/nuSolve/NsSetup.{h,cpp}: added alternative names for masterfiles to the setup.
+        * src/nuSolve/nuSolve.cpp: added use of alternative names for masterfiles;
+          added save/load info about the names.
+        * src/nuSolve/NsStartupWizard.cpp: added an ability to edit the alternative names
+          for masterfiles.
+
+Wed Apr 19 05:01:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc, src/vgosDbMake, src/vgosDbProcLogs: added use of the alternative
+          names for masterfiles.
+
+Fri Apr 21 06:38:01 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiStationList.cpp: added info about default cable calibration
+          origin (FS log, CDMS, PCMT).
+
+Fri Apr 28 06:38:01 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbi{Baseline,Source,Station}List.cpp: added a column with a
+          number of usable observations. Added a feature to switch from numbers to
+          percents for numbers of usable and processed observations.
+
+Thu May  4 4:25:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoSupport.cpp: guessWrapperFileNameBySession() can filter
+          wrapper files using an institution abbreviation code.
+        * src/vgosDbCalc, src/vgosDbProcLogs, src/nuSolve: added an option to read wrapper
+          files generated only by local analysis center.
+
+Tue May  9 05:41:41 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * configure.ac: version of the release was updated to 0.8.2.
+        * src/SgLib/SgVersion.cpp: updated version of the software: 0.8.2.
+        * src/nuSolve/NsVersion.cpp: updated version of the software: 0.8.2.
+        * src/vgosDbProcLogs/VpVersion.cpp: updated version of the software: 0.7.2.
+        * src/vgosDbMake/VmVersion.cpp: updated version of the software: 0.6.2.
+        * src/vgosDbCalc/VcVersion.cpp: updated version of the software: 0.5.2.
+        * src/log2ant/l2aVersion.cpp: updated version of the software: 0.1.2.
+
+Fri May 19 01:08:11 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: a bug that appeared in compilation without
+          HOPS libraries was fixed (thanks to Timothy Morin, Haystack, MIT).
+        * configure.ac: version of the release was updated to 0.8.2.1.
+        * src/SgLib/SgVersion.cpp: date of the release was updated.
+
+Thu May 25 10:00:50 AM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiBand.cpp: debug output was commented out.
+
+Tue May 30 01:06:21 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: the reporter stores values of estimation and
+          std.vars of dUT1 (a temporary solution to make scripts work).
+
+Fri Jun 16 03:05:28 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * SgLib/SgVlbiStationInfo.cpp: added polarization setup setup.
+        * src/SgLib/SgVlbiBand.cpp: selfCheck() now gather info on polarization setup
+          of stations.
+        * src/nuSolve//NsSessionEditDialog.cpp: modified generation of the commands for
+          refringing observations: added polarization setup.
+
+Mon Jun 26 04:55:45 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgSolutionReporter.cpp: added ability to copy a file with a list of
+          unused observations into "Report" directory (as it is done for spoolfiles),
+          a name of the copy has form of "<database_name>.NUO".
+        * src/nuSolve/NsSessionHandler.cpp: added an option to copy unused observations.
+        * src/nuSolve/NsSessionEditDialog.{h,cpp}: added GUI for this feature.
+
+Mon Aug 28 05:01:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgRefraction.cpp: turned off evaluaiton of the wet zenith delays,
+          now the wet zenith delays come from estimation only.
+
+Fri Oct 13 05:49:00 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: modified handling of CDMS data extracted from
+          log files: the cable sign derived from cablelong/cablediff measurements now is
+          not applied to the CDMS data.
+
+Fri Oct 20 01:37:31 PM EDT 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgEstimator.cpp: modified logger output.
+
+Wed Nov 08 03:39:27 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: added a filter for Mk4 root file names,
+          if the first part of the name is not a valid source name, the file will be
+          ignored.
+        * src/vgosDbMake/vgosDbMake.cpp: added a command line option to use all Mk4
+          root files (i.e., do not use the filter menioned above).
+
+Thu Dec 14 05:23:03 PM EST 2023 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiBand.cpp: selfCheck() added calculation of mean effective
+          integration time for each of band.
+        * src/nuSolve/NsSessionEditDialog.cpp: added max number of channels, sample rate,
+          bits per sample and mean effective integration time to the "General Info" tab.
+        * src/nuSolve/NsSessionEditDialog.cpp: added values of effective integration time
+          to the baseline plot.
+
+Mon Mar 25 08:21:58 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgIoAgvDriver.cpp: fixed a bug in storing info on clock break: if
+          time of the break is zero (00:00:00), the corresponding LCode was not writen
+          in vgosDa format (the bug was reported by Leonid Petrov).
+
+Thu Apr  4 04:42:22 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * log2ant_sep.tgz: an archive is added.
+
+Fri Apr 12 07:18:44 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: in the function of determing the
+          application of manual phase cals added parser for version 3 of correltor report.
+
+Thu Apr 25 06:18:35 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtils4Automation.cpp: updated regexp for parsing station
+          names/abbreviations in the version 3 of correltor report.
+
+Tue May 14 08:23:19 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.{h,cpp}: added extraction of az/el info from the
+          "source=azel" command in a log file.
+
+Fri May 31 05:30:26 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionUtilities.cpp: added a workaround for the case when
+          automatic ambiguity resolution casue unrealistically huge ambig.multipliers.
+
+Tue 04 Jun 2024 04:50:19 PM Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgIoAgvDriver.{h.cpp}: added a workaroud for the problematic databases
+          generated by K5 correlator software (the observaitons have different reference
+          epochs inside one scan).
+
+Thu 06 Jun 2024 04:49:00 PM Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: added a button to set ambiguity multipliers
+          to zero.
+
+Tue 27 Aug 2024 05:16:00 PM Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgExternalTrp.{h,cpp}: parsing of *.trp files has been added.
+        * src/SgLib/SgVlbiSessionUtilities.cpp: added using the external troposphere model.
+        * src/SgLib/SgVlbiObservation.cpp: reworked using troposphere fly-by/internal/external
+          contributions.
+
+Wed 28 Aug 2024 05:36:00 PM Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/SgGuiTaskConfig.cpp: changed setup for troposphere efects.
+        * src/nuSolve/nuSolve.cpp: modified settings to reflect the latest changes
+          of using the troposphere model.
+
+Fri 30 Aug 2024 05:04:00 PM Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsScrPrx4TaskConfig.h: added troposphere model setup in the
+          scipt mode.
+
+Tue 17 Sep 2024 05:25:00 PM Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgGuiVlbiStationList.cpp: modified creating of a clock break event:
+          the epoch of the break should be at least 10 minutes from the begining or the
+          end of observations at the station.
+
+Wed Oct  8 07:08:39 PM EDT 2025 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoKomb.cpp: SgVlbiSession::processKombFile(): modified
+          generation of a scan name, now it uses hours and minutes directly from KOMB file.
+
+Tue Oct 15 01:51:15 PM EDT 2024 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: modified setup for auxliary parameters
+          (phase dlays at +,-1 second, etc.) for the observations that have no channels.
+          Previously, it causes a segmentation fault for older sessions.
+
+Wed 05 Mar 2025 04:31:11 PM EST Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/vgosDbCalc/vgosDbCalc.cpp: replaced "Path2SolveAPrioriFiles" with
+          "Path2CalcAPrioriFiles".
+
+Fri 07 Mar 2025 04:13:08 PM EST Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDb.cpp: SgVdbVariable::name4export() fixed a bug which under
+          some conditions created unnecessary directories in vgosDb database.
+
+Tue Feb 10 05:47:43 PM EST 2026 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: Modified reaction on the event when a
+         user decided to include back an observation -- if the corresponding baseline
+         and/or staiton(s) were deselected it turns them "on" too.
+
+Fri Mar  6 04:42:26 PM EST 2026  Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgStnLogCollector.cpp: updated output of CABLE and METEO records.
+          The indices now respond to epochs. Added extraction SDE fingerprints and
+          modified output of PROVENANCE to reflect the single dish experiments.
+
+Fri Mar 13 13:49:00 PM EST 2026  Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: Disabled "IonoC" and "Iono0" buttons
+          for sessions with one band.
+
+Mon Mar 16 17:16:00 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVgosDbStoreObs.cpp: modified SgVgosDb::storeObsChannelInfo(),
+          now it stores all data not checking is it new or old dataset.
+
+Wed Mar 18 17:16:00 EST 2020 Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoVdbInput.cpp: updates of the sideband order and
+          channel bandwidth is limited to nuSolve only, the other utilities will not
+          modify ChannelInfo*.nc files.
+
+Thu Mar 19 05:47:06 PM EDT 2026  Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/nuSolve/NsSessionEditDialog.cpp: reworked shortcut keys to switch on/off
+          imunne atribute for marked by user observations. Now, <Shift+x> add imunne
+          attribute to the observtion, <Shift+y> remove imunne attribute; <Ctrl+Shift+x>
+          exclude and add imunne attribute to the observtion, <Ctrl+Shift+y> include
+          and remove imunne attribute.
+
+Tue Mar 24 04:13:30 PM EDT 2026  Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiObservation.cpp: modified calculation of the ionosphere
+          corrections to make it in accordance with John's memo.
+        * src/SgLib/SgTaskConfig.cpp: added two parameters: use correlation of S- and
+          X-band in calculation std.dev of ionosphere free delays.
+        * src/SgLib/SgGuiTaskConfig.cpp: added GUI to control these parameters.
+
+Tue Apr 21 01:33:19 PM EDT 2026  Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * src/SgLib/SgVlbiSessionIoFringes.cpp: corrected units for channel bandwidth.

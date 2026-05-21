@@ -1,0 +1,5 @@
+Pass one: Checking the interface of the object.
+SgDbhFormat: postRead(): the order of records is parsed correctly
+SgDbhFormat: postRead(): the order of records is parsed correctly
+SgDbhFormat: postRead(): the order of records is parsed correctly
+DBH I/O: read 23 observations

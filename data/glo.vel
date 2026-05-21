@@ -1,0 +1,155 @@
+140101
+$$ This file was produced by gsnoop
+$$ Using spoolfile:  /500/solutions/2020a_csolve/2020a_prelim1/2020a_prelim6a.spl
+$$
+$$  velocities:    x (mm/yr)       y (mm/yr)      z (mm/yr)
+$$
+    AGGO                2.4           -10.6            2.3       
+    ALGOPARK          -15.7            -3.5            4.4       
+    BADARY            -26.6             0.4           -2.5       
+    BLKBUTTE          -13.1            13.7          -14.6       
+    BR-VLBA           -14.2             0.5           -7.0       
+    CRIMEA            -20.3            15.9           10.2       
+    CTVASTJ           -15.9            -0.6            7.9       
+    DEADMANL          -50.7           -65.6           40.2       
+    DSS13             -15.1             6.7           -3.5       
+    DSS15             -15.1             6.7           -3.5       
+    GOLDVENU          -15.1             6.7           -3.5       
+    GOLDMARS          -15.1             6.7           -3.5       
+    DSS34             -35.3             1.0           45.3       
+    DSS36             -35.3             1.0           45.3       
+    DSS45             -35.3             1.0           45.3       
+    TIDBIN64          -35.3             1.0           45.3       
+    DSS65              -8.1            19.2           14.1       
+    DSS65A             -8.1            19.2           14.1       
+    ROBLED32           -8.1            19.2           14.1       
+    EFLSBERG          -13.4            16.8           11.3       
+    ELY               -17.3             0.9           -7.6       
+    FD-VLBA           -12.3             0.7           -4.3       
+    FLAGSTAF          -16.2            -7.5           -1.3       
+    FORT ORD          -27.6            29.3           24.1       
+    FORTORDS          -27.6            29.3           24.1       
+    FORTLEZA           -1.9            -3.9           12.9       
+    GGAO7108          -14.7            -0.7            2.6       
+    GORF7102          -14.7            -0.7            2.6       
+    GGAO12M           -14.7            -0.7            2.6       
+    GILCREEK          -20.9            -2.6           -8.0       
+    HALEAKAL           -6.5            65.5           30.4       
+    HART15M            -0.2            19.3           16.7       
+    HARTRAO            -0.2            19.3           16.7       
+    HATCREEK          -17.7             6.6           -5.3       
+    HAYSTACK          -14.5            -1.7            4.7       
+    HN-VLBA           -15.3            -1.5            4.6       
+    HOBART12          -38.0             8.2           41.1       
+    HOBART26          -38.0             8.2           41.1       
+    HRAS 085          -11.3             0.3           -4.2       
+    FTD 7900          -11.3             0.3           -4.2       
+    MCD_7850          -11.3             0.3           -4.2         
+    MACGO12M           -4.7            -7.6           -7.8       
+    ISHIOKA           -22.5            -2.9           -7.3       
+    JPL MV1           -30.0            22.5            8.0       
+    KASHIM11            3.4             8.0          -10.9       
+    KASHIM34            3.4             8.0          -10.9       
+    KASHIMA             3.4             8.0          -10.9       
+    KATH12M           -34.5           -14.0           56.7       
+    KAUAI              -6.5            65.5           30.4       
+    KODIAK            -19.9             6.7            1.1       
+    KOGANEI             5.5            -1.1           -4.4       
+    KOGANEI3            5.5            -1.1           -4.4       
+    KOKEE              -8.8            63.2           32.4       
+    KOKEE12M          -11.6            58.6           34.0           
+    KP-VLBA           -13.2             0.9           -6.0       
+    KUNMING           -32.9            -6.9          -18.0       
+    KWAJAL26           -2.9            73.0           36.3       
+    LA-VLBA           -13.9             0.7           -4.5       
+    MAMMOTHL          -12.2            30.4          -18.5       
+    MARCUS             46.6            64.0           25.6       
+    MARPOINT          -14.0             1.4            0.2       
+    MATERA            -17.9            19.0           15.2       
+    MCD 7850          -11.3             0.3           -4.2       
+    MEDICINA          -17.4            18.8           12.2       
+    METSAHOV          -16.1            14.3           10.0       
+    METSHOVI          -16.1            14.3           10.0       
+    MIAMI20            -8.9            -0.8            2.8       
+    MIURA              13.8             5.0            4.3       
+    MIZNAO10            2.6            32.1           -6.1       
+    MIZUSGSI            2.6            32.1           -6.1       
+    MK-VLBA           -13.7            62.8           32.7       
+    MOJ 7288          -13.4             7.3           -3.6       
+    MOJAVE12          -13.4             7.3           -3.6       
+    MON PEAK          -31.1            30.8           10.1       
+    NL-VLBA           -15.0             1.5           -1.8       
+    NOBEY 6M          -47.7            58.0           37.9       
+    NOME              -21.8            -4.1           -8.6       
+    NOTO              -16.8            17.6           15.9       
+    NRAO 140          -13.8            -0.9            3.3       
+    NRAO20            -13.8            -0.9            3.3       
+    NRAO85 1          -13.8            -0.9            3.3       
+    NRAO85 3          -13.8            -0.9            3.3       
+    GBT-VLBA          -13.8            -0.9            3.3       
+    NYALES20          -14.0             7.6           11.2       
+    OCOTILLO           -0.3            -0.3           -0.5       
+    OHIGGINS           17.7             1.1            5.9       
+    ONSALA60          -13.5            14.6           11.2       
+    ONSALA85          -13.5            14.6           11.2       
+    ONSA13NE          -13.5            14.6           11.2       
+    ONSA13SW          -13.5            14.6           11.2       
+    MV2ONSLA          -13.5            14.6           11.2       
+    OV-VLBA           -17.9             6.8           -3.1       
+    OVR 7853          -17.2             4.8           -0.7       
+    OVRO 130          -17.2             4.8           -0.7       
+    PARKES            -33.8            -2.5           48.1       
+    PBLOSSOM          -15.6            29.9           -4.7       
+    PENTICTN          -19.7           -12.6            6.5       
+    PIETOWN           -14.0            -0.3           -5.4       
+    VLA-N8            -14.0            -0.3           -5.4       
+    PINFLATS          -22.9            19.0            4.2       
+    PLATTVIL          -15.0            -1.4           -5.0       
+    PRESIDIO          -19.9            25.0            8.2       
+    PT REYES          -25.5            22.7           23.5       
+    PVERDES           -26.2            32.5           10.2       
+    QUINCY            -18.9             8.7           -4.9       
+    RAEGSMAR          157.5           -22.7           20.0       
+    RAEGYEB           -11.8            19.6           10.6       
+    RICHMOND           -8.9            -0.8            2.8       
+    SANPAULA          -35.6            14.7           19.7       
+    SANTIA12           25.6            -8.4           12.2       
+    SC-VLBA             7.8             9.2           12.9       
+    SEATTLE1           -5.9            12.9          -22.3       
+    SEJONG            -29.4           -10.3           -5.7       
+    SESHAN25          -29.5           -11.5          -11.4       
+    SINTOTU           -17.5             1.4           -1.3       
+    SINTOTU3          -17.5             1.4           -1.3       
+    SNDPOINT          -17.6             5.1          -12.8       
+    SOURDOGH          -22.7             1.3          -11.9       
+    SVETLOE           -18.0            13.4            8.3       
+    SYOWA               5.3            -1.0            0.1       
+    TATEYAMA           18.8             0.7            6.7       
+    TIANMA65          -27.6           -17.4          -16.3       
+    TIGOCONC           35.2            -0.3           18.3       
+    TIGOWTZL          -15.3            17.1           10.7       
+    TROMSONO          -18.1            22.3           11.3       
+    TRYSILNO           -9.5             8.8           19.5       
+    TSUKUB32           -1.9             6.3           -4.9       
+    TSUKUBA            -1.9             6.3           -4.9       
+    TSUKU3             -1.9             6.3           -4.9       
+    URUMQI            -31.5            -0.5            5.5       
+    USUDA64            -8.7             0.7            0.3       
+    VERAISGK          -52.0            11.7          -45.4       
+    VERNAL            -17.9           -11.8            3.7       
+    VNDNBERG          -28.1            32.6           20.4       
+    WARK12M           -21.4            -2.0           34.0       
+    WESTFORD          -15.1            -1.1            4.5       
+    WETTZ13N          -15.3            17.1           10.7       
+    WETTZ13S          -15.3            17.1           10.7       
+    WETTZELL          -15.3            17.1           10.7       
+    WHTHORSE           44.2            62.9         -104.0       
+    YAKATAGA          -14.0            14.3           50.7       
+    YARRA12M          -46.2             9.2           50.6       
+    YEBES             -11.8            19.6           10.6       
+    YEBES40M          -11.8            19.6           10.6       
+    YELLOWKN          -20.5            -4.4            0.9       
+    YLOW7296          -20.5            -4.4            0.9       
+    YUMA              -17.2           -10.8           -0.1       
+    ZELENCHK          -21.0            14.8            9.3       
+$$

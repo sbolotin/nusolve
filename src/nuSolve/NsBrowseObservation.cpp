@@ -735,7 +735,6 @@ QWidget* NsBrowseObservation::tab4EditingInfo(SgVlbiObservable* o)
   {
     str = "None";
     if (!obs_->isAttr(SgObservation::Attr_PROCESSED))
-//  if (!o->isUsable() )
     {
       str = "";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_LOW_QF))
@@ -751,17 +750,13 @@ QWidget* NsBrowseObservation::tab4EditingInfo(SgVlbiObservable* o)
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_UNMATED))
         str += "Not mated. ";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_ONE_CHANNEL))
-        str += "Not enough used channels. ";
+        str += "Not enough good channels. ";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_MATE_LOW_QF))
         str += "Low quality factor on another band. ";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_MATE_HAS_ERROR_CODE))
         str += "Error code is set on another band. ";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_MATE_ONE_CHANNEL))
-        str += "Not enough used channels on another band. ";
-      if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_TOO_EARLY))
-        str += "The observation is before the specified time to start. ";
-      if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_TOO_LATE))
-        str += "The observation is after the specified time to end. ";
+        str += "Not enough good channels on another band. ";
       str.chop(1);
     };
     //
@@ -779,6 +774,10 @@ QWidget* NsBrowseObservation::tab4EditingInfo(SgVlbiObservable* o)
     else if (!o->activeDelay()->isAttr(SgVlbiMeasurement::Attr_PROCESSED))
     {
       str = "";
+      if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_TOO_EARLY))
+        str += "The observation is before the specified time to start. ";
+      if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_TOO_LATE))
+        str += "The observation is after the specified time to end. ";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_DESELECTED_OBS))
         str += "Deselected observation. ";
       if (o->nonUsableReason().isAttr(SgVlbiObservable::NUR_MATE_DESELECTED_OBS))

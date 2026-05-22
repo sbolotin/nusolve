@@ -842,24 +842,108 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
   leIniSigma4Rat_->setMinimumWidth(leIniSigma4Rat_->fontMetrics().width("100.0") + 10);
   connect(leIniSigma4Rat_, SIGNAL(textChanged(const QString &)), SLOT(changeAS_ini4rat(const QString&)));
   grid->addWidget(leIniSigma4Rat_, 2, 1);
+
+
   // minimal aux sigmas:
-  grid->addWidget(new QLabel("Minimal aux sigmas for delays (ps):", gboxRW), 3, 0);
+  if (session_==NULL)
+    grid->addWidget(new QLabel("Minimal aux sigmas for delays (ps):", gboxRW), 3, 0);
+  else
+    grid->addWidget(new QLabel("Minimal aux sigmas for delays (ps):", gboxRW), 1, 2);
   leMinSigma4Del_ = new QLineEdit(gboxRW);
   leMinSigma4Del_->setText(QString("").sprintf("%g", config_->getMinAuxSigma4Delay()*1.0e12));
-  leMinSigma4Del_->setMinimumWidth(leMinSigma4Del_->fontMetrics().width("100.0") + 10);
+  leMinSigma4Del_->setMinimumWidth(leMinSigma4Del_->fontMetrics().width("100.0"));
   connect(leMinSigma4Del_, SIGNAL(textChanged(const QString &)), SLOT(changeAS_min4del(const QString&)));
-  grid->addWidget(leMinSigma4Del_, 3, 1);
+  if (session_==NULL)
+    grid->addWidget(leMinSigma4Del_, 3, 1);
+  else
+    grid->addWidget(leMinSigma4Del_, 1, 3);
   //
-  grid->addWidget(new QLabel("Minimal aux sigmas for rates (fs/s):", gboxRW), 4, 0);
+  if (session_==NULL)
+    grid->addWidget(new QLabel("Minimal aux sigmas for rates (fs/s):", gboxRW), 4, 0);
+  else
+    grid->addWidget(new QLabel("Minimal aux sigmas for rates (fs/s):", gboxRW), 2, 2);
   leMinSigma4Rat_ = new QLineEdit(gboxRW);
   leMinSigma4Rat_->setText(QString("").sprintf("%g", config_->getMinAuxSigma4Rate()*1.0e15));
-  leMinSigma4Rat_->setMinimumWidth(leMinSigma4Rat_->fontMetrics().width("100.0") + 10);
+  leMinSigma4Rat_->setMinimumWidth(leMinSigma4Rat_->fontMetrics().width("100.0"));
   connect(leMinSigma4Rat_, SIGNAL(textChanged(const QString &)), SLOT(changeAS_min4rat(const QString&)));
-  grid->addWidget(leMinSigma4Rat_, 4, 1);
-  grid->setColumnStretch(2, 1);
+
+  if (session_ == NULL)
+    grid->addWidget(leMinSigma4Rat_, 4, 1);
+  else
+    grid->addWidget(leMinSigma4Rat_, 2, 3);
+
+  if (session_ == NULL)
+    grid->setColumnStretch(2, 1);
+  else
+    grid->setColumnStretch(4, 1);
   //
   layout->addWidget(gboxRW);
-  layout->addStretch(1);
+  //
+  // end of Reweighting.
+  //
+  //
+  if (session_ == NULL)
+    layout->addStretch(1);
+  else
+  {
+    // Scope of data:
+    //
+    QGroupBox                    *gboxTSO=new QGroupBox("Time span of observations to process", w);
+    //
+    grid = new QGridLayout(gboxTSO);
+
+    grid->addWidget(new QLabel("First observation:", gboxTSO), 0, 0);
+    grid->addWidget(new QLabel("Last observation:",  gboxTSO), 1, 0);
+    //
+    QRadioButton                 *rbFirstObs[2];
+    QRadioButton                 *rbLastObs[2];
+    
+    bgFirstObs_ = new QButtonGroup(gboxTSO);
+    bgLastObs_  = new QButtonGroup(gboxTSO);
+
+    rbFirstObs[0] = new QRadioButton("First observation of the session", gboxTSO);
+    rbFirstObs[1] = new QRadioButton("Manual", gboxTSO);
+    rbFirstObs[0]-> setMinimumSize(rbFirstObs[0]->sizeHint());
+    rbFirstObs[1]-> setMinimumSize(rbFirstObs[1]->sizeHint());
+    bgFirstObs_->addButton(rbFirstObs[0], 0);
+    bgFirstObs_->addButton(rbFirstObs[1], 1);
+    
+    rbLastObs[0] = new QRadioButton("Last observation of the session", gboxTSO);
+    rbLastObs[1] = new QRadioButton("Manual", gboxTSO);
+    rbLastObs[0]-> setMinimumSize(rbLastObs[0]->sizeHint());
+    rbLastObs[1]-> setMinimumSize(rbLastObs[1]->sizeHint());
+    bgLastObs_->addButton(rbLastObs[0], 0);
+    bgLastObs_->addButton(rbLastObs[1], 1);
+  
+    grid->addWidget(rbFirstObs[0], 0, 1);
+    grid->addWidget(rbFirstObs[1], 0, 2);
+    grid->addWidget(rbLastObs[0], 1, 1);
+    grid->addWidget(rbLastObs[1], 1, 2);
+   
+    leFirstObs2Process_ = new QLineEdit(gboxTSO);
+    leFirstObs2Process_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    leFirstObs2Process_->setMinimumWidth(leFirstObs2Process_->fontMetrics().width(leFirstObs2Process_->text()));
+    grid->addWidget(leFirstObs2Process_, 0, 3);
+        
+    leLastObs2Process_ = new QLineEdit(gboxTSO);
+    leLastObs2Process_->setText(session_->getTFinis().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    leLastObs2Process_->setMinimumWidth(leLastObs2Process_->fontMetrics().width(leLastObs2Process_->text()));
+    grid->addWidget(leLastObs2Process_, 1, 3);
+
+    connect(bgFirstObs_, SIGNAL(buttonClicked(int)), SLOT(firstObsChanged(int)));
+    connect(bgLastObs_,  SIGNAL(buttonClicked(int)), SLOT(lastObsChanged(int)));
+    connect(leFirstObs2Process_, SIGNAL(editingFinished()),  SLOT(changeFirstObs()));
+    connect(leLastObs2Process_,  SIGNAL(editingFinished()),  SLOT(changeLastObs()));
+
+    leFirstObs2Process_->setEnabled(false);
+    leLastObs2Process_ ->setEnabled(false);
+
+    rbFirstObs[0]->setChecked(true);
+    rbLastObs[0] ->setChecked(true);
+
+    layout->addWidget(gboxTSO);
+    layout->addStretch(1);
+  };
   //
   return w;
 };
@@ -1755,15 +1839,6 @@ void SgGuiTaskConfig::displayConfig()
   if (cbH2AppHfNutation_ && cbH2AppHfNutation_->isEnabled())
     cbH2AppHfNutation_->
       setCheckState(config_->getHave2ApplyNutationHFContrib()?Qt::Checked:Qt::Unchecked);
-
-/*
-  cbH2AppAxisOffsetContrib_->
-    setCheckState(config_->getHave2ApplyAxisOffsetContrib()?Qt::Checked:Qt::Unchecked);
-  cbH2AppNdryContrib_->
-    setCheckState(config_->getHave2ApplyNdryContrib()?Qt::Checked:Qt::Unchecked);
-  cbH2AppNwetContrib_->
-    setCheckState(config_->getHave2ApplyNwetContrib()?Qt::Checked:Qt::Unchecked);
-*/
 
   if (cbH2AppFeedCorr_->isEnabled())
     cbH2AppFeedCorr_->setCheckState(config_->getHave2ApplyFeedCorrContrib()?Qt::Checked:Qt::Unchecked);
@@ -3073,6 +3148,66 @@ void SgGuiTaskConfig::changeOP_IsSolveCompatible(int chkState)
 void SgGuiTaskConfig::changeOP_DoNotNormalize(int chkState)
 {
   config_->setOpHave2NormalizeResiduals(chkState==Qt::Unchecked);
+};
+
+
+
+//
+void SgGuiTaskConfig::firstObsChanged(int idx)
+{
+  leFirstObs2Process_->setEnabled(idx != 0);
+  if (idx == 0)
+    config_->setT2Bgn(tZero);
+  else
+    changeFirstObs();
+};
+
+
+
+//
+void SgGuiTaskConfig::lastObsChanged(int idx)
+{
+  leLastObs2Process_->setEnabled(idx != 0);
+  if (idx == 0)
+    config_->setT2End(tInf);
+  else
+    changeLastObs();
+};
+
+
+
+//
+void SgGuiTaskConfig::changeFirstObs()
+{
+  QString                       txt=leFirstObs2Process_->text();
+  SgMJD                         t;
+  if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, txt))
+    config_->setT2Bgn(t);
+  else
+  {
+    config_->setT2Bgn(tZero);
+    leFirstObs2Process_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    bgFirstObs_->button(0)->setChecked(true);
+    leFirstObs2Process_->setEnabled(false);
+  };
+};
+
+
+
+//
+void SgGuiTaskConfig::changeLastObs()
+{
+  QString                       txt=leLastObs2Process_->text();
+  SgMJD                         t;
+  if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, txt))
+    config_->setT2End(t);
+  else
+  {
+    config_->setT2End(tInf);
+    leLastObs2Process_->setText(session_->getTFinis().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    bgLastObs_->button(0)->setChecked(true);
+    leLastObs2Process_->setEnabled(false);
+  };
 };
 
 

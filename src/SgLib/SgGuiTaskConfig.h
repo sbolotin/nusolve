@@ -200,6 +200,10 @@ private slots:
   void changeOP_WcSuppresion(int);
   void changeOP_IsSolveCompatible(int);
   void changeOP_DoNotNormalize(int);
+  void firstObsChanged(int);
+  void lastObsChanged(int);
+  void changeFirstObs();
+  void changeLastObs();
   
   void changeEF_SitePositions(int);
   void changeEF_SitePositionsFileName(const QString&);
@@ -332,6 +336,11 @@ private:
   QLineEdit                  *leIniSigma4Rat_;
   QLineEdit                  *leMinSigma4Del_;
   QLineEdit                  *leMinSigma4Rat_;
+  //
+  QButtonGroup               *bgFirstObs_;
+  QButtonGroup               *bgLastObs_;
+  QLineEdit                  *leFirstObs2Process_;
+  QLineEdit                  *leLastObs2Process_;
   //
   QLineEdit                  *leOPThreshold_;
   QLineEdit                  *leOPIterationsLimit_;

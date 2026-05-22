@@ -226,7 +226,10 @@ class NsScrPrx4TaskConfig : public QObject
   Q_PROPERTY(bool have2outputCovarMatrix
     WRITE setHave2outputCovarMatrix READ getHave2outputCovarMatrix)
   
-
+  Q_PROPERTY(QString firstObs2Process
+    WRITE setFirstObs2Process READ getFirstObs2Process)
+  Q_PROPERTY(QString lastObs2Process
+    WRITE setLastObs2Process READ getLastObs2Process)
 
 
 public:
@@ -380,6 +383,11 @@ public slots:
 
   inline CableCalSource getFlybyCableCalSource() const 
     {return (CableCalSource)config_->getFlybyCableCalSource();};
+ 
+  inline QString getFirstObs2Process() const 
+		{return config_->getT2Bgn().toString(SgMJD::F_YYYYMMDDHHMMSSSS);};
+  inline QString getLastObs2Process() const 
+		{return config_->getT2End().toString(SgMJD::F_YYYYMMDDHHMMSSSS);};
 
   inline void setQualityCodeThreshold(int th) {config_->setQualityCodeThreshold(th);};
   inline void setGoodQualityCodeAtStartup(int th) {config_->setGoodQualityCodeAtStartup(th);};
@@ -465,6 +473,11 @@ public slots:
     {config_->setRefractionModel((SgTaskConfig::RefractionModel) m);};
   inline void setFlybyCableCalSource(CableCalSource s) 
     {config_->setFlybyCableCalSource((SgTaskConfig::CableCalSource) s);};
+  inline void setFirstObs2Process(const QString& str)
+		{SgMJD t; if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, str)) config_->setT2Bgn(t);};
+  inline void setLastObs2Process(const QString& str)
+		{SgMJD t; if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, str)) config_->setT2End(t);};
+		
   
 private:
   SgTaskConfig                 *config_;

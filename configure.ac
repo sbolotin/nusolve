@@ -488,6 +488,7 @@ AC_CONFIG_FILES([
         src/vgosDbProcLogs/Makefile
         src/log2ant/Makefile
         scripts/vgosDxConvertor
+        docs/UserGuides/Makefile
 ])
 fi
 

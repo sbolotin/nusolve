@@ -1,2 +1,20 @@
 *.diff
 *.log
+*.rts
+
+# executables:
+3dMatrixR_app
+3dMatrixRdots_app
+3dMatrix_app
+3dVector_app
+DBH_app
+DBH_dump
+DBH_extract
+FRN_dump
+KOMB_dump
+MJD_app
+Matrix_app
+Vector_app
+checkMjd
+getSessionList
+testCip2Wahr

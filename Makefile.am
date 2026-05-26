@@ -28,7 +28,7 @@ SUBDIRS = src/SgLib doc tests
 
 
 if WHOLEDIST
-SUBDIRS += src/nuSolve src/vgosDbProcLogs src/log2ant
+SUBDIRS += src/nuSolve src/vgosDbProcLogs src/log2ant docs/UserGuides
 endif
 
 ##SUBDIRS += src/nuSolve src/vgosDbProcLogs src/vgosDbCalc/calc11 src/vgosDbCalc src/log2ant
@@ -55,8 +55,9 @@ EXTRA_DIST = BUGS ChangeLog INSTALL INSTALL.local NEWS README\
         data/ECCDAT.ecc data/glo.axis data/glo.sit data/glo.src data/glo.ssm data/glo.vel data/glo_baseline.wgt\
         data/gsfc_dao_9095.mgr data/jmg96.hf data/last.erp\
         \
-        scripts/pia4INT.js scripts/export2ngs.js scripts/vgosDx.js scripts/vgosDxConvertor scripts/autoINT.js\
-        log2ant_sep.tgz
+        scripts/pia4INT.js scripts/export2ngs.js scripts/vgosDx.js scripts/vgosDxConvertor scripts/autoINT.js
+
+#       log2ant_sep.tgz
 
 
 

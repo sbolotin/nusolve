@@ -2,6 +2,7 @@
 *.o
 *.lo
 *.moc.cpp
+*~
 .memo
 .stats
 tmp/
@@ -9,6 +10,7 @@ tmp/
 .libs/
 Makefile
 Makefile.in
+nusolve-*.tar.gz
 
 # autoconf/automake stuff:
 aclocal.m4
@@ -34,17 +36,9 @@ config.sub
 # local stuff:
 geany-*
 
-
+# docs:
 doc/aux/
 doc/html/
 doc/latex/
 doc/man/
-doc/Makefile
-doc/Makefile.in
-doc/libGPGeo.dox.log
-docs/UserGuides/archive/
-
-
-
-
 

@@ -25,8 +25,8 @@
 
 SgVersion                       vgosDbProcLogsVersion("vgosDbProcLogs", 0, 7, 3,
                                                       "Whiteoak Canyon",
-                                                      SgMJD(   2026,   4, 21,
-                                                                      14, 14));
+                                                      SgMJD(   2026,   5, 26,
+                                                                      15, 18));
 
 SgVersion                      *driverVersion=&vgosDbProcLogsVersion;
 

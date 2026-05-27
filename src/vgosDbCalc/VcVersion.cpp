@@ -24,8 +24,8 @@
 
 SgVersion                       vgosDbCalcVersion("vgosDbCalc", 0, 5, 3,
                                                   "Piney River",
-                                                  SgMJD(   2026,  4,  10,
-                                                                 13,  37));
+                                                  SgMJD(   2026,  5,  26,
+                                                                 15,  15));
 
 SgVersion                      *driverVersion=&vgosDbCalcVersion;
 

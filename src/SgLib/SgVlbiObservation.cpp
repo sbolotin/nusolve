@@ -1360,8 +1360,25 @@ void SgVlbiObservation::evaluateResiduals(SgTaskManager* mgr)
   SgTaskConfig                 *cfg=mgr->getTask()->config();
   const SgParametersDescriptor *parameters=mgr->getTask()->parameters();
   SgEstimator                  *estimator=mgr->estimator();
+  QMap<QString, SgVlbiObservable*>::iterator
+                                it;
   QString                       str("");
   
+  // out of scope:
+  if (*this < cfg->getT2Bgn() || 
+      cfg->getT2End() < *this)
+  {
+    for (it=observableByKey_.begin(); it!=observableByKey_.end(); ++it)
+    {
+      SgVlbiObservable           *o=it.value();
+      o->sbDelay().setResidual(0.0);
+      o->grDelay().setResidual(0.0);
+      o->phDelay().setResidual(0.0);
+      o->phDRate().setResidual(0.0);
+    };
+    return;
+  };
+
   reweightAuxSum4delay_ = reweightAuxSum4rate_ = 0.0;
   // delay:
   // zerofy all partials:
@@ -1371,7 +1388,7 @@ void SgVlbiObservation::evaluateResiduals(SgTaskManager* mgr)
   fillPartials(mgr);
   sumAX_4delay_ = estimator->calcAX(getMJD(), true);
   reweightAuxSum4delay_ = estimator->calc_aT_P_a_opt(getMJD(), parameters_);
-//  reweightAuxSum4delay_ = estimator->calc_aT_P_a_opt(getMJD());
+//reweightAuxSum4delay_ = estimator->calc_aT_P_a_opt(getMJD());
   //
   //
   // rate:
@@ -1388,8 +1405,6 @@ void SgVlbiObservation::evaluateResiduals(SgTaskManager* mgr)
   //
   // residuals themselves:
   double                        sbDelayResidual, grDelayResidual, phDelayResidual, phDRateResidual;
-  QMap<QString, SgVlbiObservable*>::iterator
-                                it;
   for (it=observableByKey_.begin(); it!=observableByKey_.end(); ++it)
   {
     SgVlbiObservable           *o=it.value();

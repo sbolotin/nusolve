@@ -24,8 +24,8 @@
 
 SgVersion                       vgosDbMakeVersion("vgosDbMake", 0, 6, 3,
                                                   "Rattlesnake Point",
-                                                  SgMJD(   2026,  4,  10,
-                                                                 13,  38));
+                                                  SgMJD(   2026,  5,  26,
+                                                                 15,  17));
 
 SgVersion                      *driverVersion=&vgosDbMakeVersion;
 /*=====================================================================================================*/

@@ -11,6 +11,8 @@ tmp/
 Makefile
 Makefile.in
 nusolve-*.tar.gz
+log2ant_standalone/
+support/
 
 # autoconf/automake stuff:
 aclocal.m4

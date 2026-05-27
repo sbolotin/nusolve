@@ -52,11 +52,12 @@ bool SgSingleSessionTaskManager::prepare4Run()
   logger->write(SgLogger::DBG, SgLogger::RUN, className() +
     "::prepare4Run(): preparing to run the task");
 
+  SgTaskConfig                 *config=task_->config();
+
+
   // create CALCable objects:
-  refraction_ = new SgRefraction(task_->config());
-
-
-  estimator_ = new SgEstimator(task_->config());
+  refraction_ = new SgRefraction(config);
+  estimator_ = new SgEstimator(config);
 
   // create the list of parameters:
   globalParameters_ = new QList<SgParameter*>;
@@ -109,6 +110,11 @@ bool SgSingleSessionTaskManager::prepare4Run()
   tFinis_ = *observations_->last();
   tRefer_ = currentSession_->tRefer();
 
+  if (tStart_ < config->getT2Bgn())
+    tStart_ = config->getT2Bgn();
+  if (config->getT2End() < tFinis_)
+    tFinis_ = config->getT2End();
+  
 
   // prepare the session:
   currentSession_->prepare4Analysis();
@@ -120,7 +126,7 @@ bool SgSingleSessionTaskManager::prepare4Run()
     it!=currentSession_->stationsByName().end(); ++it)
   {
     SgVlbiStationInfo          *si=it.value();
-    si->prepare2Run(task_->config(), refraction_);
+    si->prepare2Run(config, refraction_);
     if (!si->isAttr(SgVlbiStationInfo::Attr_NOT_VALID))
     {
       if (task_->parameters()->getClock0Mode() == SgParameterCfg::PM_NONE ||
@@ -390,87 +396,32 @@ void SgSingleSessionTaskManager::run(bool haveProcessAllBands)
          si->isAttr(SgVlbiSourceInfo::Attr_APPLY_SSM)
        )
     {
-/*
-      if (si->getSmtType() == SgVlbiSourceInfo::SMT_TWO_POINTS)
+      for (int i=0; i<si->sModel().size(); i++)
       {
-        if (si->pX() && si->pY() && si->pK() && si->pB())
+        if (si->sModel()[i].pK())
         {
-          si->setK(si->getK() + si->pK()->getSolution());
-          si->setB(si->getB() + si->pB()->getSolution());
-          si->setX(si->getX() + si->pX()->getSolution());
-          si->setY(si->getY() + si->pY()->getSolution());
-          si->setKsig(si->pK()->getSigma());
-          si->setBsig(si->pB()->getSigma());
-          si->setXsig(si->pX()->getSigma());
-          si->setYsig(si->pY()->getSigma());
+          si->sModel()[i].setK(si->sModel()[i].getK() + si->sModel()[i].pK()->getSolution());
+          si->sModel()[i].setB(si->sModel()[i].getB() + si->sModel()[i].pB()->getSolution());
+          si->sModel()[i].setX(si->sModel()[i].getX() + si->sModel()[i].pX()->getSolution());
+          si->sModel()[i].setY(si->sModel()[i].getY() + si->sModel()[i].pY()->getSolution());
 
-          if (si->isExtSS())
-          {
-            si->setA0(si->getA0() + si->pA0()->getSolution());
-            si->setB0(si->getB0() + si->pB0()->getSolution());
-            si->setTheta0(si->getTheta0() + si->pTheta0()->getSolution());
-            si->setA1(si->getA1() + si->pA1()->getSolution());
-            si->setB1(si->getB1() + si->pB1()->getSolution());
-            si->setTheta1(si->getTheta1() + si->pTheta1()->getSolution());
-            
-            si->setA0Sig(si->pA0()->getSigma());
-            si->setB0Sig(si->pB0()->getSigma());
-            si->setTheta0Sig(si->pTheta0()->getSigma());
-            si->setA1Sig(si->pA1()->getSigma());
-            si->setB1Sig(si->pB1()->getSigma());
-            si->setTheta1Sig(si->pTheta1()->getSigma());
-          };
-
-          if (si->isExtSS())
-            logger->write(SgLogger::DBG, SgLogger::RUN, className() +
-              "::run(): aux parameters for " + si->getKey() + 
-              QString("").sprintf(": K=%.4f  B=%.4f    X=%.4f(mas) Y=%.4f(mas)   "
-                "A0=%.4f(mas) B0=%.4f(mas) Th0=%.4f(deg)   A1=%.4f(mas) B1=%.4f(mas) "
-                "Th1=%.4f(deg) %.3f(ps)",
-                si->getK(), si->getB(), si->getX()*RAD2MAS, si->getY()*RAD2MAS,
-                si->getA0()*RAD2MAS, si->getB0()*RAD2MAS, si->getTheta0()*RAD2DEG,
-                si->getA1()*RAD2MAS, si->getB1()*RAD2MAS, si->getTheta1()*RAD2DEG,
-                si->wrms(DT_DELAY)*1.0e12));
-          else
-            logger->write(SgLogger::DBG, SgLogger::RUN, className() +
-              "::run(): aux parameters for " + si->getKey() + 
-              QString("").sprintf(": K=%.4f  B=%.4f    X=%.4f(mas) Y=%.4f(mas)",
-                si->getK(), si->getB(), si->getX()*RAD2MAS, si->getY()*RAD2MAS));
-        }
-        else
-          logger->write(SgLogger::ERR, SgLogger::RUN, className() +
-            "::run(): aux parameters are NULL for " + si->getKey());
-      }
-      else if (si->getSmtType() == SgVlbiSourceInfo::SMT_MULTIPLE_POINTS)
-*/
-      {
-        for (int i=0; i<si->sModel().size(); i++)
-        {
-          if (si->sModel()[i].pK())
-          {
-            si->sModel()[i].setK(si->sModel()[i].getK() + si->sModel()[i].pK()->getSolution());
-            si->sModel()[i].setB(si->sModel()[i].getB() + si->sModel()[i].pB()->getSolution());
-            si->sModel()[i].setX(si->sModel()[i].getX() + si->sModel()[i].pX()->getSolution());
-            si->sModel()[i].setY(si->sModel()[i].getY() + si->sModel()[i].pY()->getSolution());
-
-            si->sModel()[i].setKsig(si->sModel()[i].pK()->getSigma());
-            si->sModel()[i].setBsig(si->sModel()[i].pB()->getSigma());
-            si->sModel()[i].setXsig(si->sModel()[i].pX()->getSigma());
-            si->sModel()[i].setYsig(si->sModel()[i].pY()->getSigma());
+          si->sModel()[i].setKsig(si->sModel()[i].pK()->getSigma());
+          si->sModel()[i].setBsig(si->sModel()[i].pB()->getSigma());
+          si->sModel()[i].setXsig(si->sModel()[i].pX()->getSigma());
+          si->sModel()[i].setYsig(si->sModel()[i].pY()->getSigma());
  
-            logger->write(SgLogger::DBG, SgLogger::RUN, className() +
-              "::run(): aux parameters for " + si->getKey() + 
-              QString("").sprintf(": X=%.4f (%.4f)  Y=%.4f (%.4f)  K=%.4f (%.4f)  B=%.4f (%.4f)  %.3f(ps)",
-                si->sModel()[i].getX()*RAD2MAS, 
-                si->sModel()[i].getXsig()*RAD2MAS, 
-                si->sModel()[i].getY()*RAD2MAS,
-                si->sModel()[i].getYsig()*RAD2MAS,
-                si->sModel()[i].getK(), 
-                si->sModel()[i].getKsig(), 
-                si->sModel()[i].getB(),
-                si->sModel()[i].getBsig(),
-                si->wrms(DT_DELAY)*1.0e12));
-          };
+          logger->write(SgLogger::DBG, SgLogger::RUN, className() +
+            "::run(): aux parameters for " + si->getKey() + 
+            QString("").sprintf(": X=%.4f (%.4f)  Y=%.4f (%.4f)  K=%.4f (%.4f)  B=%.4f (%.4f)  %.3f(ps)",
+              si->sModel()[i].getX()*RAD2MAS, 
+              si->sModel()[i].getXsig()*RAD2MAS, 
+              si->sModel()[i].getY()*RAD2MAS,
+              si->sModel()[i].getYsig()*RAD2MAS,
+              si->sModel()[i].getK(), 
+              si->sModel()[i].getKsig(), 
+              si->sModel()[i].getB(),
+              si->sModel()[i].getBsig(),
+              si->wrms(DT_DELAY)*1.0e12));
         };
       };
     };

@@ -56,30 +56,31 @@ enum BaselineColumnIndex
 {
   BCI_NUMBER      =  0,
   BCI_NAME        =  1,
-  BCI_TOT_OBS     =  2,
-  BCI_USB_OBS     =  3,
-  BCI_PRC_OBS     =  4,
+  BCI_SID         =  2,
+  BCI_TOT_OBS     =  3,
+  BCI_USB_OBS     =  4,
+  BCI_PRC_OBS     =  5,
   //
-  BCI_S_WRMS_DEL  =  5,
-  BCI_S_IGNORE    =  6,
-  BCI_S_LENGTH    =  7,
-  BCI_S_SIG0_DEL  =  8,
-  BCI_S_CLK_EST   =  9,
-  BCI_S_CLK_VAL   = 10,
-  BCI_S_CLK_SIG   = 11,
-  BCI_S_IONO4GRD  = 12,
-  BCI_S_IONO4PHD  = 13,
-  BCI_S_BIND_TRP  = 14,
+  BCI_S_WRMS_DEL  =  6,
+  BCI_S_IGNORE    =  7,
+  BCI_S_LENGTH    =  8,
+  BCI_S_SIG0_DEL  =  9,
+  BCI_S_CLK_EST   = 10,
+  BCI_S_CLK_VAL   = 11,
+  BCI_S_CLK_SIG   = 12,
+  BCI_S_IONO4GRD  = 13,
+  BCI_S_IONO4PHD  = 14,
+  BCI_S_BIND_TRP  = 15,
 
   //
-  BCI_B_DISP_DEL  =  5,
-  BCI_B_DISP_RAT  =  6,
-  BCI_B_SIG0_DEL  =  7,
-  BCI_B_SIG0_RAT  =  8,
-  BCI_B_WRMS_DEL  =  9,
-  BCI_B_WRMS_RAT  = 10,
-  BCI_B_AMBIG_SP  = 11,
-  BCI_B_NUM_CHAN  = 12,
+  BCI_B_DISP_DEL  =  6,
+  BCI_B_DISP_RAT  =  7,
+  BCI_B_SIG0_DEL  =  8,
+  BCI_B_SIG0_RAT  =  9,
+  BCI_B_WRMS_DEL  = 10,
+  BCI_B_WRMS_RAT  = 11,
+  BCI_B_AMBIG_SP  = 12,
+  BCI_B_NUM_CHAN  = 13,
 };
 
 
@@ -157,6 +158,7 @@ SgGuiVlbiBaselineList::SgGuiVlbiBaselineList(SgVlbiSession *session, SgTaskConfi
   headerLabels 
     << "Idx" 
     << "Name" 
+    << "ID"
     << "TotObs"
     << "GoodObs"
     << "PrcdObs"
@@ -211,6 +213,10 @@ SgGuiVlbiBaselineList::SgGuiVlbiBaselineList(SgVlbiSession *session, SgTaskConfi
     item->setText(BCI_NAME,    blInfo->getKey());
     item->setData(BCI_NAME,    Qt::TextAlignmentRole, Qt::AlignLeft);
     item->setData(BCI_NAME,    Qt::UserRole, true);
+    //
+    item->setText(BCI_SID,     blInfo->getSid());
+    item->setData(BCI_SID,     Qt::TextAlignmentRole, Qt::AlignLeft);
+    item->setData(BCI_SID,     Qt::UserRole, true);
     //
     item->setText(BCI_TOT_OBS, str.sprintf("%7d", blInfo->numTotal(DT_DELAY)));
     item->setData(BCI_TOT_OBS, Qt::TextAlignmentRole, Qt::AlignRight);
@@ -494,11 +500,8 @@ void SgGuiVlbiBaselineList::updateContent()
     numUsable = blInfo->numUsable(DT_DELAY);
     item->setText(BCI_NUMBER, str.sprintf("%4d", blInfo->getIdx()));
     item->setText(BCI_NAME, blInfo->getKey());
+    item->setText(BCI_SID,  blInfo->getSid());
     item->setText(BCI_TOT_OBS, str.sprintf("%7d", blInfo->numTotal(DT_DELAY)));
-    /*
-    item->setText(BCI_USB_OBS, str.sprintf("%7d", blInfo->numUsable(DT_DELAY)));
-    item->setText(BCI_PRC_OBS, str.sprintf("%7d", blInfo->numProcessed(DT_DELAY)));
-    */
     //
     if (numbersBrowseMode_ == 0)
     {

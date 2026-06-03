@@ -44,6 +44,7 @@
 #include <SgEccRec.h>
 #include <SgLogger.h>
 #include <SgMasterRecord.h>
+#include <SgNetworkStnRecord.h>
 #include <SgTaskConfig.h>
 #include <SgVector.h>
 #include <SgVersion.h>
@@ -775,6 +776,45 @@ bool SgVlbiSession::selfCheck(bool guiExpected, const QStringList& suffixes)
   setupTimeRefer();
   logger->write(SgLogger::DBG, SgLogger::PREPROC, className() +
     "::selfCheck(): epochs of start/finish were established", true);
+  //
+  //
+  // check for ns-codes.txt file:
+  //
+  SgNetworkStations             ns_codes(path2Masterfile_);
+  if (ns_codes.readFile())
+    for (StationsByName_it it=stationsByName_.begin(); it!=stationsByName_.end(); ++it)
+    {
+      SgVlbiStationInfo        *stn=it.value();
+      if (ns_codes.recsByName().contains(stn->getKey()))
+      {
+        const SgNetworkStnRecord &rec=ns_codes.recsByName().find(stn->getKey()).value();
+        if (rec.isValid())
+        {
+          const QString&          sCode=rec.getCode();
+          stn->setSid(sCode.at(0).toLatin1(), sCode.at(1).toLatin1());
+          // propagare to bands' attributes:
+          for (int i=0; i<bands_.size(); i++)
+            if (bands_.at(i)->stationsByName().contains(stn->getKey()))
+              bands_.at(i)->stationsByName().find(stn->getKey()).value()->
+                  setSid(sCode.at(0).toLatin1(), sCode.at(1).toLatin1());
+        };
+      };
+    };
+  //
+  // baselines:
+  for (BaselinesByName_it it=baselinesByName_.begin(); it!=baselinesByName_.end(); ++it)
+  {
+    SgVlbiBaselineInfo         *bln=it.value();
+    SgVlbiStationInfo          *si=bln->stn_1(stationsByName_);
+    SgVlbiStationInfo          *sj=bln->stn_2(stationsByName_);
+    if (si && sj)
+    {
+      bln->setSid(QString(si->getCid()) + QChar(sj->getCid()));
+      for (int i=0; i<bands_.size(); i++)
+        if (bands_.at(i)->baselinesByName().contains(bln->getKey()))
+          bands_.at(i)->baselinesByName().find(bln->getKey()).value()->setSid(bln->getSid());
+    };
+  };
   //
   //
   // check masterfile:

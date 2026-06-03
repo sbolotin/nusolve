@@ -294,19 +294,29 @@ QWidget* SgGuiParameterCfg::tab4RegularType()
 //
 QWidget* SgGuiParameterCfg::tab4ArcType()
 {
-  QWidget      *w=new QWidget(this);
-  QBoxLayout   *layout=new QVBoxLayout(w);
-  QGroupBox    *gbox=new QGroupBox("Arc Parameter", w);
+  QWidget                      *w=new QWidget(this);
+  QBoxLayout                   *layout=new QVBoxLayout(w);
+  QGroupBox                    *gbox=new QGroupBox("Arc Parameter", w);
   layout->addWidget(gbox);
-  QGridLayout  *grid=new QGridLayout(gbox);
-  QLabel       *label=new QLabel("Arc length (hrs):", gbox);
+
+  QGridLayout                  *grid=new QGridLayout(gbox);
+  QLabel                       *label;
+
+  grid->addWidget(label=new QLabel("Arc length (hrs):", gbox), 0, 0);
   label->setMinimumSize(label->sizeHint());
-  grid->addWidget(label, 0, 0);
   
   leArcLength_ = new QLineEdit(gbox);
   leArcLength_->setText(str_.sprintf("%.4f", 24.0*parConfig_->getArcStep()));
   leArcLength_->setMinimumSize(leArcLength_->sizeHint());
   grid->addWidget(leArcLength_, 0, 1);
+
+
+/*
+  QRadioButton                 *rbFirstObs[2];
+   
+  bgFirstObs_ = new QButtonGroup(gboxTSO);
+*/
+
 
   return w;
 };

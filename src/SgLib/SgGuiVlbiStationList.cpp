@@ -57,37 +57,38 @@ enum StationColumnIndex
 {
   SCI_NUMBER      =  0,
   SCI_NAME        =  1,
-  SCI_SCANS       =  2,
-  SCI_TOT_OBS     =  3,
-  SCI_USB_OBS     =  4,
-  SCI_PRC_OBS     =  5,
+  SCI_SID         =  2,
+  SCI_SCANS       =  3,
+  SCI_TOT_OBS     =  4,
+  SCI_USB_OBS     =  5,
+  SCI_PRC_OBS     =  6,
   //
-  SCI_S_WRMS_DEL  =  6,
-  SCI_S_IGNORE    =  7,
-  SCI_S_ACM       =  8,
-  SCI_S_CLK_BRKS  =  9,
-  SCI_S_CLK_TERMS = 10,
-  SCI_S_REF_CLK   = 11,
+  SCI_S_WRMS_DEL  =  7,
+  SCI_S_IGNORE    =  8,
+  SCI_S_ACM       =  9,
+  SCI_S_CLK_BRKS  = 10,
+  SCI_S_CLK_TERMS = 11,
+  SCI_S_REF_CLK   = 12,
   
-  SCI_S_DFLT_CO   = 12,
-  SCI_S_CBL_ORI   = 13,
-  SCI_S_CBL_SGN   = 14,
+  SCI_S_DFLT_CO   = 13,
+  SCI_S_CBL_ORI   = 14,
+  SCI_S_CBL_SGN   = 15,
 
-  SCI_S_CBL_CAL   = 15,
-  SCI_S_FLAGS     = 16,
-  SCI_S_LC        = 17,
-  SCI_S_LZ        = 18,
-  SCI_S_COO_EST   = 19,
-  SCI_S_COO_CON   = 20,
-  SCI_S_AXO_EST   = 21,
+  SCI_S_CBL_CAL   = 16,
+  SCI_S_FLAGS     = 17,
+  SCI_S_LC        = 18,
+  SCI_S_LZ        = 19,
+  SCI_S_COO_EST   = 20,
+  SCI_S_COO_CON   = 21,
+  SCI_S_AXO_EST   = 22,
   //
-  SCI_B_DISP_DEL  =  6,
-  SCI_B_DISP_RAT  =  7,
-  SCI_B_SIG0_DEL  =  8,
-  SCI_B_SIG0_RAT  =  9,
-  SCI_B_WRMS_DEL  = 10,
-  SCI_B_WRMS_RAT  = 11,
-  SCI_B_CLK_BRKS  = 12,
+  SCI_B_DISP_DEL  =  7,
+  SCI_B_DISP_RAT  =  8,
+  SCI_B_SIG0_DEL  =  9,
+  SCI_B_SIG0_RAT  = 10,
+  SCI_B_WRMS_DEL  = 11,
+  SCI_B_WRMS_RAT  = 12,
+  SCI_B_CLK_BRKS  = 13,
 };
 
 const QString                 sCableCalOrigs[] = {"Default", "FSLog", "CDMS", "PCMT"};
@@ -142,6 +143,7 @@ SgGuiVlbiStationList::SgGuiVlbiStationList(SgObjectBrowseMode mode, const QStrin
   headerLabels 
     << "Idx" 
     << "Name" 
+    << "ID" 
     << "Scans"
     << "TotObs"
     << "GoodObs"
@@ -203,6 +205,11 @@ SgGuiVlbiStationList::SgGuiVlbiStationList(SgObjectBrowseMode mode, const QStrin
     item->setText(SCI_NAME,    stInfo->getKey());
     item->setData(SCI_NAME,    Qt::TextAlignmentRole, Qt::AlignLeft);
     item->setData(SCI_NAME,    Qt::UserRole, true);
+    
+    //item->setText(SCI_SID,     QString(stInfo->getSid()));
+    item->setText(SCI_SID,     stInfo->getSid());
+    item->setData(SCI_SID,     Qt::TextAlignmentRole, Qt::AlignLeft);
+    item->setData(SCI_SID,     Qt::UserRole, true);
 
     item->setText(SCI_SCANS,   str.sprintf("%7d", stInfo->auxObservationByScanId()->size()));
     item->setData(SCI_SCANS,   Qt::TextAlignmentRole, Qt::AlignRight);
@@ -528,12 +535,9 @@ void SgGuiVlbiStationList::updateContent()
     //
     item->setText(SCI_NUMBER,   str.sprintf("%4d", stInfo->getIdx()));
     item->setText(SCI_NAME,     stInfo->getKey());
+    item->setText(SCI_SID,      stInfo->getSid());
     item->setText(SCI_SCANS,    str.sprintf("%7d", stInfo->auxObservationByScanId()->size()));
     item->setText(SCI_TOT_OBS,  str.sprintf("%7d", stInfo->numTotal(DT_DELAY)));
-    /*
-    item->setText(SCI_USB_OBS,  str.sprintf("%7d", stInfo->numUsable(DT_DELAY)));
-    item->setText(SCI_PRC_OBS,  str.sprintf("%7d", stInfo->numProcessed(DT_DELAY)));
-    */
     //
     if (numbersBrowseMode_ == 0)
     {

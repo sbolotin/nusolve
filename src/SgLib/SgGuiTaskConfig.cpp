@@ -892,8 +892,8 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
     //
     grid = new QGridLayout(gboxTSO);
 
-    grid->addWidget(new QLabel("First observation:", gboxTSO), 0, 0);
-    grid->addWidget(new QLabel("Last observation:",  gboxTSO), 1, 0);
+    grid->addWidget(new QLabel("Start with:", gboxTSO), 0, 0);
+    grid->addWidget(new QLabel("End by:",     gboxTSO), 1, 0);
     //
     QRadioButton                 *rbFirstObs[2];
     QRadioButton                 *rbLastObs[2];

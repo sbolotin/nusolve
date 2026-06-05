@@ -47,6 +47,7 @@
 
 #include <SgParametersDescriptor.h>
 #include <SgLogger.h>
+#include <SgVlbiSession.h>
 
 
 
@@ -56,13 +57,16 @@
 * 
 *======================================================================================================*/
 //
-SgGuiParameterCfg::SgGuiParameterCfg(SgParameterCfg *pCfg, int idx, bool isModeAdjustable,
-                                     QWidget* parent, Qt::WindowFlags f)
+SgGuiParameterCfg::SgGuiParameterCfg(SgParameterCfg *pCfg, int idx, 
+                                      SgVlbiSession* session,
+                                      bool isModeAdjustable,
+                                      QWidget* parent, Qt::WindowFlags f)
   : QDialog(parent, f),
     str_()
 {
   parameterIdx_ = idx;
   parConfigOrig_ = pCfg;
+  session_ = session;
   parConfig_ = new SgParameterCfg(*parConfigOrig_);
   isModified_ = false;
   isModeAdjustable_ = isModeAdjustable;
@@ -311,13 +315,53 @@ QWidget* SgGuiParameterCfg::tab4ArcType()
   grid->addWidget(leArcLength_, 0, 1);
 
 
-/*
-  QRadioButton                 *rbFirstObs[2];
-   
-  bgFirstObs_ = new QButtonGroup(gboxTSO);
-*/
+  if (session_)
+  {
+    QGroupBox                  *gboxBE=new QGroupBox("Boundary epoch of the intervals", gbox);
+    QGridLayout                *grd=new QGridLayout(gboxBE);
+    QRadioButton               *rbBoundary[2];
+  
+    bgArcBoundary_ = new QButtonGroup(gboxBE);
+  
+    rbBoundary[0] = new QRadioButton("Default (first observation of the session)", gboxBE);
+    rbBoundary[1] = new QRadioButton("Manual", gboxBE);
 
+    rbBoundary[0]->setMinimumSize(rbBoundary[0]->sizeHint());
+    rbBoundary[1]->setMinimumSize(rbBoundary[1]->sizeHint());
 
+    bgArcBoundary_->addButton(rbBoundary[0], 0);
+    bgArcBoundary_->addButton(rbBoundary[1], 1);
+
+    grd->addWidget(rbBoundary[0], 0, 0, 1, 2);
+    grd->addWidget(rbBoundary[1], 1, 0);
+
+    leArcBoundary_ = new QLineEdit(gboxBE);
+  
+    leArcBoundary_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    leArcBoundary_->setMinimumWidth(leArcBoundary_->fontMetrics().width(leArcBoundary_->text()));
+    grd->addWidget(leArcBoundary_, 1, 1);
+
+    connect(bgArcBoundary_, SIGNAL(buttonClicked(int)), SLOT(arcBoundaryChanged(int)));
+    connect(leArcBoundary_, SIGNAL(editingFinished()),  SLOT(changeArcBoundary()));
+
+    if (session_->getTStart() - 1.2 < parConfig_->getArcBoundaryEpoch() &&
+        parConfig_->getArcBoundaryEpoch()  < session_->getTFinis() + 1.2 )
+    {
+      leArcBoundary_->setText(parConfig_->getArcBoundaryEpoch().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+      leArcBoundary_->setEnabled(true);
+      rbBoundary[1]->setChecked(true);
+    }
+    else
+    {
+      leArcBoundary_->setEnabled(false);
+      rbBoundary[0]->setChecked(true);
+    };
+
+    grid->setRowStretch(2, 1);
+    grid->addWidget(gboxBE, 3, 0,  1, 2);
+    grid->setRowStretch(4, 3);
+  };
+  
   return w;
 };
 
@@ -326,14 +370,14 @@ QWidget* SgGuiParameterCfg::tab4ArcType()
 //
 QWidget* SgGuiParameterCfg::tab4PWLType()
 {
-  QWidget      *w=new QWidget(this);
-  QBoxLayout   *layout=new QVBoxLayout(w);
-  QGroupBox    *gbox=new QGroupBox("PieceWise Linear Parameter", w);
+  QWidget                      *w=new QWidget(this);
+  QBoxLayout                   *layout=new QVBoxLayout(w);
+  QGroupBox                    *gbox=new QGroupBox("PieceWise Linear Parameter", w);
   layout->addWidget(gbox);
-  QGridLayout  *grid=new QGridLayout(gbox);
-//"<p>&sigma;</p>"
-  QLabel       *label=new QLabel("A priori sigmas for rate terms (" +
-                                    parConfig_->getScaleName() + "/hr):", gbox);
+  QGridLayout                  *grid=new QGridLayout(gbox);
+
+  QLabel                       *label=new QLabel("A priori sigmas for rate terms (" +
+                                                  parConfig_->getScaleName() + "/hr):", gbox);
   label->setMinimumSize(label->sizeHint());
   grid->setRowStretch(0, 1);
   grid->addWidget(label, 1, 0);
@@ -352,7 +396,54 @@ QWidget* SgGuiParameterCfg::tab4PWLType()
   lePwlLength_->setMinimumSize(lePwlLength_->sizeHint());
   grid->addWidget(lePwlLength_, 2, 1);
   grid->setRowStretch(3, 1);
+
+  if (session_)
+  {
+    QGroupBox                  *gboxBE=new QGroupBox("Boundary epoch of the intervals", gbox);
+    QGridLayout                *grd=new QGridLayout(gboxBE);
+    QRadioButton               *rbBoundary[2];
   
+    bgPwlBoundary_ = new QButtonGroup(gboxBE);
+  
+    rbBoundary[0] = new QRadioButton("Default (first observation of the session)", gboxBE);
+    rbBoundary[1] = new QRadioButton("Manual", gboxBE);
+
+    rbBoundary[0]->setMinimumSize(rbBoundary[0]->sizeHint());
+    rbBoundary[1]->setMinimumSize(rbBoundary[1]->sizeHint());
+
+    bgPwlBoundary_->addButton(rbBoundary[0], 0);
+    bgPwlBoundary_->addButton(rbBoundary[1], 1);
+
+    grd->addWidget(rbBoundary[0], 0, 0, 1, 2);
+    grd->addWidget(rbBoundary[1], 1, 0);
+
+    lePwlBoundary_ = new QLineEdit(gboxBE);
+  
+    lePwlBoundary_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    lePwlBoundary_->setMinimumWidth(lePwlBoundary_->fontMetrics().width(lePwlBoundary_->text()));
+    grd->addWidget(lePwlBoundary_, 1, 1);
+
+    connect(bgPwlBoundary_, SIGNAL(buttonClicked(int)), SLOT(pwlBoundaryChanged(int)));
+    connect(lePwlBoundary_, SIGNAL(editingFinished()),  SLOT(changePwlBoundary()));
+
+    if (session_->getTStart() - 1.2 < parConfig_->getPwlBoundaryEpoch() &&
+        parConfig_->getPwlBoundaryEpoch()  < session_->getTFinis() + 1.2 )
+    {
+      lePwlBoundary_->setText(parConfig_->getPwlBoundaryEpoch().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+      lePwlBoundary_->setEnabled(true);
+      rbBoundary[1]->setChecked(true);
+    }
+    else
+    {
+      lePwlBoundary_->setEnabled(false);
+      rbBoundary[0]->setChecked(true);
+    };
+
+    grid->setRowStretch(2, 1);
+    grid->addWidget(gboxBE, 3, 0,  1, 2);
+    grid->setRowStretch(4, 3);
+  };
+ 
   return w;
 };
 
@@ -439,6 +530,73 @@ void SgGuiParameterCfg::stochasticTypeChanged(int id)
     break;
   };
 };
+
+
+
+
+//
+void SgGuiParameterCfg::arcBoundaryChanged(int idx)
+{
+  leArcBoundary_->setEnabled(idx != 0);
+  if (idx == 0)
+    parConfig_->setArcBoundaryEpoch(tZero);
+  else
+    changeArcBoundary();
+  isModified_ = true;
+};
+
+
+
+//
+void SgGuiParameterCfg::pwlBoundaryChanged(int idx)
+{
+  lePwlBoundary_->setEnabled(idx != 0);
+  if (idx == 0)
+    parConfig_->setPwlBoundaryEpoch(tZero);
+  else
+    changePwlBoundary();
+  isModified_ = true;
+};
+
+
+
+//
+void SgGuiParameterCfg::changeArcBoundary()
+{
+  QString                       txt=leArcBoundary_->text();
+  SgMJD                         t;
+  if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, txt))
+    parConfig_->setArcBoundaryEpoch(t);
+  else
+  {
+    parConfig_->setArcBoundaryEpoch(tZero);
+    leArcBoundary_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    bgArcBoundary_->button(0)->setChecked(true);
+    leArcBoundary_->setEnabled(false);
+  };
+  isModified_ = true;
+};
+
+
+
+//
+void SgGuiParameterCfg::changePwlBoundary()
+{
+  QString                       txt=lePwlBoundary_->text();
+  SgMJD                         t;
+  if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, txt))
+    parConfig_->setPwlBoundaryEpoch(t);
+  else
+  {
+    parConfig_->setPwlBoundaryEpoch(tZero);
+    lePwlBoundary_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+    bgPwlBoundary_->button(0)->setChecked(true);
+    lePwlBoundary_->setEnabled(false);
+  };
+  isModified_ = true;
+};
+
+
 /*=====================================================================================================*/
 
 

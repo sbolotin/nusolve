@@ -1084,7 +1084,7 @@ void SgGuiVlbiStnInfoEditor::editClockBreakRecordItem(QTreeWidgetItem* item, int
 void SgGuiVlbiStnInfoEditor::editLocalClocks()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(stationInfo_->pcClocks(), 
-    SgParametersDescriptor::Idx_CLOCK_0, true, this);
+    SgParametersDescriptor::Idx_CLOCK_0, NULL, true, this);
   connect (e, SIGNAL(valueModified(bool)), SLOT(updateModifyStatus(bool)));
   connect (e, SIGNAL(valueModified(bool)), SLOT(updateLClocksMode(bool)));
   e->show();
@@ -1096,7 +1096,7 @@ void SgGuiVlbiStnInfoEditor::editLocalClocks()
 void SgGuiVlbiStnInfoEditor::editLocalZenith()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(stationInfo_->pcZenith(),
-    SgParametersDescriptor::Idx_ZENITH, true, this);
+    SgParametersDescriptor::Idx_ZENITH, NULL, true, this);
   connect (e, SIGNAL(valueModified(bool)), SLOT(updateModifyStatus(bool)));
   connect (e, SIGNAL(valueModified(bool)), SLOT(updateLZenithMode(bool)));
   e->show();

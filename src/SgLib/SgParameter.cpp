@@ -62,6 +62,7 @@ SgParameter& SgParameter::operator=(const SgParameter& p)
   numOfPolynomials_ = p.getNumOfPolynomials();
   tLeft_ = p.getTLeft();
   tRight_ = p.getTRight();
+  boundaryEpoch_ = p.getBoundaryEpoch();
   idx_ = p.getIdx();
   return *this;
 };
@@ -84,12 +85,14 @@ void SgParameter::tune(const SgParameterCfg& cfg)
       sigmaAPriori_    = cfg.getPwlAPriori()/scale_;
       sigmaAPrioriAux_ = cfg.getConvAPriori()/scale_;
       numOfPolynomials_= cfg.getPwlNumOfPolynomials();
+      boundaryEpoch_   = cfg.getPwlBoundaryEpoch();
     break;
     case SgParameterCfg::PM_ARC:
       step_ = cfg.getArcStep();
       ttl_  = step_;
       sigmaAPriori_    = cfg.getConvAPriori()/scale_;
       sigmaAPrioriAux_ = cfg.getConvAPriori()/scale_;
+      boundaryEpoch_   = cfg.getArcBoundaryEpoch();
     break;
     default:
       step_ = cfg.getArcStep();
@@ -128,12 +131,14 @@ void SgParameter::tune(SgParameterCfg::PMode pMode, const SgParameterCfg& cfg)
       sigmaAPriori_    = cfg.getPwlAPriori()/scale_;
       sigmaAPrioriAux_ = cfg.getConvAPriori()/scale_;
       numOfPolynomials_= cfg.getPwlNumOfPolynomials();
+      boundaryEpoch_   = cfg.getPwlBoundaryEpoch();
     break;
     case SgParameterCfg::PM_ARC:
       step_ = cfg.getArcStep();
       ttl_  = step_;
       sigmaAPriori_    = cfg.getConvAPriori()/scale_;
       sigmaAPrioriAux_ = cfg.getConvAPriori()/scale_;
+      boundaryEpoch_   = cfg.getArcBoundaryEpoch();
     break;
     default:
       step_ = cfg.getArcStep();
@@ -170,6 +175,7 @@ void SgParameter::tune(const SgParameter& p)
   prefix_ = p.getPrefix();
   ttl_ = p.getTTL();
   numOfPolynomials_ = p.getNumOfPolynomials();
+  boundaryEpoch_   = p.getBoundaryEpoch();
 };
 
 

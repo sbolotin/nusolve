@@ -49,7 +49,9 @@ SgParameterCfg::SgParameterCfg(const QString& name, PMode pMode, SType sType, do
                         double arcStep, double stocAPriori, double breakNoise, double tau,
                         double whiteNoise, double pwlStep, double pwlAPriori, int pwlNumOfPolynomials,
                         double scale, const QString& scaleName)
-: SgAttribute()
+: SgAttribute(),
+  arcBoundaryEpoch_(tZero),
+  pwlBoundaryEpoch_(tZero)
 {
   name_ = name;
   pMode_= pMode;
@@ -93,7 +95,10 @@ bool SgParameterCfg::saveIntermediateResults(QDataStream& s) const
 {
   s << name_ << getAttributes() << (unsigned int)pMode_ << (unsigned int)sType_ << scale_ << scaleName_ 
     << convAPriori_ << arcStep_ << pwlAPriori_ << pwlStep_ << pwlNumOfPolynomials_ << stocAPriori_ 
-    << breakNoise_ << tau_ << whiteNoise_;
+    << breakNoise_ << tau_ << whiteNoise_
+    << arcBoundaryEpoch_.getDate() << arcBoundaryEpoch_.getTime()
+    << pwlBoundaryEpoch_.getDate() << pwlBoundaryEpoch_.getTime()
+    ;
   if (s.status() != QDataStream::Ok)
   {
     logger->write(SgLogger::ERR, SgLogger::IO_BIN, className() +
@@ -113,10 +118,15 @@ bool SgParameterCfg::loadIntermediateResults(QDataStream& s)
   double                        scale, convAPriori, arcStep, pwlAPriori, pwlStep, stocAPriori;
   double                        breakNoise, tau, whiteNoise;
   int                           pwlNumOfPolynomials;
+  int                           arcBoundaryEpochDate, pwlBoundaryEpochDate;
+  double                        arcBoundaryEpochTime, pwlBoundaryEpochTime;
   //
   s >> name >> attributes >> pMode >> sType >> scale >> scaleName 
     >> convAPriori >> arcStep >> pwlAPriori >> pwlStep >> pwlNumOfPolynomials >> stocAPriori 
-    >> breakNoise >> tau >> whiteNoise;
+    >> breakNoise >> tau >> whiteNoise
+    >> arcBoundaryEpochDate >> arcBoundaryEpochTime
+    >> pwlBoundaryEpochDate >> pwlBoundaryEpochTime
+    ;
   //
   if (s.status() != QDataStream::Ok)
   {
@@ -146,6 +156,13 @@ bool SgParameterCfg::loadIntermediateResults(QDataStream& s)
   breakNoise_ = breakNoise;
   tau_ = tau;
   whiteNoise_ = whiteNoise;
+
+  arcBoundaryEpoch_.setDate(arcBoundaryEpochDate);
+  arcBoundaryEpoch_.setTime(arcBoundaryEpochTime);
+    
+  pwlBoundaryEpoch_.setDate(pwlBoundaryEpochDate);
+  pwlBoundaryEpoch_.setTime(pwlBoundaryEpochTime);
+    
   //
   return s.status()==QDataStream::Ok;
 };

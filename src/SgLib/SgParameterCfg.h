@@ -35,6 +35,7 @@
 class QDataStream;
 
 #include <SgAttribute.h>
+#include <SgMJD.h>
 
 
 
@@ -140,6 +141,9 @@ public:
    */
   inline double getArcStep() const;
 
+  inline const SgMJD& getArcBoundaryEpoch() const {return arcBoundaryEpoch_;};
+  inline const SgMJD& getPwlBoundaryEpoch() const {return pwlBoundaryEpoch_;};
+  
   /**Returns a scale for this type of parameters.
    */
   inline double getScale() const;
@@ -208,6 +212,9 @@ public:
    */
   inline void setArcStep(double s);
 
+  inline void setArcBoundaryEpoch(const SgMJD& t) {arcBoundaryEpoch_ = t;};
+  inline void setPwlBoundaryEpoch(const SgMJD& t) {pwlBoundaryEpoch_ = t;};
+
   /**Sets up a scale factor for this type of parameters.
    * \param s -- a scale;
    */
@@ -251,10 +258,12 @@ private:
   // conventional parameter properties:
   double        convAPriori_;         //!< a priori std. deviation (conventional pars)
   double        arcStep_;             //!< a step for arc parameter
+  SgMJD         arcBoundaryEpoch_;    //
   // piecewise-linear parameter properties:
   double        pwlAPriori_;          //!< a priori std. deviation (for pisewice linear B-coeffs)
   double        pwlStep_;             //!< a step for modelling by picewise linear function
   int           pwlNumOfPolynomials_; //!< number of polynomials in the PWL model
+  SgMJD         pwlBoundaryEpoch_;    //
   // stochastic parameter properties:
   double        stocAPriori_;         //!< a priori std. deviation (stochastic pars)
   double        breakNoise_;          //!< psd of noise process used for "breaks"
@@ -281,7 +290,9 @@ private:
 //
 // An empty constructor:
 inline SgParameterCfg::SgParameterCfg() : 
-  SgAttribute()
+  SgAttribute(),
+  arcBoundaryEpoch_(tZero),
+  pwlBoundaryEpoch_(tZero)
 {
   name_ = "a parameter";
   pMode_= PM_NONE;
@@ -316,10 +327,12 @@ inline SgParameterCfg::SgParameterCfg(const SgParameterCfg& pc) :
   //
   convAPriori_ = pc.getConvAPriori();
   arcStep_ = pc.getArcStep();
+  arcBoundaryEpoch_ = pc.getArcBoundaryEpoch();
   //
   pwlAPriori_ = pc.getPwlAPriori();
   pwlStep_ = pc.getPwlStep();
   pwlNumOfPolynomials_ = pc.getPwlNumOfPolynomials();
+  pwlBoundaryEpoch_ = pc.getPwlBoundaryEpoch();
   //
   stocAPriori_ = pc.getStocAPriori();
   breakNoise_ = pc.getBreakNoise();
@@ -352,10 +365,12 @@ inline SgParameterCfg& SgParameterCfg::operator=(const SgParameterCfg& pc)
   //
   convAPriori_ = pc.getConvAPriori();
   arcStep_ = pc.getArcStep();
+  arcBoundaryEpoch_ = pc.getArcBoundaryEpoch();
   //
   pwlAPriori_ = pc.getPwlAPriori();
   pwlStep_ = pc.getPwlStep();
   pwlNumOfPolynomials_ = pc.getPwlNumOfPolynomials();
+  pwlBoundaryEpoch_ = pc.getPwlBoundaryEpoch();
   //
   stocAPriori_ = pc.getStocAPriori();
   breakNoise_ = pc.getBreakNoise();

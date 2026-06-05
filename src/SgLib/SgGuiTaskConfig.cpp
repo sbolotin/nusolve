@@ -935,11 +935,28 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
     connect(leFirstObs2Process_, SIGNAL(editingFinished()),  SLOT(changeFirstObs()));
     connect(leLastObs2Process_,  SIGNAL(editingFinished()),  SLOT(changeLastObs()));
 
-    leFirstObs2Process_->setEnabled(false);
-    leLastObs2Process_ ->setEnabled(false);
-
-    rbFirstObs[0]->setChecked(true);
-    rbLastObs[0] ->setChecked(true);
+    if (session_->getTStart() < config_->getT2Bgn())
+    {
+      leFirstObs2Process_->setText(config_->getT2Bgn().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+      leFirstObs2Process_->setEnabled(true);
+      rbFirstObs[1]->setChecked(true);
+    }
+    else
+    {
+      leFirstObs2Process_->setEnabled(false);
+      rbFirstObs[0]->setChecked(true);
+    };
+    if (config_->getT2End() < session_->getTFinis())
+    {
+      leLastObs2Process_->setText(config_->getT2End().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+      leLastObs2Process_->setEnabled(true);
+      rbLastObs[1]->setChecked(true);
+    }
+    else
+    {
+      leLastObs2Process_ ->setEnabled(false);
+      rbLastObs[0] ->setChecked(true);
+    };
 
     layout->addWidget(gboxTSO);
     layout->addStretch(1);

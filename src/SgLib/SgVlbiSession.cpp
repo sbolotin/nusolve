@@ -62,7 +62,8 @@ bool observationSortingOrderLessThan4newSession(SgVlbiObservation*, SgVlbiObserv
 
 
 const QString                   SgVlbiSession::sSkipCode_("---");
-
+const QString                   sSirFingerprint("SessionIntermediateResults/SgLib");
+const double                    dSirSerialNumber = 20260605.65;
 
 
 /*=======================================================================================================
@@ -1390,6 +1391,17 @@ QString SgVlbiSession::name4SirFile(bool isThroughCatalog)
 //
 bool SgVlbiSession::saveIntermediateResults(QDataStream& s) const
 {
+  //
+  // first, put the fingerprints and serial number:
+  s << sSirFingerprint << dSirSerialNumber;
+  if (s.status() != QDataStream::Ok)
+  {
+    logger->write(SgLogger::ERR, SgLogger::IO_BIN, className() +
+      "::saveIntermediateResults(): error writting data");
+    return false;
+  };
+  //
+  // then, the data:
   s << name_ << getAttributes();
   if (s.status() != QDataStream::Ok)
   {
@@ -1397,6 +1409,7 @@ bool SgVlbiSession::saveIntermediateResults(QDataStream& s) const
       "::saveIntermediateResults(): error writting data");
     return false;
   };
+/*
   // store the current version too:
   if (!libraryVersion.saveIntermediateResults(s))
   {
@@ -1404,6 +1417,7 @@ bool SgVlbiSession::saveIntermediateResults(QDataStream& s) const
       "::saveIntermediateResults(): error writting data for the version");
     return false;
   };
+*/
   //
   // bands:
   for (int i=0; i<bands_.size(); i++)
@@ -1489,7 +1503,43 @@ bool SgVlbiSession::loadIntermediateResults(QDataStream& s)
 {
   QString                       name;
   unsigned int                  attributes;
-  SgVersion                     version(libraryVersion);
+//SgVersion                     version(libraryVersion);
+
+  QString                       fingerprints("");
+  double                        serialNumber=0.0;
+
+  // first check fingerprints:
+  s >> fingerprints;
+  if (s.status() != QDataStream::Ok)
+  {
+    logger->write(SgLogger::ERR, SgLogger::IO_BIN, className() +
+      "::loadIntermediateResults(): error reading data: " +
+      (s.status()==QDataStream::ReadPastEnd?"read past end of the file":"read corrupt data"));
+    return false;
+  };
+  if (fingerprints != sSirFingerprint)
+  {
+    logger->write(SgLogger::WRN, SgLogger::IO_BIN, className() +
+      "::loadIntermediateResults(): old or unknown input file (the fingerprints do not match)");
+    return false;
+  };
+  // 
+  // then, check the serial number:
+  s >> serialNumber;
+  if (s.status() != QDataStream::Ok)
+  {
+    logger->write(SgLogger::ERR, SgLogger::IO_BIN, className() +
+      "::loadIntermediateResults(): error reading data: " +
+      (s.status()==QDataStream::ReadPastEnd?"read past end of the file":"read corrupt data"));
+    return false;
+  };
+  if (serialNumber != dSirSerialNumber)
+  {
+    logger->write(SgLogger::WRN, SgLogger::IO_BIN, className() +
+      "::loadIntermediateResults(): the serial number mismatch, skipping the file");
+    return false;
+  };
+
   s >> name >> attributes;
   if (s.status() != QDataStream::Ok)
   {
@@ -1505,6 +1555,8 @@ bool SgVlbiSession::loadIntermediateResults(QDataStream& s)
       "], expected [" + getName() + "]");
     return false;
   };
+
+/*
   if (!version.loadIntermediateResults(s))
   {
     logger->write(SgLogger::ERR, SgLogger::IO_BIN, className() +
@@ -1512,20 +1564,14 @@ bool SgVlbiSession::loadIntermediateResults(QDataStream& s)
       (s.status()==QDataStream::ReadPastEnd?"read past end of the file":"read corrupt data"));
     return false;
   };
-/* 
-  if (version != libraryVersion)
-  {
-    logger->write(SgLogger::ERR, SgLogger::IO_BIN, className() +
-      "::loadIntermediateResults(): version mismatch, wouldn't dare to read that file");
-    return false;
-  };
-*/
   if (version != libraryVersion)
   {
     logger->write(SgLogger::WRN, SgLogger::IO_BIN, className() +
       "::loadIntermediateResults(): version mismatch, could get a problem");
 //  return false;
   };
+*/
+
   //
   // bands:
   for (int i=0; i<bands_.size(); i++)

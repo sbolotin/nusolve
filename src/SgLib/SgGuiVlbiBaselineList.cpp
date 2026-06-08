@@ -55,8 +55,8 @@
 enum BaselineColumnIndex
 {
   BCI_NUMBER      =  0,
-  BCI_NAME        =  1,
-  BCI_SID         =  2,
+  BCI_SID         =  1,
+  BCI_NAME        =  2,
   BCI_TOT_OBS     =  3,
   BCI_USB_OBS     =  4,
   BCI_PRC_OBS     =  5,
@@ -157,8 +157,8 @@ SgGuiVlbiBaselineList::SgGuiVlbiBaselineList(SgVlbiSession *session, SgTaskConfi
   QStringList                   headerLabels;
   headerLabels 
     << "Idx" 
-    << "Name" 
     << "ID"
+    << "Name" 
     << "TotObs"
     << "GoodObs"
     << "PrcdObs"
@@ -210,13 +210,13 @@ SgGuiVlbiBaselineList::SgGuiVlbiBaselineList(SgVlbiSession *session, SgTaskConfi
     item->setData(BCI_NUMBER,  Qt::TextAlignmentRole, Qt::AlignRight);
     item->setData(BCI_NUMBER,  Qt::UserRole, true);
     //
-    item->setText(BCI_NAME,    blInfo->getKey());
-    item->setData(BCI_NAME,    Qt::TextAlignmentRole, Qt::AlignLeft);
-    item->setData(BCI_NAME,    Qt::UserRole, true);
-    //
     item->setText(BCI_SID,     blInfo->getSid());
     item->setData(BCI_SID,     Qt::TextAlignmentRole, Qt::AlignLeft);
     item->setData(BCI_SID,     Qt::UserRole, true);
+    //
+    item->setText(BCI_NAME,    blInfo->getKey());
+    item->setData(BCI_NAME,    Qt::TextAlignmentRole, Qt::AlignLeft);
+    item->setData(BCI_NAME,    Qt::UserRole, true);
     //
     item->setText(BCI_TOT_OBS, str.sprintf("%7d", blInfo->numTotal(DT_DELAY)));
     item->setData(BCI_TOT_OBS, Qt::TextAlignmentRole, Qt::AlignRight);
@@ -330,7 +330,7 @@ SgGuiVlbiBaselineList::SgGuiVlbiBaselineList(SgVlbiSession *session, SgTaskConfi
   
   tweBaselines_->setSortingEnabled(true);
   tweBaselines_->setUniformRowHeights(true);
-  tweBaselines_->sortByColumn(1, Qt::AscendingOrder);
+  tweBaselines_->sortByColumn(BCI_NAME, Qt::AscendingOrder);
   tweBaselines_->setFocus();
   tweBaselines_->setItemsExpandable(false);
   tweBaselines_->setAllColumnsShowFocus(true);
@@ -499,8 +499,8 @@ void SgGuiVlbiBaselineList::updateContent()
     numTotal = blInfo->numTotal(DT_DELAY);
     numUsable = blInfo->numUsable(DT_DELAY);
     item->setText(BCI_NUMBER, str.sprintf("%4d", blInfo->getIdx()));
-    item->setText(BCI_NAME, blInfo->getKey());
     item->setText(BCI_SID,  blInfo->getSid());
+    item->setText(BCI_NAME, blInfo->getKey());
     item->setText(BCI_TOT_OBS, str.sprintf("%7d", blInfo->numTotal(DT_DELAY)));
     //
     if (numbersBrowseMode_ == 0)

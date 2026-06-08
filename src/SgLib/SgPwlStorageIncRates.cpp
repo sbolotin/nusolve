@@ -162,9 +162,10 @@ void SgPwlStorageIncRates::deployParameters(SgParameter* p,
   sumX1P2_ = 0.0;
   sumX2P2_ = 0.0;
   sumT1P2_ = 0.0;
-
-std::cout << "++ " << qPrintable(pOrig_->getName()) << ": tBoundary=" <<
-qPrintable(pOrig_->getBoundaryEpoch().toString(SgMJD::F_YYYYMMDDHHMMSSSS)) << "\n";
+  /*
+  std::cout << "++ " << qPrintable(pOrig_->getName()) << ": tBoundary=" <<
+  qPrintable(pOrig_->getBoundaryEpoch().toString(SgMJD::F_YYYYMMDDHHMMSSSS)) << "\n";
+  */
 
 };
 

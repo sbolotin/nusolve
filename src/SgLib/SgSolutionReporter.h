@@ -216,6 +216,8 @@ private:
   bool reportAtmo(const QString& path, const QString& fileName); // ATMO<U.I.>
   bool reportCloc(const QString& path, const QString& fileName); // CLOC<U.I.>
   bool reportPall(const QString& path, const QString& fileName); // PALL<U.I.>
+  bool reportErpsArc(const QString& path, const QString& fileName); // ERP.ARC.<U.I.>
+  bool reportErpsPwl(const QString& path, const QString& fileName); // ERP.PWL.<U.I.>
 
   bool reportSources_Output4AposterioriFiles(const QString& path, const QString& fileName);
   bool reportStations_Output4AposterioriFiles(const QString& path, const QString& fileName);

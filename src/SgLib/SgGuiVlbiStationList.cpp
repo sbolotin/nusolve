@@ -56,8 +56,8 @@
 enum StationColumnIndex
 {
   SCI_NUMBER      =  0,
-  SCI_NAME        =  1,
-  SCI_SID         =  2,
+  SCI_SID         =  1,
+  SCI_NAME        =  2,
   SCI_SCANS       =  3,
   SCI_TOT_OBS     =  4,
   SCI_USB_OBS     =  5,
@@ -142,8 +142,8 @@ SgGuiVlbiStationList::SgGuiVlbiStationList(SgObjectBrowseMode mode, const QStrin
   QStringList                   headerLabels;
   headerLabels 
     << "Idx" 
-    << "Name" 
     << "ID" 
+    << "Name"
     << "Scans"
     << "TotObs"
     << "GoodObs"
@@ -202,15 +202,14 @@ SgGuiVlbiStationList::SgGuiVlbiStationList(SgObjectBrowseMode mode, const QStrin
     item->setData(SCI_NUMBER,  Qt::UserRole, true);
     item->setToolTip(SCI_NUMBER, "Index of a station");
     
-    item->setText(SCI_NAME,    stInfo->getKey());
-    item->setData(SCI_NAME,    Qt::TextAlignmentRole, Qt::AlignLeft);
-    item->setData(SCI_NAME,    Qt::UserRole, true);
-    
-    //item->setText(SCI_SID,     QString(stInfo->getSid()));
     item->setText(SCI_SID,     stInfo->getSid());
     item->setData(SCI_SID,     Qt::TextAlignmentRole, Qt::AlignLeft);
     item->setData(SCI_SID,     Qt::UserRole, true);
 
+    item->setText(SCI_NAME,    stInfo->getKey());
+    item->setData(SCI_NAME,    Qt::TextAlignmentRole, Qt::AlignLeft);
+    item->setData(SCI_NAME,    Qt::UserRole, true);
+    
     item->setText(SCI_SCANS,   str.sprintf("%7d", stInfo->auxObservationByScanId()->size()));
     item->setData(SCI_SCANS,   Qt::TextAlignmentRole, Qt::AlignRight);
     item->setData(SCI_SCANS,   Qt::UserRole, true);
@@ -351,7 +350,7 @@ SgGuiVlbiStationList::SgGuiVlbiStationList(SgObjectBrowseMode mode, const QStrin
   
   tweStations_->setSortingEnabled(true);
   tweStations_->setUniformRowHeights(true);
-  tweStations_->sortByColumn(1, Qt::AscendingOrder);
+  tweStations_->sortByColumn(SCI_NAME, Qt::AscendingOrder);
   tweStations_->setFocus();
   tweStations_->setItemsExpandable(false);
   tweStations_->setAllColumnsShowFocus(true);
@@ -534,8 +533,8 @@ void SgGuiVlbiStationList::updateContent()
     numUsable = stInfo->numUsable(DT_DELAY);
     //
     item->setText(SCI_NUMBER,   str.sprintf("%4d", stInfo->getIdx()));
-    item->setText(SCI_NAME,     stInfo->getKey());
     item->setText(SCI_SID,      stInfo->getSid());
+    item->setText(SCI_NAME,     stInfo->getKey());
     item->setText(SCI_SCANS,    str.sprintf("%7d", stInfo->auxObservationByScanId()->size()));
     item->setText(SCI_TOT_OBS,  str.sprintf("%7d", stInfo->numTotal(DT_DELAY)));
     //

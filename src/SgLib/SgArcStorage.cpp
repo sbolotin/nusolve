@@ -77,10 +77,10 @@ void SgArcStorage::deployParameters(SgParameter* p,
     pPi_[i].setTLeft(tStart_ + i*step_);
     pPi_[i].setTRight(tStart_ + (i + 1)*step_);
   };
-
-std::cout << "++ " << qPrintable(pOrig_->getName()) << ": tBoundary=" <<
-qPrintable(pOrig_->getBoundaryEpoch().toString(SgMJD::F_YYYYMMDDHHMMSSSS)) << "\n";
-
+  /*
+  std::cout << "++ " << qPrintable(pOrig_->getName()) << ": tBoundary=" <<
+  qPrintable(pOrig_->getBoundaryEpoch().toString(SgMJD::F_YYYYMMDDHHMMSSSS)) << "\n";
+  */
 };
 
 

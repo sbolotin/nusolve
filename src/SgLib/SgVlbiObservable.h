@@ -100,7 +100,7 @@ public:
   /**A destructor.
    * Frees allocated memory.
    */
-  inline ~SgVlbiObservable();
+  ~SgVlbiObservable();
 
 
 
@@ -631,24 +631,6 @@ private:
 /*=====================================================================================================*/
 //
 //
-
-
-
-
-// A destructor:
-inline SgVlbiObservable::~SgVlbiObservable()
-{
-  owner_ = NULL;
-  band_ = NULL;
-  baseline_ = NULL;
-  stn_1_ = NULL;
-  stn_2_ = NULL;
-  src_ = NULL;
-  activeDelay_ = NULL;
-  activeRate_  = NULL;
-  activeMeasurement_  = NULL;
-  releaseChannelsSetupStorages();
-};
 
 
 

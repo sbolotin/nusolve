@@ -153,8 +153,10 @@ SgVlbiObservable::SgVlbiObservable(SgVlbiObservation* obs) :
   polarization_2ByChan_ = NULL;
   phaseCalData_1ByChan_ = NULL;
   phaseCalData_2ByChan_ = NULL;
-  vDlys_ = NULL;
-  vAuxData_ = NULL;
+
+  vDlys_ = new SgVector(3);
+  vAuxData_ = new SgVector(5);
+
   corelIndexNumUSB_ = NULL;
   corelIndexNumLSB_ = NULL;
 
@@ -264,8 +266,10 @@ SgVlbiObservable::SgVlbiObservable(SgVlbiObservation* obs, SgVlbiBand* band) :
   polarization_2ByChan_ = NULL;
   phaseCalData_1ByChan_ = NULL;
   phaseCalData_2ByChan_ = NULL;
-  vDlys_ = NULL;
-  vAuxData_ = NULL;
+
+  vDlys_ = new SgVector(3);
+  vAuxData_ = new SgVector(5);
+
   corelIndexNumUSB_ = NULL;
   corelIndexNumLSB_ = NULL;
 
@@ -488,6 +492,33 @@ SgVlbiObservable::SgVlbiObservable(SgVlbiObservation* obs, const SgVlbiObservabl
 
 
 
+// A destructor:
+SgVlbiObservable::~SgVlbiObservable()
+{
+  owner_ = NULL;
+  band_ = NULL;
+  baseline_ = NULL;
+  stn_1_ = NULL;
+  stn_2_ = NULL;
+  src_ = NULL;
+  activeDelay_ = NULL;
+  activeRate_  = NULL;
+  activeMeasurement_  = NULL;
+  if (vDlys_)
+  {
+    delete vDlys_;
+    vDlys_ = NULL;
+  };
+  if (vAuxData_)
+  {
+    delete vAuxData_;
+    vAuxData_ = NULL;
+  };
+  releaseChannelsSetupStorages();
+};
+
+
+
 //
 void SgVlbiObservable::setupActiveMeasurements(const SgTaskConfig* cfg)
 {
@@ -584,6 +615,8 @@ QString SgVlbiObservable::strId() const
 void SgVlbiObservable::allocateChannelsSetupStorages(int numOfChans)
 {
   releaseChannelsSetupStorages();
+  //
+  //
   if ((numOfChannels_=numOfChans) > 0)
   {
     numOfAccPeriodsByChan_USB_ = new SgVector(numOfChannels_);
@@ -598,9 +631,6 @@ void SgVlbiObservable::allocateChannelsSetupStorages(int numOfChans)
     polarization_2ByChan_ = new QVector<char>(numOfChannels_);
     phaseCalData_1ByChan_ = new SgMatrix(5, numOfChannels_);
     phaseCalData_2ByChan_ = new SgMatrix(5, numOfChannels_);
-    //
-    vDlys_ = new SgVector(3);
-    vAuxData_ = new SgVector(5);
     // fixed size (mimic dbedit behavior):
     corelIndexNumUSB_ = new QVector<int>(numOfChannels_);
     corelIndexNumLSB_ = new QVector<int>(numOfChannels_);
@@ -687,16 +717,6 @@ void SgVlbiObservable::releaseChannelsSetupStorages()
   {
     delete phaseCalData_2ByChan_;
     phaseCalData_2ByChan_ = NULL;
-  };
-  if (vDlys_)
-  {
-    delete vDlys_;
-    vDlys_ = NULL;
-  };
-  if (vAuxData_)
-  {
-    delete vAuxData_;
-    vAuxData_ = NULL;
   };
   if (corelIndexNumUSB_)
   {

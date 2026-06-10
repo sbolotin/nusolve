@@ -1064,7 +1064,6 @@ void SgSolutionReporter::report2spoolFile(const QString& path, const QString& pa
           bool                  isOk;
           if (!d.exists())
           {
-//          isOk = d.mkpath("./");
             isOk = d.mkpath(d.absolutePath());
             if (!isOk)
             {
@@ -4024,20 +4023,22 @@ void SgSolutionReporter::reportDeselectedObsBlock_Output4Spoolfile_v3(QTextStrea
 {
   QList<SgVlbiObservation*>     excludedObs, unusableObs, includedObs, allObs;
   int                           outputVersion;
+  SgVlbiObservable             *pO=NULL;
   
   outputVersion = activeBand_?activeBand_->getInputFileVersion()+1:1;
 
   for (int i=0; i<session_->observations().size(); i++)
   {
     SgVlbiObservation          *obs=session_->observations().at(i);
-    if (obs->primeObs() && !obs->primeObs()->isUsable())
-      unusableObs << obs;
-    else if (obs->primeObs() && obs->primeObs()->isUsable() &&
-             obs->primeObs()->activeDelay() && 
-             obs->primeObs()->activeDelay()->isAttr(SgVlbiMeasurement::Attr_NOT_VALID) )
-      excludedObs << obs;
-    else
-      includedObs << obs;
+    if ((pO=obs->primeObs()))
+    {
+      if (!pO->isUsable())
+        unusableObs << obs;
+      else if (pO->activeDelay() && !pO->activeDelay()->isAttr(SgVlbiMeasurement::Attr_PROCESSED))
+        excludedObs << obs;
+      else
+        includedObs << obs;
+    };
   };
   //
   if (excludedObs.size() + unusableObs.size() + includedObs.size() == 0)
@@ -4127,7 +4128,7 @@ void SgSolutionReporter::reportDeselectedObsBlock_Output4Spoolfile_v3(QTextStrea
   
     if (o->isUsable())
     {
-      if (o->activeDelay()->isAttr(SgVlbiMeasurement::Attr_NOT_VALID))
+      if (!o->activeDelay()->isAttr(SgVlbiMeasurement::Attr_PROCESSED))
         sSts = "e ";
       else
         sSts = "i ";
@@ -4531,7 +4532,9 @@ void SgSolutionReporter::report2MyFile(const QString& path, const QString& fileN
     SgVlbiAuxObservation       *auxObs_1=obs->auxObs_1(), *auxObs_2=obs->auxObs_2();
     QString                     str("");
 //  if (obs->isAttr(SgVlbiObservation::Attr_PROCESSED) && o && auxObs_1 && auxObs_2)
-    if (o && o->activeDelay() && !o->activeDelay()->isAttr(SgVlbiMeasurement::Attr_NOT_VALID) && 
+    if (o &&
+        o->activeDelay() &&
+        o->activeDelay()->isAttr(SgVlbiMeasurement::Attr_PROCESSED) &&
         auxObs_1 && auxObs_2)
     {
       str.sprintf("%s  %16.4f %8.4f  %14.2f %14.2f  %14.2f %14.2f  %-8s:%-8s %-8s PP:%s",

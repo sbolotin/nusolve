@@ -95,30 +95,12 @@ void SgPwlStorageIncRates::deployParameters(SgParameter* p,
 {
   if (isPOrigOwner_)
     delete pOrig_;
+
   pOrig_ = p;
   isPOrigOwner_ = false;
-  tStart_ = t0;
-  tFinis_ = tN;
-  //tRefer_ = tN;
-  //tRefer_.setTime(0); // 0hr
   tRefer_ = tRefer;
-  step_ = pOrig_->getStep();
   //
-  if (false)
-  {
-    SgMJD                       t0h(tRefer_);
-    if (step_ > tFinis_-tStart_)
-    {
-      tStart_ = t0h - ceil((t0h - t0)*24.0)/24.0;
-      tFinis_ = t0h + ceil((tN - t0h)*24.0)/24.0;
-      step_ = tFinis_ - tStart_;
-    }
-    else
-    {
-      tStart_ = t0h - ceil((t0h - t0)*24.0)/24.0;
-      tFinis_ = tStart_ + ceil((tN - tStart_)/step_)*step_;
-    };
-  };
+  setupIntervals(p, t0, tN);
   //
   //
   // if the step equal to an interval of data set, only a zero order (shift) should be set:

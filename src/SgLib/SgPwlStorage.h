@@ -162,25 +162,27 @@ public:
 
 protected:
   // original/external parameter:
-  SgParameter        *pOrig_;
+  SgParameter                  *pOrig_;
 
-  SgParameter        *pAi_;
-  SgParameter        *pBi_;
-  int                 numOfPolynomials_;
-  int                 numOfNodes_;
-  SgMJD               tStart_;
-  SgMJD               tFinis_;
-  SgMJD               tRefer_;
-  double              step_;
+  SgParameter                  *pAi_;
+  SgParameter                  *pBi_;
+  int                           numOfPolynomials_;
+  int                           numOfNodes_;
+  SgMJD                         tStart_;
+  SgMJD                         tFinis_;
+  SgMJD                         tRefer_;
+  double                        step_;
   // for statistics/spoolfile outputs:
-  double              sumP2_;
-  double              sumX1P2_;
-  double              sumX2P2_;
-  double              sumT1P2_;
-  bool                isPOrigOwner_;
+  double                        sumP2_;
+  double                        sumX1P2_;
+  double                        sumX2P2_;
+  double                        sumT1P2_;
+  bool                          isPOrigOwner_;
   // exercise:
-  double              trace_;
+  double                        trace_;
   
+  //
+  void setupIntervals(SgParameter* p, const SgMJD& t0, const SgMJD& tN);
 };
 /*=====================================================================================================*/
 

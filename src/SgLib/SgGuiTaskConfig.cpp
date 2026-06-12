@@ -892,8 +892,8 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
     //
     grid = new QGridLayout(gboxTSO);
 
-    grid->addWidget(new QLabel("First observation:", gboxTSO), 0, 0);
-    grid->addWidget(new QLabel("Last observation:",  gboxTSO), 1, 0);
+    grid->addWidget(new QLabel("Start with:", gboxTSO), 0, 0);
+    grid->addWidget(new QLabel("End by:",     gboxTSO), 1, 0);
     //
     QRadioButton                 *rbFirstObs[2];
     QRadioButton                 *rbLastObs[2];
@@ -935,11 +935,28 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
     connect(leFirstObs2Process_, SIGNAL(editingFinished()),  SLOT(changeFirstObs()));
     connect(leLastObs2Process_,  SIGNAL(editingFinished()),  SLOT(changeLastObs()));
 
-    leFirstObs2Process_->setEnabled(false);
-    leLastObs2Process_ ->setEnabled(false);
-
-    rbFirstObs[0]->setChecked(true);
-    rbLastObs[0] ->setChecked(true);
+    if (session_->getTStart() < config_->getT2Bgn())
+    {
+      leFirstObs2Process_->setText(config_->getT2Bgn().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+      leFirstObs2Process_->setEnabled(true);
+      rbFirstObs[1]->setChecked(true);
+    }
+    else
+    {
+      leFirstObs2Process_->setEnabled(false);
+      rbFirstObs[0]->setChecked(true);
+    };
+    if (config_->getT2End() < session_->getTFinis())
+    {
+      leLastObs2Process_->setText(config_->getT2End().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
+      leLastObs2Process_->setEnabled(true);
+      rbLastObs[1]->setChecked(true);
+    }
+    else
+    {
+      leLastObs2Process_ ->setEnabled(false);
+      rbLastObs[0] ->setChecked(true);
+    };
 
     layout->addWidget(gboxTSO);
     layout->addStretch(1);
@@ -2064,7 +2081,7 @@ void SgGuiTaskConfig::editParameterCfg4Clocks()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_CLOCK_0)),
-    SgParametersDescriptor::Idx_CLOCK_0);
+    SgParametersDescriptor::Idx_CLOCK_0, session_);
   e->show();
 };
 
@@ -2075,7 +2092,7 @@ void SgGuiTaskConfig::editParameterCfg4Zenith()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_ZENITH)),
-    SgParametersDescriptor::Idx_ZENITH);
+    SgParametersDescriptor::Idx_ZENITH, session_);
   e->show();
 };
 
@@ -2086,7 +2103,7 @@ void SgGuiTaskConfig::editParameterCfg4AtmGrd()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_ATMGRAD)),
-    SgParametersDescriptor::Idx_ATMGRAD);
+    SgParametersDescriptor::Idx_ATMGRAD, session_);
   e->show();
 };
 
@@ -2097,7 +2114,7 @@ void SgGuiTaskConfig::editParameterCfg4StnPos()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_STNCOO)),
-    SgParametersDescriptor::Idx_STNCOO);
+    SgParametersDescriptor::Idx_STNCOO, session_);
   e->show();
 };
 
@@ -2108,7 +2125,7 @@ void SgGuiTaskConfig::editParameterCfg4AxsOfs()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_AXISOFFSET)),
-    SgParametersDescriptor::Idx_AXISOFFSET);
+    SgParametersDescriptor::Idx_AXISOFFSET, session_);
   e->show();
 };
 
@@ -2119,7 +2136,7 @@ void SgGuiTaskConfig::editParameterCfg4SrcPos()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_SRCCOO)),
-    SgParametersDescriptor::Idx_SRCCOO);
+    SgParametersDescriptor::Idx_SRCCOO, session_);
   e->show();
 };
 
@@ -2130,7 +2147,7 @@ void SgGuiTaskConfig::editParameterCfg4SrcSsm()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_SRCSSM)),
-    SgParametersDescriptor::Idx_SRCSSM);
+    SgParametersDescriptor::Idx_SRCSSM, session_);
   e->show();
 };
 
@@ -2141,7 +2158,7 @@ void SgGuiTaskConfig::editParameterCfg4EopUt1()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_POLUSUT1)),
-    SgParametersDescriptor::Idx_POLUSUT1);
+    SgParametersDescriptor::Idx_POLUSUT1, session_);
   e->show();
 };
 
@@ -2152,7 +2169,7 @@ void SgGuiTaskConfig::editParameterCfg4EopUt1Rate()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_POLUSUT1R)),
-    SgParametersDescriptor::Idx_POLUSUT1R);
+    SgParametersDescriptor::Idx_POLUSUT1R, session_);
   e->show();
 };
 
@@ -2163,7 +2180,7 @@ void SgGuiTaskConfig::editParameterCfg4EopPolar()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_POLUSXY)),
-    SgParametersDescriptor::Idx_POLUSXY);
+    SgParametersDescriptor::Idx_POLUSXY, session_);
   e->show();
 };
 
@@ -2174,7 +2191,7 @@ void SgGuiTaskConfig::editParameterCfg4EopPolarRate()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_POLUSXYR)),
-    SgParametersDescriptor::Idx_POLUSXYR);
+    SgParametersDescriptor::Idx_POLUSXYR, session_);
   e->show();
 };
 
@@ -2185,7 +2202,7 @@ void SgGuiTaskConfig::editParameterCfg4EopNutation()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_POLUSNUT)),
-    SgParametersDescriptor::Idx_POLUSNUT);
+    SgParametersDescriptor::Idx_POLUSNUT, session_);
   e->show();
 };
 
@@ -2196,7 +2213,7 @@ void SgGuiTaskConfig::editParameterCfg4EopNutationRate()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_POLUSNUTR)),
-    SgParametersDescriptor::Idx_POLUSNUTR);
+    SgParametersDescriptor::Idx_POLUSNUTR, session_);
   e->show();
 };
 
@@ -2207,7 +2224,7 @@ void SgGuiTaskConfig::editParameterCfg4BlnClock()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_BL_CLK)),
-    SgParametersDescriptor::Idx_BL_CLK);
+    SgParametersDescriptor::Idx_BL_CLK, session_);
   e->show();
 };
 
@@ -2218,7 +2235,7 @@ void SgGuiTaskConfig::editParameterCfg4BlnLength()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_BL_LENGTH)),
-    SgParametersDescriptor::Idx_BL_LENGTH);
+    SgParametersDescriptor::Idx_BL_LENGTH, session_);
   e->show();
 };
 
@@ -2229,7 +2246,7 @@ void SgGuiTaskConfig::editParameterCfg4Test()
 {
   SgGuiParameterCfg            *e=new SgGuiParameterCfg(
     &(parametersDescriptor_->parameter(SgParametersDescriptor::Idx_TEST)),
-    SgParametersDescriptor::Idx_TEST);
+    SgParametersDescriptor::Idx_TEST, session_);
   e->show();
 };
 

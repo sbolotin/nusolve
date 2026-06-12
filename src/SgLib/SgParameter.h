@@ -163,6 +163,10 @@ public:
    */
   inline int getIdx() const;
 
+  /**
+   */
+  inline const SgMJD& getBoundaryEpoch() const {return boundaryEpoch_;};
+
   //
   /**Sets up a value of the parameter.
    * \param v -- a value;
@@ -249,6 +253,9 @@ public:
    */
   inline void setIdx(int idx);
 
+
+  inline void setBoundaryEpoch(const SgMJD& t) {boundaryEpoch_ = t;};
+
   //
   // Functions:
   //
@@ -314,6 +321,8 @@ protected:
   SgMJD                 tLeft_;
   SgMJD                 tRight_;
   int                   idx_;                   //!< an index in common list of parameters
+  // -- too
+  SgMJD                 boundaryEpoch_;
 };
 /*=====================================================================================================*/
 
@@ -337,7 +346,8 @@ protected:
 inline SgParameter::SgParameter() : 
   SgPartial(),
   tLeft_(tZero),
-  tRight_(tInf)
+  tRight_(tInf),
+  boundaryEpoch_(tZero)
 {
   value_ = 0.0;
   solution_ = 0.0;
@@ -363,7 +373,8 @@ inline SgParameter::SgParameter() :
 inline SgParameter::SgParameter(const QString& name) : 
   SgPartial(name),
   tLeft_(tZero),
-  tRight_(tInf)
+  tRight_(tInf),
+  boundaryEpoch_(tZero)
 {
   value_ = 0.0;
   solution_ = 0.0;
@@ -389,7 +400,8 @@ inline SgParameter::SgParameter(const QString& name) :
 inline SgParameter::SgParameter(const SgParameter& p) : 
   SgPartial(p),
   tLeft_(p.getTLeft()),
-  tRight_(p.getTRight())
+  tRight_(p.getTRight()),
+  boundaryEpoch_(p.getBoundaryEpoch())
 {
   value_ = p.getValue();
   solution_ = p.getSolution();

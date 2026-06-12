@@ -40,18 +40,28 @@
 
 
 
+class QButtonGroup;
 class QLineEdit;
 class QRadioButton;
 class QTabWidget;
 //class SgParametersDescriptor;
+
+class SgVlbiSession;
+
+
 /*=====================================================================================================*/
 class SgGuiParameterCfg : public QDialog
 {
   Q_OBJECT
 
 public:
-   SgGuiParameterCfg(SgParameterCfg*, int, bool=false, QWidget* =0, Qt::WindowFlags=Qt::Widget);
+  //
+  SgGuiParameterCfg(SgParameterCfg *parConfig, int parIdx, 
+                    SgVlbiSession* session, bool isModeAdjustable=false,
+                    QWidget* parent=0, Qt::WindowFlags f=Qt::Widget);
+  // 
   virtual inline ~SgGuiParameterCfg() {parConfig_=NULL; emit windowClosed();};
+  //
   inline QString className() const {return "SgGuiParameterCfg";};
 
 
@@ -65,6 +75,10 @@ private slots:
   void reject() {QDialog::reject(); emit valueModified(false); deleteLater();};
   void setDefault();
   void stochasticTypeChanged(int);
+  void arcBoundaryChanged(int idx);
+  void changeArcBoundary();
+  void pwlBoundaryChanged(int idx);
+  void changePwlBoundary();
 
 
 protected:
@@ -82,14 +96,23 @@ private:
   QString                     str_;
   //
   QLineEdit                  *leConvApriori_;
+  // Arc:
   QLineEdit                  *leArcLength_;
+  QButtonGroup               *bgArcBoundary_;
+  QLineEdit                  *leArcBoundary_;
+  // PWL:    
   QLineEdit                  *lePwlApriori_;
   QLineEdit                  *lePwlLength_;
+  QButtonGroup               *bgPwlBoundary_;
+  QLineEdit                  *lePwlBoundary_;
+  // Stc:  
   QLineEdit                  *leStcApriori_;
   QLineEdit                  *leRWNPower_;
   QLineEdit                  *leTau_;
   QTabWidget                 *tabs4types_;
   QRadioButton               *rbSType_[3];
+  //
+  SgVlbiSession              *session_;
 
   // functions:
   virtual void                acquireData();

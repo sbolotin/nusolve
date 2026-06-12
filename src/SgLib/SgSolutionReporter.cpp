@@ -1049,6 +1049,34 @@ void SgSolutionReporter::report2spoolFile(const QString& path, const QString& pa
           "::report2spoolFile(): saving of the estimated clock PWL-parameters failed");
     };
     //
+    if (parametersDescriptor_->getPolusXYMode()  == SgParameterCfg::PM_ARC ||
+        parametersDescriptor_->getPolusUT1Mode() == SgParameterCfg::PM_ARC
+      // getPolusXYRate() + getPolusUT1Rate()
+    )
+    {
+      if (reportErpsArc(path, auxFname = "ERPA" + identities_.getUserDefaultInitials()))
+        logger->write(SgLogger::DBG, SgLogger::REPORT, className() +
+          "::report2spoolFile(): the estimated ERP ARC/PWL parameters have been saved "
+          "in the file: " + path + "/" + auxFname);
+      else
+        logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+          "::report2spoolFile(): saving of the estimated ERP ARC/PWL parameters failed");
+    };
+    //
+    if (parametersDescriptor_->getPolusXYMode()  == SgParameterCfg::PM_PWL ||
+        parametersDescriptor_->getPolusUT1Mode() == SgParameterCfg::PM_PWL
+      // getPolusXYRate() + getPolusUT1Rate()
+    )
+    {
+      if (reportErpsPwl(path, auxFname = "ERPP" + identities_.getUserDefaultInitials()))
+        logger->write(SgLogger::DBG, SgLogger::REPORT, className() +
+          "::report2spoolFile(): the estimated ERP ARC/PWL parameters have been saved "
+          "in the file: " + path + "/" + auxFname);
+      else
+        logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+          "::report2spoolFile(): saving of the estimated ERP ARC/PWL parameters failed");
+    };
+    //
     if (ap.doReportNotUsedData_)
     {
       if (reportNotUsedObs(path2obsStatus,
@@ -3819,6 +3847,170 @@ bool SgSolutionReporter::reportPall(const QString& path, const QString& fileName
     for (unsigned int j=i; j<PxAll_->nCol(); j++)
       ts << str.sprintf("%4d %4d %22.15E", i, j, PxAll_->getElement(i, j)) << "\n";
 
+  // close the file:
+  ts.setDevice(NULL);
+  f.close();
+  return true;
+};
+
+
+
+//
+bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileName)
+{
+  QString                       str("");
+  QFile                         f(path + "/" + fileName);
+  QMap< QString, QList<SgParameter*> >
+                                parsByEpoch;
+
+  if (!f.open(QIODevice::WriteOnly))
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErps(): error opening output file: " + path + "/" + fileName);
+    return false;
+  };
+  QTextStream                   ts(&f);
+
+  SgParameter                  *p;
+  SgArcStorage                 *arcPx, *arcPy, *arcUt1;
+  double                        dPx, dPy, dUt1, sPx, sPy, sUt1;
+
+  arcPx = arcPy = arcUt1 = NULL;
+
+  p = session_->pPolusX();
+  if (p && arcByName_.contains(p->getName()) && (arcPx=arcByName_.find(p->getName()).value()))
+    for (int i=0; i<arcPx->getNum(); i++)
+      if ((p=arcPx->getPi(i)))
+        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  p = session_->pPolusY();
+  if (p && arcByName_.contains(p->getName()) && (arcPy=arcByName_.find(p->getName()).value()))
+    for (int i=0; i<arcPy->getNum(); i++)
+      if ((p=arcPy->getPi(i)))
+        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  p = session_->pUT1();
+  if (p && arcByName_.contains(p->getName()) && (arcUt1=arcByName_.find(p->getName()).value()))
+    for (int i=0; i<arcUt1->getNum(); i++)
+      if ((p=arcUt1->getPi(i)))
+        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  if (parsByEpoch.size())
+    ts  << "#    ARC parameters\n#\n#  Weighted mean epoch       dPx, mas       sPx, mas          "
+        << "dPy, mas       sPy, mas           dUT1, ms       sUT1, ms\n#\n";
+  for (QMap<QString, QList<SgParameter*> >::iterator it=parsByEpoch.begin(); it!=parsByEpoch.end(); ++it)
+  {
+    QList<SgParameter*>        &pList=it.value();
+    SgParameter                *p=pList.at(0);
+    SgMJD                       t=p->getTMean();
+    
+    dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
+   
+    if (arcPx)
+    {
+      dPx = arcPx->calcSolution(t)*RAD2MAS;
+      sPx = arcPx->calcSigma(t)*RAD2MAS;
+    };
+    if (arcPy)
+    {
+      dPy = arcPy->calcSolution(t)*RAD2MAS;
+      sPy = arcPy->calcSigma(t)*RAD2MAS;
+    };
+    if (arcUt1)
+    {
+      dUt1 = arcUt1->calcSolution(t)*DAY2SEC*1000.0;
+      sUt1 = arcUt1->calcSigma(t)*DAY2SEC*1000.0;
+    };
+  
+    str.sprintf(" %s  %14.6f %14.6f    %14.6f %14.8f    %14.6f %14.6f",
+      qPrintable(p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+      dPx, sPx,      dPy, sPy,      dUt1, sUt1);
+
+    ts << str << "\n";
+  };
+  // close the file:
+  ts.setDevice(NULL);
+  f.close();
+  return true;
+};
+
+
+
+//
+bool SgSolutionReporter::reportErpsPwl(const QString& path, const QString& fileName)
+{
+  QString                       str("");
+  QFile                         f(path + "/" + fileName);
+  QMap< QString, QList<SgParameter*> >
+                                parsByEpoch;
+
+  if (!f.open(QIODevice::WriteOnly))
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErps(): error opening output file: " + path + "/" + fileName);
+    return false;
+  };
+  QTextStream                   ts(&f);
+
+  SgParameter                  *p;
+  SgPwlStorage                 *pwlPx, *pwlPy, *pwlUt1;
+  double                        dPx, dPy, dUt1, sPx, sPy, sUt1;
+
+  pwlPx = pwlPy = pwlUt1 = NULL;
+
+  p = session_->pPolusX();
+  if (p && pwlByName_.contains(p->getName()) && (pwlPx=pwlByName_.find(p->getName()).value()))
+//    for (int i=0; i<pwlPx->getNum(); i++) 
+    for (int i=0; i<pwlPx->getNumOfSegments(); i++)
+//      if ((p=pwlPx->getPi(i)))
+      if ((p=pwlPx->getP_Bi(i)))
+        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  p = session_->pPolusY();
+  if (p && pwlByName_.contains(p->getName()) && (pwlPy=pwlByName_.find(p->getName()).value()))
+    for (int i=0; i<pwlPy->getNumOfSegments(); i++)
+      if ((p=pwlPy->getP_Bi(i)))
+        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  p = session_->pUT1();
+  if (p && pwlByName_.contains(p->getName()) && (pwlUt1=pwlByName_.find(p->getName()).value()))
+    for (int i=0; i<pwlUt1->getNumOfSegments(); i++)
+      if ((p=pwlUt1->getP_Bi(i)))
+        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  if (parsByEpoch.size())
+    ts  << "#    PWL parameters\n#\n#  Weighted mean epoch       dPx, mas       sPx, mas          "
+        << "dPy, mas       sPy, mas           dUT1, ms       sUT1, ms\n#\n";
+  for (QMap<QString, QList<SgParameter*> >::iterator it=parsByEpoch.begin(); it!=parsByEpoch.end(); ++it)
+  {
+    QList<SgParameter*>        &pList=it.value();
+    SgParameter                *p=pList.at(0);
+    SgMJD                       t=p->getTMean();
+    
+    dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
+   
+    if (pwlPx)
+    {
+      dPx = pwlPx->calcSolution(t)*RAD2MAS;
+      sPx = pwlPx->calcRateSigma(t)*RAD2MAS;
+    };
+    if (pwlPy)
+    {
+      dPy = pwlPy->calcSolution(t)*RAD2MAS;
+      sPy = pwlPy->calcRateSigma(t)*RAD2MAS;
+    };
+    if (pwlUt1)
+    {
+      dUt1 = pwlUt1->calcSolution(t)*DAY2SEC*1000.0;
+      sUt1 = pwlUt1->calcRateSigma(t)*DAY2SEC*1000.0;
+    };
+  
+    str.sprintf(" %s  %14.6f %14.6f    %14.6f %14.8f    %14.6f %14.6f",
+      qPrintable(p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+      dPx, sPx,      dPy, sPy,      dUt1, sUt1);
+
+    ts << str << "\n";
+  };
   // close the file:
   ts.setDevice(NULL);
   f.close();

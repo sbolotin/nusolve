@@ -62,11 +62,8 @@ void SgArcStorage::deployParameters(SgParameter* p,
   const SgMJD& t0, const SgMJD& tN, const SgMJD& /*tFinis*/)
 {
   pOrig_ = p;
-  tStart_ = t0;
-  tFinis_ = tN;
-  step_ = pOrig_->getStep();
-
-  num_ = ceil((tFinis_ - tStart_)/step_);
+  setupIntervals(p, t0, tN);
+  
   // arcs:
   pPi_ = new SgParameter[num_];
   for (int i=0; i<num_; i++)
@@ -77,6 +74,25 @@ void SgArcStorage::deployParameters(SgParameter* p,
     pPi_[i].setTLeft(tStart_ + i*step_);
     pPi_[i].setTRight(tStart_ + (i + 1)*step_);
   };
+};
+
+
+
+//
+void SgArcStorage::setupIntervals(SgParameter* p, const SgMJD& t0, const SgMJD& tN)
+{
+  step_ = p->getStep();
+  if (tZero < p->getBoundaryEpoch()) // the boundary explicilty was set by a user
+  {
+    tStart_ = p->getBoundaryEpoch() - step_*ceil((p->getBoundaryEpoch() - t0)/step_);
+    tFinis_ = p->getBoundaryEpoch() + step_*ceil((tN - p->getBoundaryEpoch())/step_);
+  }
+  else // default:
+  {
+    tStart_ = t0;
+    tFinis_ = tN;
+  };
+  num_ = ceil((tFinis_ - tStart_)/step_);
 };
 
 

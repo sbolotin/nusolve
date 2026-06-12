@@ -130,6 +130,9 @@ private:
   SgMJD              tStart_;
   SgMJD              tFinis_;
   double             step_;
+  /*
+  */
+  void setupIntervals(SgParameter* p, const SgMJD& t0, const SgMJD& tN);
 };
 /*=====================================================================================================*/
 

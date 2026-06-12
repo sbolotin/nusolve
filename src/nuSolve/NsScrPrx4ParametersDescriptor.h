@@ -158,6 +158,20 @@ public slots:
   inline void setArcStep(ParIdx idx, double d)
     {parametersDescriptor_->
       parameter((SgParametersDescriptor::ParIdx)idx).setArcStep(d);};
+	//
+  inline void setArcBoundaryEpoch(ParIdx idx, const QString& str)
+    {SgMJD t; if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, str))
+			parametersDescriptor_->parameter((SgParametersDescriptor::ParIdx)idx).setArcBoundaryEpoch(t);};
+  inline void setArcBoundaryEpoch(ParIdx idx, double mjd)
+    {parametersDescriptor_->parameter((SgParametersDescriptor::ParIdx)idx).setArcBoundaryEpoch(mjd);};
+
+  inline void setPwlBoundaryEpoch(ParIdx idx, const QString& str)
+    {SgMJD t; if (t.fromString(SgMJD::F_YYYYMMDDHHMMSSSS, str))
+			parametersDescriptor_->parameter((SgParametersDescriptor::ParIdx)idx).setPwlBoundaryEpoch(t);};
+  inline void setPwlBoundaryEpoch(ParIdx idx, double mjd)
+    {parametersDescriptor_->parameter((SgParametersDescriptor::ParIdx)idx).setPwlBoundaryEpoch(mjd);};
+	//
+
   inline void setPwlStep(ParIdx idx, double d)
     {parametersDescriptor_->
       parameter((SgParametersDescriptor::ParIdx)idx).setPwlStep(d);};

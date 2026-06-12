@@ -80,6 +80,25 @@ SgPwlStorage& SgPwlStorage::operator=(const SgPwlStorage& s)
 
 
 //
+void SgPwlStorage::setupIntervals(SgParameter* p, const SgMJD& t0, const SgMJD& tN)
+{
+  step_ = p->getStep();
+  if (tZero < p->getBoundaryEpoch()) // the boundary explicilty was set by a user
+  {
+    tStart_ = p->getBoundaryEpoch() - step_*ceil((p->getBoundaryEpoch() - t0)/step_);
+    tFinis_ = p->getBoundaryEpoch() + step_*ceil((tN - p->getBoundaryEpoch())/step_);
+  }
+  else // default:
+  {
+    tStart_ = t0;
+    tFinis_ = tN;
+  };
+  numOfNodes_ = ceil((tFinis_ - tStart_)/step_);
+};
+
+
+
+//
 void SgPwlStorage::zerofy()
 {
   for (int i=0; i<numOfPolynomials_; i++)

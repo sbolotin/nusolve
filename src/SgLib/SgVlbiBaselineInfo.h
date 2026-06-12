@@ -152,6 +152,9 @@ public:
   
   inline SgClockBreakIndicator* cbIndicator();
 
+  inline const QString& getSid() const {return sId_;};
+
+
   /**Sets an auxiliary sign.
    * \param  s -- new sign;
    */
@@ -177,6 +180,7 @@ public:
 
   inline const QMap<int, int>& numOfChanByCount() const {return numOfChanByCount_;};
 
+  inline void setSid(const QString& sid) {sId_ = sid;};
 
   //
   // Functions:
@@ -276,6 +280,8 @@ private:
   QMap<double, int>             phdAmbigsBySpacing_;
   double                        typicalPhdAmbigSpacing_;
   QString                       strPhdAmbigsStat_;
+  //
+  QString                       sId_;
 
 };
 /*=====================================================================================================*/
@@ -302,7 +308,8 @@ inline SgVlbiBaselineInfo::SgVlbiBaselineInfo(int idx, const QString& key, const
   grdAmbigsBySpacing_(),
   strGrdAmbigsStat_(""),
   phdAmbigsBySpacing_(),
-  strPhdAmbigsStat_("")
+  strPhdAmbigsStat_(""),
+  sId_("")
 {
   addAttr(Attr_USE_IONO4GRD); // use it by default if available
   cbd_total_wrms_ = 0.0;

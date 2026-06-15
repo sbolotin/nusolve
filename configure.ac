@@ -2,7 +2,7 @@
 #
 
 
-AC_INIT([nuSolve],[0.8.3.2],[sergei.bolotin@nasa.gov])
+AC_INIT([nuSolve],[0.8.3.3],[sergei.bolotin@nasa.gov])
 AC_COPYRIGHT([This file is a part of Space Geodetic Library. The library
 is used by nuSolve, a part of CALC/SOLVE system, and designed to make
 analysis of geodetic VLBI observations.

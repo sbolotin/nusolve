@@ -5,6 +5,7 @@
 *~
 .memo
 .stats
+.chglog/
 tmp/
 .deps/
 .libs/

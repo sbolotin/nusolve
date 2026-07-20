@@ -4890,8 +4890,13 @@ bool SgStnLogCollector::readLogFile(const QString& fileName, const QString& stnN
   //2022.347.15:11:13.04&setmode_m08/rdbed=pcal=2.400e6;
   //
   //2022.322.23:30:09.85&rdbebb/rdbe=pcal=1.4e6;
-  
-  QRegularExpression            rePcalOffset("&.+/rdbe([a-z0-9]*)=pcal=([0-9\\.eEfFdD+-]+).*");
+  QRegularExpression            rePcalOffset_v1("&.+/rdbe([a-z0-9]*)=pcal=([0-9\\.eEfFdD+-]+).*");
+  //2026.027.22:14:46.36&rdbebb/pcal_offset=2.6e6
+  QRegularExpression            rePcalOffset_v2("\\d+&rdbe.*/pcal_offset([a-z0-9]*)=([0-9\\.eEfFdD+-]+).*");
+  //2026.028.00:00:02.31/pcal_offset(d)/2.6e+06
+  QRegularExpression            rePcalOffset_v3("\\d+/pcal_offset\\(([a-z0-9]*)\\)/([0-9\\.eEfFdD+-]+).*");
+
+  //QRegularExpression            rePcalOffset("(?:&.+/rdbe|&.+/pcal_offset|\\d+/pcal_offset\\()([a-z0-9]*)(?:=|=pcal=|\\)/)([0-9\\.eEfFdD+-]+).*");
 
   //2020.195.11:30:01.17#rdtca#pcal/ 1a0000,   8.686,  -98.7, 1a0005,  78.913,  116.7, 1a0010,   8.729,  147.9, 1a0015,  81.273,    4.1
   //2020.195.11:30:01.17#rdtca#pcal/ 1a0020,   9.421,   37.5, 1a0025,  88.580, -105.5, 1a0030,  10.177,  -72.2, 1a0035,  97.212,  144.1
@@ -5893,7 +5898,9 @@ std::cout << "  -- read " << numOfReadStrs/1000 << "K strings file size: " << fl
         //
         //
         // vgos pcal:
-        else if ((match=rePcalOffset.match(str)).hasMatch())
+        else if ( (match=rePcalOffset_v1.match(str)).hasMatch() || 
+                  (match=rePcalOffset_v2.match(str)).hasMatch() ||
+                  (match=rePcalOffset_v3.match(str)).hasMatch()  )
         {
           extractPcalOffsetReading(str, match, t, tAtTheEnd, logReadings_.channelSetup(), tFirst);
         }
@@ -6783,6 +6790,11 @@ bool SgStnLogCollector::extractPcalOffsetReading(const QString& str, const QRegu
 
   if (tAtTheEnd <= t)
     return false;
+
+//std::cout << "++ extractPcalOffsetReading: match(1) = [" << qPrintable(match.captured(1)) 
+//<< "], match(2) = [" << qPrintable(match.captured(2)) 
+//<< "], re = [" << qPrintable(match.regularExpression().pattern()) 
+//<< "], input=[" << qPrintable(str) << "]\n";
   
   sLo = match.captured(1);
   pcalOffset = match.captured(2).toDouble(&isOk)*1.0e-6;
@@ -6799,7 +6811,7 @@ bool SgStnLogCollector::extractPcalOffsetReading(const QString& str, const QRegu
   if (sLo.size() == 0)
     los << "*";
   else if (sLo.size() == 1)
-    los << sLo << sLo + "0" << sLo + "1";
+    los << sLo << sLo + "0" << sLo + "1" << "0" + sLo << "1" + sLo;
   else
     los << sLo;
   

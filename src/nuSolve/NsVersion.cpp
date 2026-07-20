@@ -24,8 +24,8 @@
 
 SgVersion                       nuSolveVersion( "nuSolve",  0,  8,  3,
                                                 "Marys Rock",
-                                                SgMJD(   2026,  6, 12,
-                                                               15, 39));
+                                                SgMJD(   2026,  7, 20,
+                                                               18, 48));
 
 SgVersion                      *driverVersion=&nuSolveVersion;
 

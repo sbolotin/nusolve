@@ -25,8 +25,8 @@
 
 SgVersion                       log2antVersion("log2ant", 0, 1, 3,
                                                "Old Rag",
-                                                SgMJD(2026,  5, 26,
-                                                            15, 11));
+                                                SgMJD(2026,  7, 20,
+                                                            18, 48));
 
 SgVersion                      *driverVersion=&log2antVersion;
 

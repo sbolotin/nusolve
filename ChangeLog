@@ -2386,30 +2386,31 @@ Fri May 22 18:01:52 2026 -0400   Sergei Bolotin <sergei.bolotin@nasa.gov>
           A user can process a subset of observations of a given session (GUI and
           scrypt modes).
 
-Fri Jun 5 16:32:46 2026 -0400
+Fri Jun 5 16:32:46 2026 -0400  Sergei Bolotin <sergei.bolotin@nasa.gov>
         * Added 2-char station IDs to the "Stations (List)" and 2-char IDs for the
          "Baselines (List)" tabs of the Session Editor.
         * Modified save and restore functions of the session intermediate results:
           removed the software version and added the fingerprint and serial number.
 
-Mon Jun 8 18:57:20 2026 -0400
+Mon Jun 8 18:57:20 2026 -0400  Sergei Bolotin <sergei.bolotin@nasa.gov>
         * Made output of ARC/PWL estimates of the ERP.
 
-Tue Jun 9 19:31:00 2026 -0400
+Tue Jun 9 19:31:00 2026 -0400  Sergei Bolotin <sergei.bolotin@nasa.gov>
         * Fixed a bug in reading old databases.
 
-Wed Jun 10 15:48:49 2026 -0400
+Wed Jun 10 15:48:49 2026 -0400  Sergei Bolotin <sergei.bolotin@nasa.gov>
         * Fixed the bug reported by David Gordon: in output of the file
           "nuSolve_unused_observations" not all deslected observations have proper
           attributes.
 
-Fri Jun 12 15:02:45 2026 -0400
+Fri Jun 12 15:02:45 2026 -0400  Sergei Bolotin <sergei.bolotin@nasa.gov>
         * Implemented use of the ARC and PWL parameters boundary epochs in estimation.
           A user can adjust boundary epochs of ARC and PWL parameters (GUI and scrypt
           modes).
 
-
-
+Mon Jul 20 06:44:48 PM EDT 2026  Sergei Bolotin <sergei.bolotin@nasa.gov>
+        * Updated FS log parser for recent WESTFORD files: r2dbe in equip record
+          and new commands for pcal offsets.
 
 
 

@@ -5426,7 +5426,7 @@ std::cout << "  -- read " << numOfReadStrs/1000 << "K strings file size: " << fl
             logReadings_.channelSetup().setBackEndType(SgChannelSetup::BET_DBBC3);
           else if (backEndName == "dbbc")
             logReadings_.channelSetup().setBackEndType(SgChannelSetup::BET_DBBC);
-          else if (backEndName == "rdbe")
+          else if (backEndName == "rdbe" || backEndName == "r2dbe")
           {
             logReadings_.channelSetup().setBackEndType(SgChannelSetup::BET_RDBE);
             logReadings_.channelSetup().setHwType(SgChannelSetup::HT_VGOS);

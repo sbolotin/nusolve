@@ -1,6 +1,7 @@
 *.diff
 *.log
 *.rts
+*.trs
 
 # executables:
 3dMatrixR_app

@@ -901,15 +901,15 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
     bgFirstObs_ = new QButtonGroup(gboxTSO);
     bgLastObs_  = new QButtonGroup(gboxTSO);
 
-    rbFirstObs[0] = new QRadioButton("First observation of the session", gboxTSO);
-    rbFirstObs[1] = new QRadioButton("Manual", gboxTSO);
+    rbFirstObs[0] = new QRadioButton("First observation of the session  ", gboxTSO);
+    rbFirstObs[1] = new QRadioButton("Manual:", gboxTSO);
     rbFirstObs[0]-> setMinimumSize(rbFirstObs[0]->sizeHint());
     rbFirstObs[1]-> setMinimumSize(rbFirstObs[1]->sizeHint());
     bgFirstObs_->addButton(rbFirstObs[0], 0);
     bgFirstObs_->addButton(rbFirstObs[1], 1);
     
-    rbLastObs[0] = new QRadioButton("Last observation of the session", gboxTSO);
-    rbLastObs[1] = new QRadioButton("Manual", gboxTSO);
+    rbLastObs[0] = new QRadioButton("Last observation of the session  ", gboxTSO);
+    rbLastObs[1] = new QRadioButton("Manual:", gboxTSO);
     rbLastObs[0]-> setMinimumSize(rbLastObs[0]->sizeHint());
     rbLastObs[1]-> setMinimumSize(rbLastObs[1]->sizeHint());
     bgLastObs_->addButton(rbLastObs[0], 0);
@@ -922,13 +922,18 @@ QWidget* SgGuiTaskConfig::makeTab4Operations()
    
     leFirstObs2Process_ = new QLineEdit(gboxTSO);
     leFirstObs2Process_->setText(session_->getTStart().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
-    leFirstObs2Process_->setMinimumWidth(leFirstObs2Process_->fontMetrics().width(leFirstObs2Process_->text()));
+    leFirstObs2Process_->setMinimumWidth(leFirstObs2Process_->fontMetrics().width(leFirstObs2Process_->text() + "WW"));
     grid->addWidget(leFirstObs2Process_, 0, 3);
         
     leLastObs2Process_ = new QLineEdit(gboxTSO);
     leLastObs2Process_->setText(session_->getTFinis().toString(SgMJD::F_YYYYMMDDHHMMSSSS));
-    leLastObs2Process_->setMinimumWidth(leLastObs2Process_->fontMetrics().width(leLastObs2Process_->text()));
+    leLastObs2Process_->setMinimumWidth(leLastObs2Process_->fontMetrics().width(leLastObs2Process_->text() + "WW"));
     grid->addWidget(leLastObs2Process_, 1, 3);
+    
+    grid->setColumnStretch(0, 3);
+    grid->setColumnStretch(1, 3);
+    grid->setColumnStretch(2, 3);
+    grid->setColumnStretch(3, 3);
 
     connect(bgFirstObs_, SIGNAL(buttonClicked(int)), SLOT(firstObsChanged(int)));
     connect(bgLastObs_,  SIGNAL(buttonClicked(int)), SLOT(lastObsChanged(int)));

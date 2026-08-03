@@ -154,12 +154,17 @@ void SgWrmsable::calcNormalizedResiduals(const QList<SgVlbiObservable*> &observa
       if (cfg->getOpHave2NormalizeResiduals())
       {
         s = m->sigma2Apply();
-        if (isOpSolveCompatible)
+        if (0.0 < s && 0.0 < disp)
+        {
+        	if (isOpSolveCompatible)
 // old (pre 0.5.1):
-//->      m->setResidualNorm(m->getResidual()/s/s/sumW_/disp);
-          m->setResidualNorm(m->getResidual()/s/disp);
+//->      	m->setResidualNorm(m->getResidual()/s/s/sumW_/disp);
+          	m->setResidualNorm(m->getResidual()/s/disp);
+        	else
+          	m->setResidualNorm(numProcessed_*m->getResidual()/s/s/sumW_/disp);
+        }
         else
-          m->setResidualNorm(numProcessed_*m->getResidual()/s/s/sumW_/disp);
+        	m->setResidualNorm(0.0);
       }
       else // scale by WRMS, so 3 == 3*sigma
       {

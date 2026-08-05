@@ -78,6 +78,7 @@ SgVlbiSessionInfo::SgVlbiSessionInfo() :
   numOfSources_ = 0;
   numOfObservations_ = 0;
   cppsSoft_ = CPPS_UNKNOWN;
+  dataType_ = DT_UNDEF;
 
   delaySumRMS2_ = 0.0;
   rateSumRMS2_ = 0.0;
@@ -208,4 +209,14 @@ bool lessThan4_FirstEpochSortingOrder(SgVlbiSessionInfo *si1, SgVlbiSessionInfo 
 // constants:
 //
 /*=====================================================================================================*/
+
+
+
+const QMap<SgVlbiSessionInfo::DataType, QString> sessionDataTypeByType
+{
+  {SgVlbiSessionInfo::DT_UNDEF, "UNDEF"},
+  {SgVlbiSessionInfo::DT_DSN,   "DSN"},
+  {SgVlbiSessionInfo::DT_SX,    "S/X"},
+  {SgVlbiSessionInfo::DT_VGOS,  "VGOS"}
+};
 

@@ -532,6 +532,8 @@ class NsScrPrx4Session : public QObject
     READ getSchedulerName)
   Q_PROPERTY(QString piAgencyName
     READ getPiAgencyName)
+  Q_PROPERTY(QString dataType
+    READ getDataType)
   Q_PROPERTY(int numOfBands
     READ getNumOfBands)
   Q_PROPERTY(int numOfStations
@@ -616,6 +618,7 @@ public slots:
   inline const QString& getSubmitterName() const {return session_->getSubmitterName();};
   inline const QString& getSchedulerName() const {return session_->getSchedulerName();};
   inline const QString& getPiAgencyName() const {return session_->getPiAgencyName();};
+  inline QString getDataType() const {return sessionDataTypeByType.value(session_->dataType());};
   inline int getNumOfBands() const {return session_->bandByKey().size();};
   inline int getNumOfStations() const {return session_->stationsByName().size();};
   inline int getNumOfBaselines() const {return session_->baselinesByName().size();};

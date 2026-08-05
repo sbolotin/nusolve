@@ -1052,6 +1052,17 @@ bool SgVlbiSession::selfCheck(bool guiExpected, const QStringList& suffixes)
   logger->write(SgLogger::DBG, SgLogger::PREPROC, className() +
     "::selfCheck(): the network ID was set up", true);
   //
+  dataType_ = SgVlbiSessionInfo::DT_SX;
+  if (bands_.size() == 1)
+  {
+    if (bands_.at(0) && 18 < bands_.at(0)->getMaxNumOfChannels())
+      dataType_ = SgVlbiSessionInfo::DT_VGOS;
+    else
+      dataType_ = SgVlbiSessionInfo::DT_DSN;    
+  };
+  logger->write(SgLogger::DBG, SgLogger::PREPROC, className() +
+    "::selfCheck(): the observation type was set to " + sessionDataTypeByType[dataType_], true);
+  //
   checkChannelSetup(guiExpected);
   logger->write(SgLogger::INF, SgLogger::PREPROC, className() +
     "::selfCheck(): the session selfcheck has been completed", true);

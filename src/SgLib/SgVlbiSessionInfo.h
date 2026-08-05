@@ -102,6 +102,14 @@ public:
     CPPS_C5PP     = 2,                //!< C5++
     CPPS_UNKNOWN  = 0xff,             //!< unknown (=all others);
   };
+  enum DataType
+  {
+    DT_UNDEF      = 0,                //!< unknown
+    DT_DSN        = 1,                //!< DSN's one band observations
+    DT_SX         = 2,                //!< the legacy system
+    DT_VGOS       = 3,                //!< VGOS
+  };
+
 
 
   // Statics:
@@ -225,7 +233,7 @@ public:
   inline int getNumOfObservations() const;
   
   inline CorrelatorPostProcSoftware getCppsSoft() const {return cppsSoft_;};
-
+  inline DataType dataType() const {return dataType_;};
 
 
   // sets:
@@ -384,6 +392,7 @@ protected:
   int                           numOfSources_;
   int                           numOfObservations_;
   CorrelatorPostProcSoftware    cppsSoft_;
+  DataType                      dataType_;
 
   double                        delaySumRMS2_;
   double                        rateSumRMS2_;
@@ -817,6 +826,9 @@ inline void SgVlbiSessionInfo::clearRMSs()
 
 /*=====================================================================================================*/
 
+
+
+extern const QMap<SgVlbiSessionInfo::DataType, QString> sessionDataTypeByType;
 
 
 

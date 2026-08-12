@@ -1516,7 +1516,6 @@ QWidget* NsSessionEditDialog::tab4BandPlots(SgVlbiBand* band)
       //
       if (processHasBeenCalled_)
       {
-//        if (!o->owner()->isAttr(SgObservation::Attr_PROCESSED))
         if (!o->activeMeasurement()->isAttr(SgVlbiMeasurement::Attr_PROCESSED))
           branch->addDataAttr(idx, SgPlotCarrier::DA_REJECTED);
         else

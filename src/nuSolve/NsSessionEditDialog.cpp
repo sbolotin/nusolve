@@ -1900,6 +1900,9 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
   plotCarrier4Session_->createBranch(numOfScans, "ERP: estimation stochastic");
   SgPlotBranch                  *branchS=plotCarrier4Session_->listOfBranches()->last();
 
+  plotCarrier4Session_->createBranch(numOfScans, "ERP: a priori");
+  SgPlotBranch                  *branchI=plotCarrier4Session_->listOfBranches()->last();
+
   t = tZero;
   idx = 0;
   for (int i=0; i<session_->observations().size(); i++)
@@ -1946,6 +1949,14 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
       branchS->data()->setElement(idx, SNI_EST_PMY, 0.0);
       branchS->data()->setElement(idx, SNI_SIG_PMY, 0.0);
       branchS->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+
+      branchI->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
+      branchI->data()->setElement(idx, SNI_EST_UT1, obs->aPrioriUt1()*DAY2SEC*1.0e3);
+      branchI->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchI->data()->setElement(idx, SNI_EST_PMX, obs->aPrioriPx()*RAD2MAS);
+      branchI->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchI->data()->setElement(idx, SNI_EST_PMY, obs->aPrioriPy()*RAD2MAS);
+      branchI->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
       idx++;
     };
@@ -2316,6 +2327,7 @@ void NsSessionEditDialog::updateSessionWideSolutions()
   SgPlotBranch                 *brArc=carrier->listOfBranches()->at(2);
   SgPlotBranch                 *brPwl=carrier->listOfBranches()->at(3);
   SgPlotBranch                 *brStc=carrier->listOfBranches()->at(4);
+  SgPlotBranch                 *brApr=carrier->listOfBranches()->at(5);
 
   
   // 4Arc:
@@ -2492,6 +2504,20 @@ void NsSessionEditDialog::updateSessionWideSolutions()
     if (isTmp)
       brStc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
   };
+
+  SgMJD 												t = tZero;
+  int 													idx = 0;
+  for (int i=0; i<session_->observations().size(); i++)
+    if (t != session_->observations().at(i)->getMJD())
+    {
+      SgVlbiObservation         *obs=session_->observations().at(i);
+      t = session_->observations().at(i)->getMJD();
+			
+			brApr->data()->setElement(idx, SNI_EST_UT1, obs->aPrioriUt1()*DAY2SEC*1.0e3);
+      brApr->data()->setElement(idx, SNI_EST_PMX, obs->aPrioriPx()*RAD2MAS);
+      brApr->data()->setElement(idx, SNI_EST_PMY, obs->aPrioriPy()*RAD2MAS);
+		};
+
 
   plot->dataContentChanged();
 };

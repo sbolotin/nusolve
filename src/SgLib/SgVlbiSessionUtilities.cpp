@@ -471,6 +471,7 @@ void SgVlbiSession::collectAPriories()
       "::collectAPriories(): cannot make ERP interpolation: data are not provided", true);
 
   // and individual observations:
+  SgVlbiScan                   *scan=NULL;
   QString                       str;
   double                        dT, t;
   dT = (getLeapSeconds() + 32.184)/DAY2SEC;
@@ -484,6 +485,17 @@ void SgVlbiSession::collectAPriories()
     double                      r;
     dUt = dPx = dPy = dCx = dCy = 0.0;
     t  = obs->toDouble() + dT;
+
+    if (scanByKey_.contains(obs->getScanId()))
+      scan=scanByKey_.value(obs->getScanId());
+    else
+    {
+      logger->write(SgLogger::ERR, SgLogger::IO_TXT | SgLogger::FLY_BY, className() +
+        "::collectAPriories(): cannot find scan id \"" + obs->getScanId() + 
+        "\" in the session scan map");
+      return;
+    };
+
     //
     // external HiFrequency ERP model:
     if (hiFyEopRead)
@@ -502,9 +514,14 @@ void SgVlbiSession::collectAPriories()
       obs->setExtRateHiFyPxy ((obs->getDrat_dPx()*dPx + obs->getDrat_dPy()*dPy));
       obs->setExtRateHiFyUt1 ( obs->getDrat_dUT1()*dUt );
       // make it SOLVE-compatible:
+/*
       obs->setAprioriUt1HfContrib(0.0);
       obs->setAprioriPxHfContrib(0.0);
       obs->setAprioriPyHfContrib(0.0);
+*/
+      scan->setExtrPmX_Hf(dPx);
+      scan->setExtrPmY_Hf(dPy);
+      scan->setExtrUt1_Hf(dUt);
     }
     else
     {
@@ -522,9 +539,28 @@ std::cout << "    -- no HF calculated\n";
       obs->setExtRateHiFyUt1 (0.0);
     };
     //
+/*
     obs->setAprioriUt1HfContrib(dUt);
     obs->setAprioriPxHfContrib(dPx);
     obs->setAprioriPyHfContrib(dPy);
+*/
+
+    // CALC's values:
+    double                      contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy;
+    contribDel  = obs->getCalcHiFyPxyDelay();
+    contribRat  = obs->getCalcHiFyPxyRate();
+    dDel_dPx    = obs->getDdel_dPx();
+    dDel_dPy    = obs->getDdel_dPy();
+    dRat_dPx    = obs->getDrat_dPx();
+    dRat_dPy    = obs->getDrat_dPy();
+    dPy = (contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx);
+    dPx = (contribDel - dPy*dDel_dPy)/dDel_dPx;
+    dUt = obs->getCalcHiFyUt1Delay()/obs->getDdel_dUT1();
+
+    scan->setIntrPmX_Hf(dPx);
+    scan->setIntrPmY_Hf(dPy);
+    scan->setIntrUt1_Hf(dUt);
+
     //
     // external ERP a priori:
     if (isAble2InterpolateErp_)
@@ -534,16 +570,26 @@ std::cout << "    -- no HF calculated\n";
       py0e = externalErpInterpolator_->spline(t, SgExternalEopFile::PMY_IDX, r)/RAD2MAS;
       cx0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIX_IDX, r)/RAD2MAS;
       cy0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIY_IDX, r)/RAD2MAS;
-      
+      scan->setExtrPmX_Lf(px0e);
+      scan->setExtrPmY_Lf(py0e);
+      scan->setExtrUt1_Lf(ut0e);
+      scan->setExtrCpX_Lf(cx0e);
+      scan->setExtrCpY_Lf(cx0e);
+
       ut0i = innerUt1Interpolator_->spline(t, 0, r)/DAY2SEC;
       px0i = innerPxyInterpolator_->spline(t, 0, r)/RAD2MAS;
       py0i = innerPxyInterpolator_->spline(t, 1, r)/RAD2MAS;
+      scan->setIntrPmX_Lf(px0i);
+      scan->setIntrPmY_Lf(py0i);
+      scan->setIntrUt1_Lf(ut0i);
+
       //
       dUt = ut0e - ut0i;
       dPx = px0e - px0i;
       dPy = py0e - py0i;
       dCx = cx0e;
       dCy = cy0e;
+
       //      
       if (config_->getUseExtAPrioriErp())
       {
@@ -553,19 +599,32 @@ std::cout << "    -- no HF calculated\n";
         obs->setExtRateErp (obs->getDrat_dUT1()*dUt +
           obs->getDrat_dPx()  *dPx + obs->getDrat_dPy()  *dPy +
           obs->getDrat_dCipX()*dCx + obs->getDrat_dCipY()*dCy);
+        /*
         obs->setAprioriUt1LfContrib(ut0e);
         obs->setAprioriPxLfContrib(px0e);
         obs->setAprioriPyLfContrib(py0e);
         obs->setAprioriCxLfContrib(cx0e);
         obs->setAprioriCyLfContrib(cy0e);
+        */        
+
+        scan->setActlPmX_Lf(px0e);
+        scan->setActlPmY_Lf(py0e);
+        scan->setActlUt1_Lf(ut0e);
+        scan->setActlCpX_Lf(cx0e);
+        scan->setActlCpY_Lf(cy0e);
       }
       else
       {
         obs->setExtDelayErp(0.0);
         obs->setExtRateErp (0.0);
+        /*
         obs->setAprioriUt1LfContrib(ut0i);
         obs->setAprioriPxLfContrib(px0i);
         obs->setAprioriPyLfContrib(py0i);
+        */
+        scan->setActlPmX_Lf(px0i);
+        scan->setActlPmY_Lf(py0i);
+        scan->setActlUt1_Lf(ut0i);
       };
     }
     else
@@ -575,14 +634,22 @@ std::cout << "    -- no HF calculated\n";
       if (innerUt1Interpolator_ && innerUt1Interpolator_->isOk())
       {
         ut0i = innerUt1Interpolator_->spline(t, 0, r)/DAY2SEC;
+        /*
         obs->setAprioriUt1LfContrib(ut0i);
+        */
+        scan->setActlUt1_Lf(ut0i);
       };
       if (innerPxyInterpolator_ && innerPxyInterpolator_->isOk())
       {
         px0i = innerPxyInterpolator_->spline(t, 0, r)/RAD2MAS;
         py0i = innerPxyInterpolator_->spline(t, 1, r)/RAD2MAS;
+        /*
         obs->setAprioriPxLfContrib(px0i);
         obs->setAprioriPyLfContrib(py0i);
+        */
+        scan->setActlPmX_Lf(px0i);
+        scan->setActlPmY_Lf(py0i);
+
       };
     };
   };

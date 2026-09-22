@@ -129,6 +129,7 @@ SgVlbiObservation::SgVlbiObservation(SgVlbiSession* session)
   calcHiFyPxyRate_ = 0.0;
   extDelayErp_ = 0.0;
   extRateErp_  = 0.0;
+/*
   aPrioriPxHfContrib_ = 0.0;
   aPrioriPyHfContrib_ = 0.0;
   aPrioriUt1HfContrib_= 0.0;
@@ -137,6 +138,7 @@ SgVlbiObservation::SgVlbiObservation(SgVlbiSession* session)
   aPrioriUt1LfContrib_= 0.0;
   aPrioriCxLfContrib_ = 0.0;
   aPrioriCyLfContrib_ = 0.0;
+*/
   //
   calcOceanPoleTideLdDelay_ = 0.0;
   calcOceanPoleTideLdRate_ = 0.0;

@@ -718,6 +718,7 @@ void SgSolutionReporter::evaluateUsedErpApriori()
     session_->getTStart(), session_->getTFinis(), session_->tRefer());
   //
   // feed the estimators:
+  SgVlbiScan                   *scan=NULL;
   double                        sig, dT, dt, dt2, dt3;
   double                        dsSB=0.1E-9; // 0.1ns
   double                        dsGR=2.E-12; // 2ps
@@ -731,6 +732,18 @@ void SgSolutionReporter::evaluateUsedErpApriori()
     SgVlbiMeasurement          *m=obs->activeObs()?obs->activeObs()->activeDelay():NULL;
     if (m && m->isAttr(SgVlbiMeasurement::Attr_PROCESSED))
     {
+
+      if (session_->scanByKey().contains(obs->getScanId()))
+        scan=session_->scanByKey().value(obs->getScanId());
+      else
+      {
+        logger->write(SgLogger::ERR, SgLogger::IO_TXT | SgLogger::FLY_BY, className() +
+          "::evaluateUsedErpApriori(): cannot find scan id \"" + obs->getScanId() + 
+          "\" in the session scan map");
+        return;
+      };
+
+
       sig = m->sigma2Apply() + dsGR;
       if (config_->getUseDelayType() == SgTaskConfig::VD_SB_DELAY)
         sig += dsSB;
@@ -769,19 +782,34 @@ void SgSolutionReporter::evaluateUsedErpApriori()
         pD_cy->setD(dt3);
       };
       //
+      /*
       vO_C.setElement  (0, obs->aPrioriUt1());
+      */
+      vO_C.setElement  (0, scan->getActlUt1_Hf() + scan->getActlUt1_Lf());
       est_ut->processObs(*obs, vO_C, vSigma);
       //
+      /*
       vO_C.setElement  (0, obs->aPrioriPx());
+      */
+      vO_C.setElement  (0, scan->getActlPmX_Hf() + scan->getActlPmX_Lf());
       est_px->processObs(*obs, vO_C, vSigma);
       //
+      /*
       vO_C.setElement  (0, obs->aPrioriPy());
+      */
+      vO_C.setElement  (0, scan->getActlPmY_Hf() + scan->getActlPmY_Lf());
       est_py->processObs(*obs, vO_C, vSigma);
       //
+      /*
       vO_C.setElement  (0, obs->aPrioriCipX());
+      */
+      vO_C.setElement  (0, scan->getActlCpX_Lf());
       est_cx->processObs(*obs, vO_C, vSigma);
       //
+      /*
       vO_C.setElement  (0, obs->aPrioriCipY());
+      */
+      vO_C.setElement  (0, scan->getActlCpY_Lf());
       est_cy->processObs(*obs, vO_C, vSigma);
       num++;
     };

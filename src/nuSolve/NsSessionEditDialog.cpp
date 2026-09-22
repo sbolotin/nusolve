@@ -1074,7 +1074,6 @@ QWidget* NsSessionEditDialog::tab4GeneralInfo()
   label = new QLabel("Record mode:", gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx, 0);
-//label = new QLabel(session_->primaryBand()->recordMode(), gbox);
   label = new QLabel(session_->getRecordingMode(), gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx++, 1);
@@ -1083,12 +1082,19 @@ QWidget* NsSessionEditDialog::tab4GeneralInfo()
   label = new QLabel("Sideband order:", gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx, 0);
-//label = new QLabel(session_->primaryBand()->recordMode(), gbox);
   label = new QLabel(sidebandOrderByType[session_->getSidebandOrder()], gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx++, 1);
   subLayout->addWidget(gbox);
 
+  label = new QLabel("CALC verison:", gbox);
+  label->setMinimumSize(label->sizeHint());
+  grid->addWidget(label, rowIdx, 0);
+  label = new QLabel(str.sprintf("%g",
+  session_->calcInfo().getDversion()), gbox);
+  label->setMinimumSize(label->sizeHint());
+  grid->addWidget(label, rowIdx++, 1);
+  subLayout->addWidget(gbox);
 
 
   // parameters:
@@ -1886,8 +1892,9 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
   // create branches and fill data:
   plotCarrier4Session_->listOfBranches()->clear();
 
-  int                           numOfScans=session_->scanEpochs().size(), idx;
-  SgMJD                          t(tZero);
+//int                           numOfScans=session_->scanEpochs().size(), idx;
+  int                           numOfScans=session_->scanByKey().size(), idx;
+  SgMJD                         t(tZero);
 
   plotCarrier4Session_->createBranch(numOfScans, "ERP: HF external model");
   SgPlotBranch                  *branch=plotCarrier4Session_->listOfBranches()->last();
@@ -1905,10 +1912,80 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
 
   t = tZero;
   idx = 0;
+
+  for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin();
+    it!=session_->scanByKey().end(); ++it)
+  {
+    SgVlbiScan                 *scan=it.value();
+    if (scan->observations().size())
+    {
+      t = scan->observations().at(0)->getMJD();
+    
+      branch->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branch->data()->setElement(idx, SNI_EST_UT1, scan->getExtrUt1_Hf()*DAY2SEC*1.0e3);
+      branch->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branch->data()->setElement(idx, SNI_EST_PMX, scan->getExtrPmX_Hf()*RAD2MAS);
+      branch->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branch->data()->setElement(idx, SNI_EST_PMY, scan->getExtrPmY_Hf()*RAD2MAS);
+      branch->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+
+      branchC->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchC->data()->setElement(idx, SNI_EST_UT1, scan->getIntrUt1_Hf()*DAY2SEC*1.0e3);
+      branchC->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchC->data()->setElement(idx, SNI_EST_PMX, scan->getIntrPmX_Hf()*RAD2MAS);
+      branchC->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchC->data()->setElement(idx, SNI_EST_PMY, scan->getIntrPmY_Hf()*RAD2MAS);
+      branchC->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+
+      branchA->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchA->data()->setElement(idx, SNI_EST_UT1, 0.0);
+      branchA->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchA->data()->setElement(idx, SNI_EST_PMX, 0.0);
+      branchA->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchA->data()->setElement(idx, SNI_EST_PMY, 0.0);
+      branchA->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+      branchA->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+
+      branchP->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchP->data()->setElement(idx, SNI_EST_UT1, 0.0);
+      branchP->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchP->data()->setElement(idx, SNI_EST_PMX, 0.0);
+      branchP->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchP->data()->setElement(idx, SNI_EST_PMY, 0.0);
+      branchP->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+      branchP->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+
+      branchS->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchS->data()->setElement(idx, SNI_EST_UT1, 0.0);
+      branchS->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchS->data()->setElement(idx, SNI_EST_PMX, 0.0);
+      branchS->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchS->data()->setElement(idx, SNI_EST_PMY, 0.0);
+      branchS->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+      branchS->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+
+      branchI->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchI->data()->setElement(idx, SNI_EST_UT1, (scan->getActlUt1_Hf() + scan->getActlUt1_Lf())*DAY2SEC*1.0e3);
+      branchI->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchI->data()->setElement(idx, SNI_EST_PMX, (scan->getActlPmX_Hf() + scan->getActlPmX_Lf())*RAD2MAS);
+      branchI->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchI->data()->setElement(idx, SNI_EST_PMY, (scan->getActlPmY_Hf() + scan->getActlPmY_Lf())*RAD2MAS);
+      branchI->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+
+      idx++;
+    };
+  };
+
+/*
   for (int i=0; i<session_->observations().size(); i++)
     if (t != session_->observations().at(i)->getMJD())
     {
-      SgVlbiObservation         *obs=session_->observations().at(i);
+      double                    dPx, dPy;
+      double                    contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy;
+      dPx = dPy = 0.0;
+      contribDel = contribRat = dDel_dPx = dDel_dPy = dRat_dPx = dRat_dPy = 0.0;
+      //
+      SgVlbiObservation        *obs=session_->observations().at(i);
       t = session_->observations().at(i)->getMJD();
       branch->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
       
@@ -1919,9 +1996,24 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
       branch->data()->setElement(idx, SNI_EST_PMY, obs->getAprioriPyHfContrib()*RAD2MAS);
       branch->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
+      // CALC's values:
+      contribDel  = obs->getCalcHiFyPxyDelay();
+      contribRat  = obs->getCalcHiFyPxyRate();
+      dDel_dPx    = obs->getDdel_dPx();
+      dDel_dPy    = obs->getDdel_dPy();
+      dRat_dPx    = obs->getDrat_dPx();
+      dRat_dPy    = obs->getDrat_dPy();
+      dPy = (contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx);
+      dPx = (contribDel - dPy*dDel_dPy)/dDel_dPx;
+
       branchC->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
+
       branchC->data()->setElement(idx, SNI_EST_UT1, obs->getCalcHiFyUt1Delay()/obs->getDdel_dUT1() *DAY2SEC*1.0e3);
-      // there are no LCODES from CALC with Px and Py corrections due to the model.
+      branchC->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchC->data()->setElement(idx, SNI_EST_PMX, dPx*RAD2MAS);
+      branchC->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchC->data()->setElement(idx, SNI_EST_PMY, dPy*RAD2MAS);
+      branchC->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
       branchA->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
       branchA->data()->setElement(idx, SNI_EST_UT1, 0.0);
@@ -1960,6 +2052,7 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
 
       idx++;
     };
+*/
 
   // widgets:
   plot4Session_ = new SgPlot(plotCarrier4Session_, setup.path2(setup.getPath2PlotterOutput()), w);
@@ -2505,19 +2598,20 @@ void NsSessionEditDialog::updateSessionWideSolutions()
       brStc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
   };
 
-  SgMJD 												t = tZero;
   int 													idx = 0;
-  for (int i=0; i<session_->observations().size(); i++)
-    if (t != session_->observations().at(i)->getMJD())
+  
+  for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin();
+    it!=session_->scanByKey().end(); ++it)
+  {
+    SgVlbiScan                 *scan=it.value();
+    if (scan->observations().size())
     {
-      SgVlbiObservation         *obs=session_->observations().at(i);
-      t = session_->observations().at(i)->getMJD();
-			
-			brApr->data()->setElement(idx, SNI_EST_UT1, obs->aPrioriUt1()*DAY2SEC*1.0e3);
-      brApr->data()->setElement(idx, SNI_EST_PMX, obs->aPrioriPx()*RAD2MAS);
-      brApr->data()->setElement(idx, SNI_EST_PMY, obs->aPrioriPy()*RAD2MAS);
-		};
-
+			brApr->data()->setElement(idx, SNI_EST_UT1, (scan->getActlUt1_Hf() + scan->getActlUt1_Lf())*DAY2SEC*1.0e3);
+      brApr->data()->setElement(idx, SNI_EST_PMX, (scan->getActlPmX_Hf() + scan->getActlPmX_Lf())*RAD2MAS);
+      brApr->data()->setElement(idx, SNI_EST_PMY, (scan->getActlPmY_Hf() + scan->getActlPmY_Lf())*RAD2MAS);
+      idx++;
+    };
+  };
 
   plot->dataContentChanged();
 };

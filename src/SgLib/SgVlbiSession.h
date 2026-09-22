@@ -53,6 +53,7 @@ class QDataStream;
 #include <SgVlbiBaselineInfo.h>
 #include <SgVlbiHistory.h>
 #include <SgVlbiSourceInfo.h>
+#include <SgVlbiScan.h>
 #include <SgVlbiStationInfo.h>
 
 class SgVlbiObservable;
@@ -291,6 +292,8 @@ public:
   /**Returns a list of scan epochs.
    */
   inline const QList<SgMJD*>& scanEpochs() const {return scanEpochs_;};
+  inline const QMap<QString, SgVlbiScan*>& getScanByKey() const {return scanByKey_;};
+  inline QMap<QString, SgVlbiScan*>& scanByKey() {return scanByKey_;};
   
   /**Sets a pointer on a reference band by band's index.
    */
@@ -666,7 +669,11 @@ private:
   SgVlbiBand                           *primaryBand_;
   // a list of observations, an owner:
   QList<SgVlbiObservation*>             observations_;
+  
   QList<SgMJD*>                         scanEpochs_;
+  QMap<QString, SgVlbiScan*>            scanByKey_;
+
+  
   QMap<QString, SgVlbiObservation*>     observationByKey_;  
   // owners of pointers (the allocated memmory should be released in the destructor):
   StationsByName                        stationsByName_;

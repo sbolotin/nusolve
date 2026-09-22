@@ -198,6 +198,7 @@ public:
   inline double getExtDelayErp() const {return extDelayErp_;};
   inline double getExtRateErp()  const {return extRateErp_;};
 
+/*
   inline double getAprioriPxHfContrib() const {return aPrioriPxHfContrib_;};
   inline double getAprioriPxLfContrib() const {return aPrioriPxLfContrib_;};
   inline double getAprioriPyHfContrib() const {return aPrioriPyHfContrib_;};
@@ -212,6 +213,7 @@ public:
   inline double aPrioriUt1() const {return aPrioriUt1HfContrib_ + aPrioriUt1LfContrib_;};
   inline double aPrioriCipX() const {return aPrioriCxLfContrib_;};
   inline double aPrioriCipY() const {return aPrioriCyLfContrib_;};
+*/
 
   /**Returns value of the LCode "PTD CONT".
    */
@@ -514,6 +516,7 @@ public:
   inline void setExtDelayErp(double v) {extDelayErp_ = v;};
   inline void setExtRateErp (double v) {extRateErp_  = v;};
 
+/*
   inline void setAprioriPxHfContrib(double v) {aPrioriPxHfContrib_ = v;};
   inline void setAprioriPxLfContrib(double v) {aPrioriPxLfContrib_ = v;};
   inline void setAprioriPyHfContrib(double v) {aPrioriPyHfContrib_ = v;};
@@ -522,6 +525,7 @@ public:
   inline void setAprioriUt1LfContrib(double v) {aPrioriUt1LfContrib_ = v;};
   inline void setAprioriCxLfContrib(double v) {aPrioriCxLfContrib_ = v;};
   inline void setAprioriCyLfContrib(double v) {aPrioriCyLfContrib_ = v;};
+*/
 
   /**Sets up the value of the LCode "PTD CONT".
    * \param v -- the value;
@@ -905,7 +909,7 @@ private:
   double                        extDelayHiFyPxy_;
   double                        extRateHiFyPxy_;
   
-  
+  /*
   // for spoolfile output:
   double                        aPrioriPxHfContrib_;
   double                        aPrioriPyHfContrib_;
@@ -915,6 +919,7 @@ private:
   double                        aPrioriUt1LfContrib_;
   double                        aPrioriCxLfContrib_;
   double                        aPrioriCyLfContrib_;
+  */
   
   // partials:
   // stations:

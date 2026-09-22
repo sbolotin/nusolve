@@ -89,6 +89,7 @@ SgVlbiSession::SgVlbiSession() :
   bandByKey_(),
   observations_(),
   scanEpochs_(),
+  scanByKey_(),
   observationByKey_(),
   stationsByName_(),
   baselinesByName_(),
@@ -237,6 +238,8 @@ SgVlbiSession::~SgVlbiSession()
   for (int i=0; i<scanEpochs_.size(); i++)
     delete scanEpochs_.at(i);
   scanEpochs_.clear();
+  
+  scanByKey_.clear();
   
   if (args4Ut1Interpolation_)
   {
@@ -597,6 +600,7 @@ bool SgVlbiSession::selfCheck(bool guiExpected, const QStringList& suffixes)
   QMap<QString, QString>        scanIdByName;
   QMap<QString, QMap<QString, QString> >
                                 duplicateByName;
+  SgVlbiScan                   *scan;
   for (int i=0; i<observations_.size(); i++)
   {
     SgVlbiObservation          *obs=observations_.at(i);
@@ -605,6 +609,14 @@ bool SgVlbiSession::selfCheck(bool guiExpected, const QStringList& suffixes)
       t = obs->getMJD();
       scanEpochs_.append(new SgMJD(t));
     };
+    
+    if (scanByKey_.contains(obs->getScanId()))
+      scan = scanByKey_.value(obs->getScanId());
+    else
+      scan = new SgVlbiScan(this, obs->getScanName());
+    scanByKey_.insert(obs->getScanId(), scan);
+    scan->observations().append(obs);
+    
     // collect scan names:
     if (!scanIdByName.contains(obs->getScanName()))
       scanIdByName.insert(obs->getScanName(), obs->getScanId());
@@ -618,6 +630,9 @@ bool SgVlbiSession::selfCheck(bool guiExpected, const QStringList& suffixes)
   logger->write(SgLogger::DBG, SgLogger::PREPROC, className() +
     "::selfCheck(): " + QString("").setNum(scanEpochs_.size()) + 
     " scans have been found in the session", true);
+  logger->write(SgLogger::DBG, SgLogger::PREPROC, className() +
+    "::selfCheck(): " + QString("").setNum(scanByKey_.size()) + 
+    " unique scans were collected", true);
   //
   // Check for duplicate scan names:
   if (duplicateByName.size())

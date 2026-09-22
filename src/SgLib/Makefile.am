@@ -76,7 +76,7 @@ SG_Geod_cpp_wohpp   = SgVlbiSessionUtilities.cpp SgVlbiSessionUtils4Automation.c
 ## regular source files:
 SG_Geod_cpp_w_hpp   = SgMeteoData.cpp SgMJD.cpp SgSourceKey.cpp SgWrmsable.cpp SgObservation.cpp\
                       SgVlbiObservation.cpp SgVlbiAuxObservation.cpp SgObjectInfo.cpp\
-                      SgVlbiStationInfo.cpp SgVlbiBaselineInfo.cpp SgVlbiSourceInfo.cpp\
+                      SgVlbiStationInfo.cpp SgVlbiBaselineInfo.cpp SgVlbiSourceInfo.cpp SgVlbiScan.cpp\
                       SgVlbiSession.cpp SgVlbiSessionInfo.cpp SgVlbiBand.cpp SgVlbiHistory.cpp\
                       SgZenithDelay.cpp SgMappingFunction.cpp SgRefraction.cpp SgConstants.cpp\
                       SgBreakModel.cpp SgOceanLoad.cpp SgMasterRecord.cpp SgNetworkStnRecord.cpp\

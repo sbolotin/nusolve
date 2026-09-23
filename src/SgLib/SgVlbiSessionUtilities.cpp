@@ -522,6 +522,13 @@ void SgVlbiSession::collectAPriories()
       scan->setExtrPmX_Hf(dPx);
       scan->setExtrPmY_Hf(dPy);
       scan->setExtrUt1_Hf(dUt);
+
+      if (config_->getUseExtAPrioriHiFyErp())
+      {
+        scan->setActlPmX_Hf(dPx);
+        scan->setActlPmY_Hf(dPy);
+        scan->setActlUt1_Hf(dUt);
+      };
     }
     else
     {
@@ -557,9 +564,28 @@ std::cout << "    -- no HF calculated\n";
     dPx = (contribDel - dPy*dDel_dPy)/dDel_dPx;
     dUt = obs->getCalcHiFyUt1Delay()/obs->getDdel_dUT1();
 
+    if (config_->getHave2ApplyPxyLibrationContrib())
+    {
+      contribDel  = obs->getCalcHiFyPxyLibrationDelay();
+      contribRat  = obs->getCalcHiFyPxyLibrationRate();
+      dPy += (contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx);
+      dPx += (contribDel - dPy*dDel_dPy)/dDel_dPx;
+    };
+
+    if (config_->getHave2ApplyUt1LibrationContrib())
+      dUt += obs->getCalcHiFyUt1LibrationDelay()/obs->getDdel_dUT1();
+
     scan->setIntrPmX_Hf(dPx);
     scan->setIntrPmY_Hf(dPy);
     scan->setIntrUt1_Hf(dUt);
+
+    if (config_->getHave2ApplyPxyOceanTideHFContrib())
+    {
+      scan->setActlPmX_Hf(dPx);
+      scan->setActlPmY_Hf(dPy);
+    };
+    if (config_->getHave2ApplyUt1OceanTideHFContrib())
+      scan->setActlUt1_Hf(dUt);
 
     //
     // external ERP a priori:
@@ -625,6 +651,8 @@ std::cout << "    -- no HF calculated\n";
         scan->setActlPmX_Lf(px0i);
         scan->setActlPmY_Lf(py0i);
         scan->setActlUt1_Lf(ut0i);
+        scan->setActlCpX_Lf(0.0);
+        scan->setActlCpY_Lf(0.0);
       };
     }
     else
@@ -664,6 +692,7 @@ std::cout << "    -- no HF calculated\n";
 
 
 //
+/*
 void SgVlbiSession::getAprioriErp(const SgMJD& epoch, 
   double& vUt1, double& rUt1,
   double& vPx, double& rPx, double& vPy, double& rPy,
@@ -716,7 +745,7 @@ void SgVlbiSession::getAprioriErp(const SgMJD& epoch,
     "::getAprioriErp(): CIP_y: " + 
     QString("").sprintf("%12.6fmas %12.6fmas/d", vCy*RAD2MAS, rCy*RAD2MAS));
 };
-
+*/
 
 
 //

@@ -1963,13 +1963,13 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
       branchS->data()->setElement(idx, SNI_EST_PMY, 0.0);
       branchS->data()->setElement(idx, SNI_SIG_PMY, 0.0);
       branchS->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
-
+      
       branchI->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
-      branchI->data()->setElement(idx, SNI_EST_UT1, (scan->getActlUt1_Hf() + scan->getActlUt1_Lf())*DAY2SEC*1.0e3);
+      branchI->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*DAY2SEC*1.0e3);
       branchI->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchI->data()->setElement(idx, SNI_EST_PMX, (scan->getActlPmX_Hf() + scan->getActlPmX_Lf())*RAD2MAS);
+      branchI->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*RAD2MAS);
       branchI->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchI->data()->setElement(idx, SNI_EST_PMY, (scan->getActlPmY_Hf() + scan->getActlPmY_Lf())*RAD2MAS);
+      branchI->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*RAD2MAS);
       branchI->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
       idx++;
@@ -2606,9 +2606,9 @@ void NsSessionEditDialog::updateSessionWideSolutions()
     SgVlbiScan                 *scan=it.value();
     if (scan->observations().size())
     {
-			brApr->data()->setElement(idx, SNI_EST_UT1, (scan->getActlUt1_Hf() + scan->getActlUt1_Lf())*DAY2SEC*1.0e3);
-      brApr->data()->setElement(idx, SNI_EST_PMX, (scan->getActlPmX_Hf() + scan->getActlPmX_Lf())*RAD2MAS);
-      brApr->data()->setElement(idx, SNI_EST_PMY, (scan->getActlPmY_Hf() + scan->getActlPmY_Lf())*RAD2MAS);
+			brApr->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*DAY2SEC*1.0e3);
+      brApr->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*RAD2MAS);
+      brApr->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*RAD2MAS);
       idx++;
     };
   };

@@ -630,9 +630,11 @@ public:
   void allocUt1InterpolValues(const SgVector* vals);
   void allocPxyInterpolValues(const SgMatrix* vals);
 
+/*
   void getAprioriErp(const SgMJD& t, 
     double& vUt1, double& rUt1, double& vPx, double& rPx, double& vPy, double& rPy,
     double& vCx, double& rCx, double& vCy, double& rCy);
+*/
 
   void setupTimeRefer();
 

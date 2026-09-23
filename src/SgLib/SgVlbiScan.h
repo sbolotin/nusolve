@@ -156,6 +156,12 @@ public:
   //
   static const QString className();
 
+  inline double getAprioriPmX() const {return actlPmX_Hf_ + actlPmX_Lf_;};
+  inline double getAprioriPmY() const {return actlPmY_Hf_ + actlPmY_Lf_;};
+  inline double getAprioriUt1() const {return actlUt1_Hf_ + actlUt1_Lf_;};
+  inline double getAprioriCpX() const {return actlCpX_Lf_;};
+  inline double getAprioriCpY() const {return actlCpY_Lf_;};
+
   //
   // Friends:
   //

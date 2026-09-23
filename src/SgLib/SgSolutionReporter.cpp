@@ -579,30 +579,6 @@ void SgSolutionReporter::synchronizeInfo()
 
 
 //
-void SgSolutionReporter::evaluateUsedErpApriori2()
-{
-  erp_ut1_0_ = erp_ut1_1_ = erp_ut1_2_ = erp_ut1_3_ = 0.0;
-  erp_pmx_0_ = erp_pmx_1_ = erp_pmx_2_ = erp_pmx_3_ = 0.0;
-  erp_pmy_0_ = erp_pmy_1_ = erp_pmy_2_ = erp_pmy_3_ = 0.0;
-  eop_cix_0_ = eop_cix_1_ = eop_cix_2_ = eop_cix_3_ = 0.0;
-  eop_ciy_0_ = eop_ciy_1_ = eop_ciy_2_ = eop_ciy_3_ = 0.0;
-
-  if (erpTref_ == tZero)
-  {
-    erpTref_ = session_->tRefer();
-    logger->write(SgLogger::WRN, SgLogger::REPORT, className() +
-      "::evaluateUsedErpApriori2(): the ERP reference time has been adjusted to " + erpTref_.toString());
-  };
-  session_->getAprioriErp(erpTref_, 
-    erp_ut1_0_, erp_ut1_1_, 
-    erp_pmx_0_, erp_pmx_1_, erp_pmy_0_, erp_pmy_1_,
-    eop_cix_0_, eop_cix_1_, eop_ciy_0_, eop_ciy_1_);
-};
-
-
-
-
-//
 void SgSolutionReporter::evaluateUsedErpApriori()
 {
   if (erpTref_ == tZero)
@@ -785,31 +761,31 @@ void SgSolutionReporter::evaluateUsedErpApriori()
       /*
       vO_C.setElement  (0, obs->aPrioriUt1());
       */
-      vO_C.setElement  (0, scan->getActlUt1_Hf() + scan->getActlUt1_Lf());
+      vO_C.setElement  (0, scan->getAprioriUt1());
       est_ut->processObs(*obs, vO_C, vSigma);
       //
       /*
       vO_C.setElement  (0, obs->aPrioriPx());
       */
-      vO_C.setElement  (0, scan->getActlPmX_Hf() + scan->getActlPmX_Lf());
+      vO_C.setElement  (0, scan->getAprioriPmX());
       est_px->processObs(*obs, vO_C, vSigma);
       //
       /*
       vO_C.setElement  (0, obs->aPrioriPy());
       */
-      vO_C.setElement  (0, scan->getActlPmY_Hf() + scan->getActlPmY_Lf());
+      vO_C.setElement  (0, scan->getAprioriPmY());
       est_py->processObs(*obs, vO_C, vSigma);
       //
       /*
       vO_C.setElement  (0, obs->aPrioriCipX());
       */
-      vO_C.setElement  (0, scan->getActlCpX_Lf());
+      vO_C.setElement  (0, scan->getAprioriCpX());
       est_cx->processObs(*obs, vO_C, vSigma);
       //
       /*
       vO_C.setElement  (0, obs->aPrioriCipY());
       */
-      vO_C.setElement  (0, scan->getActlCpY_Lf());
+      vO_C.setElement  (0, scan->getAprioriCpY());
       est_cy->processObs(*obs, vO_C, vSigma);
       num++;
     };

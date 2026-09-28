@@ -43,6 +43,7 @@
 class SgSymMatrix;
 
 class SgArcStorage;
+class SgCubicSpline;
 class SgParameter;
 class SgParameterCfg;
 class SgParametersDescriptor;
@@ -183,6 +184,9 @@ private:
   double                        eop_cix_0_, eop_cix_1_, eop_cix_2_, eop_cix_3_;
   double                        eop_ciy_0_, eop_ciy_1_, eop_ciy_2_, eop_ciy_3_;
 
+  // a priori:
+  SgCubicSpline                *aprioriErpInterpolator_;
+
 
   double                        dUt1Value_;
   double                        dUt1Correction_;
@@ -192,6 +196,7 @@ private:
   void freeResources();
   void synchronizeInfo();
   void evaluateUsedErpApriori();
+  void evaluateUsedErpApriori_old();
   void lookupParameter(SgParameter*);
   void calculateConditionNumber();
 

@@ -38,6 +38,7 @@
 #include <Sg3dMatrixR.h>
 #include <SgArcStorage.h>
 #include <SgConstants.h>
+#include <SgCubicSpline.h>
 #include <SgEstimator.h>
 #include <SgIdentities.h>
 #include <SgLogger.h>
@@ -113,6 +114,8 @@ SgSolutionReporter::SgSolutionReporter(SgVlbiSession* session, const SgIdentitie
   eop_cix_0_ = eop_cix_1_ = eop_cix_2_ = eop_cix_3_ = 0.0;
   eop_ciy_0_ = eop_ciy_1_ = eop_ciy_2_ = eop_ciy_3_ = 0.0;
 
+  aprioriErpInterpolator_ = NULL;
+
   dUt1Value_ = dUt1Correction_ = dUt1StdDev_ = 0.0;
 };
 
@@ -129,6 +132,11 @@ SgSolutionReporter::~SgSolutionReporter()
   {
     delete PxAll_;
     PxAll_ = NULL;
+  };
+  if (aprioriErpInterpolator_)
+  {
+    delete aprioriErpInterpolator_;
+    aprioriErpInterpolator_ = NULL;
   };
   numOfUnknowns_ = 0;
   numOfObservations_ = 0;
@@ -579,7 +587,7 @@ void SgSolutionReporter::synchronizeInfo()
 
 
 //
-void SgSolutionReporter::evaluateUsedErpApriori()
+void SgSolutionReporter::evaluateUsedErpApriori_old()
 {
   if (erpTref_ == tZero)
   {
@@ -846,6 +854,44 @@ void SgSolutionReporter::evaluateUsedErpApriori()
   delete est_py;
   delete est_cx;
   delete est_cy;
+};
+
+
+
+//
+void SgSolutionReporter::evaluateUsedErpApriori()
+{
+  // feed the estimators:
+  SgVlbiScan                   *scan=NULL;
+
+  if (aprioriErpInterpolator_)
+    delete aprioriErpInterpolator_;
+  aprioriErpInterpolator_ = new SgCubicSpline(session_->scanByKey().size(), 5);
+ 
+  SgMJD                         t;
+  int                           idx=0;
+  for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin(); 
+    it!=session_->scanByKey().end(); ++it)
+  {
+    scan = it.value();
+    if (scan->observations().size() && scan->observations().at(0))
+    {
+      t = *scan->observations().at(0);
+      aprioriErpInterpolator_->argument().setElement(idx, t.toDouble());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::UT1_IDX, scan->getAprioriUt1());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMX_IDX, scan->getAprioriPmX());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMY_IDX, scan->getAprioriPmY());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIX_IDX, scan->getAprioriCpX());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIY_IDX, scan->getAprioriCpY());
+    }
+    else
+      logger->write(SgLogger::ERR, SgLogger::IO_TXT | SgLogger::FLY_BY, className() +
+        "::evaluateUsedErpApriori(): the scan \"" + it.key() + 
+        "\" has no observations");
+
+    idx++;
+  };
+  aprioriErpInterpolator_->prepare4Spline();
 };
 
 
@@ -3237,7 +3283,17 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+/*    
+      ut0e = externalErpInterpolator_->spline(t, SgExternalEopFile::UT1_IDX, r)/DAY2SEC;
+      px0e = externalErpInterpolator_->spline(t, SgExternalEopFile::PMX_IDX, r)/RAD2MAS;
+      py0e = externalErpInterpolator_->spline(t, SgExternalEopFile::PMY_IDX, r)/RAD2MAS;
+      cx0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIX_IDX, r)/RAD2MAS;
+      cy0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIY_IDX, r)/RAD2MAS;
+*/
+    aprUt1 = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::UT1_IDX, dd);
+/*
     aprUt1 = erp_ut1_0_ + erp_ut1_1_*dt + erp_ut1_2_*dt*dt + erp_ut1_3_*dt*dt*dt;
+*/
     dd = 0.0;
     if (session_->pUT1Rate() && session_->pUT1Rate()->isAttr(SgParameter::Attr_IS_SOLVED))
       dd = session_->pUT1Rate()->getSolution()*dt;

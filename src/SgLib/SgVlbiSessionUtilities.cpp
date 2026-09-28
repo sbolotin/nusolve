@@ -553,7 +553,7 @@ std::cout << "    -- no HF calculated\n";
 */
 
     // CALC's values:
-    double                      contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy;
+    double                      contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy, dTmp;
     contribDel  = obs->getCalcHiFyPxyDelay();
     contribRat  = obs->getCalcHiFyPxyRate();
     dDel_dPx    = obs->getDdel_dPx();
@@ -568,8 +568,8 @@ std::cout << "    -- no HF calculated\n";
     {
       contribDel  = obs->getCalcHiFyPxyLibrationDelay();
       contribRat  = obs->getCalcHiFyPxyLibrationRate();
-      dPy += (contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx);
-      dPx += (contribDel - dPy*dDel_dPy)/dDel_dPx;
+      dPy += (dTmp=(contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx));
+      dPx += (contribDel - dTmp*dDel_dPy)/dDel_dPx;
     };
 
     if (config_->getHave2ApplyUt1LibrationContrib())

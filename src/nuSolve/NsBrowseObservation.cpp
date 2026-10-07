@@ -236,11 +236,20 @@ QWidget* NsBrowseObservation::tab4GeneralInfo()
   grid->addWidget(label, rowIdx++, 1);
 
   //
-  label = new QLabel("Scan:", gbox);
+  label = new QLabel("Scan name:", gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx, 0);
 
-  label = new QLabel(obs_->getScanName() + "  " + obs_->getScanFullName(), gbox);
+  label = new QLabel(obs_->getScanName(), gbox);
+  label->setMinimumSize(label->sizeHint());
+  grid->addWidget(label, rowIdx++, 1);
+
+  //
+  label = new QLabel("Scan ID:", gbox);
+  label->setMinimumSize(label->sizeHint());
+  grid->addWidget(label, rowIdx, 0);
+
+  label = new QLabel(obs_->getScanId(), gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx++, 1);
 

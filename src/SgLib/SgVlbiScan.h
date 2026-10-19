@@ -36,10 +36,7 @@
 #include <QtCore/QString>
 
 
-//#include <SgObservation.h>
-//#include <SgTaskConfig.h>
-//#include <SgMeteoData.h>
-//#include <SgVector.h>
+#include <SgMJD.h>
 
 
 
@@ -67,7 +64,8 @@ public:
    */
   inline SgVlbiScan();
 
-  inline SgVlbiScan(SgVlbiSession* session, const QString scheduleName);
+  inline SgVlbiScan(SgVlbiSession* session, const QString& scheduleName, const QString& key,
+                      const SgMJD& epoch);
 
   /**A destructor.
    * Frees allocated memory.
@@ -175,6 +173,7 @@ private:
   SgVlbiSession                *session_;
   QList<SgVlbiObservation*>     observations_;
   QString                       key_;
+  SgMJD                         epoch_;
   QString                       scheduleName_;
   
   // for spoolfile output:
@@ -232,7 +231,10 @@ inline SgVlbiScan::~SgVlbiScan()
 
 
 
-inline SgVlbiScan::SgVlbiScan(SgVlbiSession* session, const QString scheduleName) :
+inline SgVlbiScan::SgVlbiScan(SgVlbiSession* session, const QString& scheduleName, const QString& key,
+  const SgMJD& epoch) :
+  key_(key),
+  epoch_(epoch),
   scheduleName_(scheduleName)
 {
   session_ = session;  

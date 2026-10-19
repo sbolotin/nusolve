@@ -613,7 +613,8 @@ bool SgVlbiSession::selfCheck(bool guiExpected, const QStringList& suffixes)
     if (scanByKey_.contains(obs->getScanId()))
       scan = scanByKey_.value(obs->getScanId());
     else
-      scan = new SgVlbiScan(this, obs->getScanName());
+      scan = new SgVlbiScan(this, obs->getScanName(), obs->getScanId(), obs->getMJD());
+    
     scanByKey_.insert(obs->getScanId(), scan);
     scan->observations().append(obs);
     

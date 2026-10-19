@@ -38,6 +38,7 @@
 SgVlbiScan::SgVlbiScan() :
   observations_(),
   key_(""),
+  epoch_(tZero),
   scheduleName_("")
 {
   session_ = NULL;

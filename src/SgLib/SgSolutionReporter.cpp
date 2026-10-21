@@ -877,18 +877,28 @@ void SgSolutionReporter::evaluateUsedErpApriori()
     if (scan->observations().size() && scan->observations().at(0))
     {
       t = *scan->observations().at(0);
+      /*
+       * ERP contain semidiurnal variations:
       aprioriErpInterpolator_->argument().setElement(idx, t.toDouble());
       aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::UT1_IDX, scan->getAprioriUt1());
       aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMX_IDX, scan->getAprioriPmX());
       aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMY_IDX, scan->getAprioriPmY());
       aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIX_IDX, scan->getAprioriCpX());
       aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIY_IDX, scan->getAprioriCpY());
+      */
+      /*
+       * ERP doe not contain semidiurnal variations:
+      */
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::UT1_IDX, scan->getActlUt1_Lf());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMX_IDX, scan->getActlPmX_Lf());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMY_IDX, scan->getActlPmY_Lf());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIX_IDX, scan->getActlCpX_Lf());
+      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIY_IDX, scan->getActlCpY_Lf());
     }
     else
       logger->write(SgLogger::ERR, SgLogger::IO_TXT | SgLogger::FLY_BY, className() +
         "::evaluateUsedErpApriori(): the scan \"" + it.key() + 
         "\" has no observations");
-
     idx++;
   };
   aprioriErpInterpolator_->prepare4Spline();
@@ -3187,7 +3197,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   double                dUt1=0.0, dPmx=0.0, dPmy=0.0;
   double                rUt1=0.0, rPmx=0.0, rPmy=0.0;
   double                sigUt1=0.0, sigPmx=0.0, sigPmy=0.0;
-  double                aprUt1=0.0, aprPmx=0.0, aprPmy=0.0, dt, dd;
+  double                aprUt1=0.0, aprPmx=0.0, aprPmy=0.0, dt, rate;
   double                aprCipX=0.0, aprCipY=0.0;
   //
   // corrections to polar motion, x:
@@ -3195,14 +3205,18 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+std::cout << " PM x dt = " << dt << "\n";
+/*
     aprPmx = erp_pmx_0_ + erp_pmx_1_*dt + erp_pmx_2_*dt*dt + erp_pmx_3_*dt*dt*dt;
-    dd = 0.0;
+*/
+    aprPmx = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::PMX_IDX, rate);
+    rate = 0.0;
     if (session_->pPolusXRate() && session_->pPolusXRate()->isAttr(SgParameter::Attr_IS_SOLVED))
-      dd = session_->pPolusXRate()->getSolution()*dt;
+      rate = session_->pPolusXRate()->getSolution()*dt;
     str.sprintf("%5d. X Wobble  0,  %s  %12.4f masec %10.2f microasec %10.2f microasec %10.2f microasec",
       idx,
       qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprPmx + p->getSolution() + dd)*RAD2SEC*1.0e3,
+      (aprPmx + p->getSolution() + rate)*RAD2SEC*1.0e3,
       p->getSolution()*RAD2SEC*1.0e6,
       p->getSigma()*   RAD2SEC*1.0e6,
       p->getSigma()*   RAD2SEC*1.0e6*chi
@@ -3219,6 +3233,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+std::cout << " PM x rate dt = " << dt << "\n";
     str.sprintf("%5d. X Wobble  1,  %s  %12.4f mas/d %10.2f microas/d %10.2f microas/d %10.2f microas/d",
       idx,
       qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
@@ -3239,14 +3254,18 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+std::cout << " PM y dt = " << dt << "\n";
+/*
     aprPmy = erp_pmy_0_ + erp_pmy_1_*dt + erp_pmy_2_*dt*dt + erp_pmy_3_*dt*dt*dt;
-    dd = 0.0;
+*/
+    aprPmy = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::PMY_IDX, rate);
+    rate = 0.0;
     if (session_->pPolusYRate() && session_->pPolusYRate()->isAttr(SgParameter::Attr_IS_SOLVED))
-      dd = session_->pPolusYRate()->getSolution()*dt;
+      rate = session_->pPolusYRate()->getSolution()*dt;
     str.sprintf("%5d. Y Wobble  0,  %s  %12.4f masec %10.2f microasec %10.2f microasec %10.2f microasec",
       idx,
       qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprPmy + p->getSolution() + dd)*RAD2SEC*1.0e3,
+      (aprPmy + p->getSolution() + rate)*RAD2SEC*1.0e3,
       p->getSolution()*RAD2SEC*1.0e6,
       p->getSigma()*   RAD2SEC*1.0e6,
       p->getSigma()*   RAD2SEC*1.0e6*chi
@@ -3263,6 +3282,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+std::cout << " PM y rate dt = " << dt << "\n";
     str.sprintf("%5d. Y Wobble  1,  %s  %12.4f mas/d %10.2f microas/d %10.2f microas/d %10.2f microas/d",
       idx,
       qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
@@ -3283,6 +3303,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+std::cout << " dUT1 dt = " << dt << "\n";
 /*    
       ut0e = externalErpInterpolator_->spline(t, SgExternalEopFile::UT1_IDX, r)/DAY2SEC;
       px0e = externalErpInterpolator_->spline(t, SgExternalEopFile::PMX_IDX, r)/RAD2MAS;
@@ -3290,17 +3311,17 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
       cx0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIX_IDX, r)/RAD2MAS;
       cy0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIY_IDX, r)/RAD2MAS;
 */
-    aprUt1 = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::UT1_IDX, dd);
+    aprUt1 = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::UT1_IDX, rate);
 /*
     aprUt1 = erp_ut1_0_ + erp_ut1_1_*dt + erp_ut1_2_*dt*dt + erp_ut1_3_*dt*dt*dt;
 */
-    dd = 0.0;
+    rate = 0.0;
     if (session_->pUT1Rate() && session_->pUT1Rate()->isAttr(SgParameter::Attr_IS_SOLVED))
-      dd = session_->pUT1Rate()->getSolution()*dt;
+      rate = session_->pUT1Rate()->getSolution()*dt;
     str.sprintf("%5d. UT1-TAI   0,  %s  %12.4f  msec %10.2f microsec %11.2f microsec %11.2f microsec",
       idx,
       qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprUt1 + p->getSolution() + dd)*DAY2SEC*1.0e3,
+      (aprUt1 + p->getSolution() + rate)*DAY2SEC*1.0e3,
       p->getSolution()*DAY2SEC*1.0e6,
       p->getSigma()*   DAY2SEC*1.0e6,
       p->getSigma()*   DAY2SEC*1.0e6*chi);
@@ -3311,7 +3332,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
     dUt1  = p->getSolution();
     sigUt1= p->getSigma();
     //
-    dUt1Value_ = aprUt1 + p->getSolution() + dd;
+    dUt1Value_ = aprUt1 + p->getSolution() + rate;
     dUt1Correction_ = p->getSolution();
     dUt1StdDev_ = p->getSigma();
     //
@@ -3321,6 +3342,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
     dt = p->getTMean() - erpTref_;
+std::cout << " dUT1 rate dt = " << dt << "\n";
     // progs/solve/adjst/a2jst_segeop.f ?
     str.sprintf("%5d. UT1-TAI   1,  %s  %12.4f  ms/d %10.2f micros/d %11.2f micros/d %11.2f micros/d",
       idx,
@@ -3339,6 +3361,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   if (isErpAdjusted && p4erp)
   {
     dt = p4erp->getTMean() - erpTref_;
+std::cout << " ERP dt = " << dt << "\n";
     ts 
 //    << " EOP with included hi-freq variations  (a-sigmas)  \n"
       << " EOP without included hi-freq variations  (a-sigmas)  \n"
@@ -3369,6 +3392,7 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
     epoch += (session_->getLeapSeconds() + 32.184)/DAY2SEC;
     //
     dt = p->getTMean() - erpTref_;
+std::cout << " Cip dt = " << dt << "\n";
     aprCipX     = eop_cix_0_ + eop_cix_1_*dt + eop_cix_2_*dt*dt + eop_cix_3_*dt*dt*dt;
     aprCipY     = eop_ciy_0_ + eop_ciy_1_*dt + eop_ciy_2_*dt*dt + eop_ciy_3_*dt*dt*dt;
     //

@@ -88,6 +88,8 @@ public:
   
   void prepare4Spline();
   
+  double spline(double arg, int nColumn);
+  
   double spline(double arg, int nColumn, double &r);
 
 

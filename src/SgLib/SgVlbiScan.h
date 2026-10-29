@@ -84,6 +84,8 @@ public:
   inline const QList<SgVlbiObservation*>& getObservations() const {return observations_;};
   inline QList<SgVlbiObservation*>& observations() {return observations_;};
   inline const QString& getKey() const {return key_;};
+  
+  inline const SgMJD& epoch() const {return epoch_;};
   inline const QString& getScheduleName() const {return scheduleName_;};
 
   inline double getExtrPmX_Hf() const {return extrPmX_Hf_;};

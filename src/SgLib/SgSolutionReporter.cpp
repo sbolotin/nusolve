@@ -863,43 +863,53 @@ void SgSolutionReporter::evaluateUsedErpApriori()
 {
   // feed the estimators:
   SgVlbiScan                   *scan=NULL;
+  SgMJD                         t, t_prev(tZero);
+  QList<SgVlbiScan*>            scans;
 
-  if (aprioriErpInterpolator_)
-    delete aprioriErpInterpolator_;
-  aprioriErpInterpolator_ = new SgCubicSpline(session_->scanByKey().size(), 5);
  
-  SgMJD                         t;
-  int                           idx=0;
-  for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin(); 
+  for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin();
     it!=session_->scanByKey().end(); ++it)
   {
     scan = it.value();
     if (scan->observations().size() && scan->observations().at(0))
     {
-      t = *scan->observations().at(0);
-      /*
-       * ERP contain semidiurnal variations:
-      aprioriErpInterpolator_->argument().setElement(idx, t.toDouble());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::UT1_IDX, scan->getAprioriUt1());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMX_IDX, scan->getAprioriPmX());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMY_IDX, scan->getAprioriPmY());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIX_IDX, scan->getAprioriCpX());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIY_IDX, scan->getAprioriCpY());
-      */
-      /*
-       * ERP doe not contain semidiurnal variations:
-      */
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::UT1_IDX, scan->getActlUt1_Lf());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMX_IDX, scan->getActlPmX_Lf());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::PMY_IDX, scan->getActlPmY_Lf());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIX_IDX, scan->getActlCpX_Lf());
-      aprioriErpInterpolator_->table().setElement(idx, SgExternalEopFile::CIY_IDX, scan->getActlCpY_Lf());
-    }
-    else
-      logger->write(SgLogger::ERR, SgLogger::IO_TXT | SgLogger::FLY_BY, className() +
-        "::evaluateUsedErpApriori(): the scan \"" + it.key() + 
-        "\" has no observations");
-    idx++;
+      t = scan->epoch();
+      if (t_prev < t)
+      {
+        scans.append(scan);
+      };
+      t_prev = t;
+    };
+  };
+  logger->write(SgLogger::DBG, SgLogger::IO_TXT | SgLogger::FLY_BY, className() +
+    "::evaluateUsedErpApriori(): collected  " + QString("").sprintf("%d", scans.size()) +
+    " unique scan epochs from " + QString("").sprintf("%d", session_->scanByKey().size()) + 
+    " total scans");
+
+  if (aprioriErpInterpolator_)
+    delete aprioriErpInterpolator_;
+  aprioriErpInterpolator_ = new SgCubicSpline(scans.size(), 5);
+
+  for (int i=0; i<scans.size(); i++)
+  {
+    scan = scans.at(i);
+    aprioriErpInterpolator_->argument().setElement(i, scan->epoch().toDouble());
+   /*
+    * ERP contain semidiurnal variations:
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::UT1_IDX, scan->getAprioriUt1());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::PMX_IDX, scan->getAprioriPmX());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::PMY_IDX, scan->getAprioriPmY());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::CIX_IDX, scan->getAprioriCpX());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::CIY_IDX, scan->getAprioriCpY());
+    */
+  /*
+   * ERP does not contain semidiurnal variations:
+   */
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::UT1_IDX, scan->getActlUt1_Lf());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::PMX_IDX, scan->getActlPmX_Lf());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::PMY_IDX, scan->getActlPmY_Lf());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::CIX_IDX, scan->getActlCpX_Lf());
+    aprioriErpInterpolator_->table().setElement(i, SgExternalEopFile::CIY_IDX, scan->getActlCpY_Lf());
   };
   aprioriErpInterpolator_->prepare4Spline();
 };
@@ -3197,171 +3207,160 @@ void SgSolutionReporter::reportEstimationBlock_Output4Spoolfile(QTextStream& ts)
   double                dUt1=0.0, dPmx=0.0, dPmy=0.0;
   double                rUt1=0.0, rPmx=0.0, rPmy=0.0;
   double                sigUt1=0.0, sigPmx=0.0, sigPmy=0.0;
-  double                aprUt1=0.0, aprPmx=0.0, aprPmy=0.0, dt, rate;
-  double                aprCipX=0.0, aprCipY=0.0;
+  double                aprUt1=0.0, aprPmx=0.0, aprPmy=0.0;
+  double                apoUt1=0.0, apoPmx=0.0, apoPmy=0.0;
+  double                dt, rate;
   //
   // corrections to polar motion, x:
+  rate = 0;  // reset it
   p = session_->pPolusX();
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
-    dt = p->getTMean() - erpTref_;
-std::cout << " PM x dt = " << dt << "\n";
-/*
-    aprPmx = erp_pmx_0_ + erp_pmx_1_*dt + erp_pmx_2_*dt*dt + erp_pmx_3_*dt*dt*dt;
-*/
+    dt     = p->getTMean() - session_->tRefer();
     aprPmx = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::PMX_IDX, rate);
-    rate = 0.0;
+    dPmx   = p->getSolution();
+    sigPmx = p->getSigma();
+
     if (session_->pPolusXRate() && session_->pPolusXRate()->isAttr(SgParameter::Attr_IS_SOLVED))
-      rate = session_->pPolusXRate()->getSolution()*dt;
+    {
+      rPmx = session_->pPolusXRate()->getSolution();
+      sigPmx = sqrt(sigPmx*sigPmx + p->getSigma()*p->getSigma()*dt*dt); // need to add correlation too
+    };
+    apoPmx = aprPmx + dPmx + rPmx*dt;
     str.sprintf("%5d. X Wobble  0,  %s  %12.4f masec %10.2f microasec %10.2f microasec %10.2f microasec",
-      idx,
-      qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprPmx + p->getSolution() + rate)*RAD2SEC*1.0e3,
-      p->getSolution()*RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6*chi
+      idx, qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
+      apoPmx*RAD2SEC*1.0e3,
+      dPmx  *RAD2SEC*1.0e6,
+      sigPmx*RAD2SEC*1.0e6,
+      sigPmx*RAD2SEC*1.0e6*chi
       );
     ts << str << "\n";
     idx++;
     isErpAdjusted = true;
     p4erp = p;
-    dPmx  = p->getSolution();
-    sigPmx= p->getSigma();
   };
   // corrections to polar-x motion rate:
   p = session_->pPolusXRate();
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
-    dt = p->getTMean() - erpTref_;
-std::cout << " PM x rate dt = " << dt << "\n";
+    dt = p->getTMean() - session_->tRefer();
+    rPmx  = p->getSolution();
     str.sprintf("%5d. X Wobble  1,  %s  %12.4f mas/d %10.2f microas/d %10.2f microas/d %10.2f microas/d",
-      idx,
-      qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (erp_pmx_1_ + 2.0*erp_pmx_2_*dt + 3.0*erp_pmx_3_*dt*dt + p->getSolution())*RAD2SEC*1.0e3,
-      p->getSolution()*RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6*chi
+      idx, qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
+      (rPmx + rate) *RAD2SEC*1.0e3,
+      rPmx          *RAD2SEC*1.0e6,
+      p->getSigma() *RAD2SEC*1.0e6,
+      p->getSigma() *RAD2SEC*1.0e6*chi
       );
     ts << str << "\n";
     idx++;
     isErpAdjusted = true;
-    rPmx  = p->getSolution();
     p4erp = p;
   };
   //
   // corrections to polar-y motion:
+  rate = 0;  // reset it
   p = session_->pPolusY();
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
-    dt = p->getTMean() - erpTref_;
-std::cout << " PM y dt = " << dt << "\n";
-/*
-    aprPmy = erp_pmy_0_ + erp_pmy_1_*dt + erp_pmy_2_*dt*dt + erp_pmy_3_*dt*dt*dt;
-*/
+    dt     = p->getTMean() - session_->tRefer();
     aprPmy = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::PMY_IDX, rate);
-    rate = 0.0;
+    dPmy   = p->getSolution();
+    sigPmy = p->getSigma();
+
     if (session_->pPolusYRate() && session_->pPolusYRate()->isAttr(SgParameter::Attr_IS_SOLVED))
-      rate = session_->pPolusYRate()->getSolution()*dt;
+    {
+      rPmy = session_->pPolusYRate()->getSolution();
+      sigPmy = sqrt(sigPmy*sigPmy + p->getSigma()*p->getSigma()*dt*dt); // need to add correlation too
+    };
+    apoPmy = aprPmy + dPmy + rPmy*dt;
     str.sprintf("%5d. Y Wobble  0,  %s  %12.4f masec %10.2f microasec %10.2f microasec %10.2f microasec",
-      idx,
-      qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprPmy + p->getSolution() + rate)*RAD2SEC*1.0e3,
-      p->getSolution()*RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6*chi
+      idx, qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
+      apoPmy*RAD2SEC*1.0e3,
+      dPmy  *RAD2SEC*1.0e6,
+      sigPmy*RAD2SEC*1.0e6,
+      sigPmy*RAD2SEC*1.0e6*chi
       );
     ts << str << "\n";
     idx++;
     isErpAdjusted = true;
     p4erp = p;
-    dPmy  = p->getSolution();
-    sigPmy= p->getSigma();
   };
   // corrections to polar-y motion rate:
   p = session_->pPolusYRate();
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
-    dt = p->getTMean() - erpTref_;
-std::cout << " PM y rate dt = " << dt << "\n";
+    dt = p->getTMean() - session_->tRefer();
+    rPmy  = p->getSolution();
+
     str.sprintf("%5d. Y Wobble  1,  %s  %12.4f mas/d %10.2f microas/d %10.2f microas/d %10.2f microas/d",
-      idx,
-      qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (erp_pmy_1_ + 2.0*erp_pmy_2_*dt + 3.0*erp_pmy_3_*dt*dt + p->getSolution())*RAD2SEC*1.0e3,
-      p->getSolution()*RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6,
-      p->getSigma()*   RAD2SEC*1.0e6*chi
+      idx, qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
+      (rPmy + rate) *RAD2SEC*1.0e3,
+      rPmy          *RAD2SEC*1.0e6,
+      p->getSigma() *RAD2SEC*1.0e6,
+      p->getSigma() *RAD2SEC*1.0e6*chi
       );
     ts << str << "\n";
     idx++;
     isErpAdjusted = true;
-    rPmy  = p->getSolution();
     p4erp = p;
   };
   //
   // corrections to UT1:
+  rate = 0;  // reset it
   p = session_->pUT1();
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
-    dt = p->getTMean() - erpTref_;
-std::cout << " dUT1 dt = " << dt << "\n";
-/*    
-      ut0e = externalErpInterpolator_->spline(t, SgExternalEopFile::UT1_IDX, r)/DAY2SEC;
-      px0e = externalErpInterpolator_->spline(t, SgExternalEopFile::PMX_IDX, r)/RAD2MAS;
-      py0e = externalErpInterpolator_->spline(t, SgExternalEopFile::PMY_IDX, r)/RAD2MAS;
-      cx0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIX_IDX, r)/RAD2MAS;
-      cy0e = externalErpInterpolator_->spline(t, SgExternalEopFile::CIY_IDX, r)/RAD2MAS;
-*/
+    dt     = p->getTMean() - session_->tRefer();
     aprUt1 = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::UT1_IDX, rate);
-/*
-    aprUt1 = erp_ut1_0_ + erp_ut1_1_*dt + erp_ut1_2_*dt*dt + erp_ut1_3_*dt*dt*dt;
-*/
-    rate = 0.0;
+    dUt1   = p->getSolution();
+    sigUt1 = p->getSigma();
+    
     if (session_->pUT1Rate() && session_->pUT1Rate()->isAttr(SgParameter::Attr_IS_SOLVED))
-      rate = session_->pUT1Rate()->getSolution()*dt;
+    {
+      rUt1 = session_->pUT1Rate()->getSolution();
+      sigUt1 = sqrt(sigUt1*sigUt1 + p->getSigma()*p->getSigma()*dt*dt); // need to add correlation too
+    };
+    apoUt1 = aprUt1 + dUt1 + rUt1*dt;
+
     str.sprintf("%5d. UT1-TAI   0,  %s  %12.4f  msec %10.2f microsec %11.2f microsec %11.2f microsec",
-      idx,
-      qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprUt1 + p->getSolution() + rate)*DAY2SEC*1.0e3,
-      p->getSolution()*DAY2SEC*1.0e6,
-      p->getSigma()*   DAY2SEC*1.0e6,
-      p->getSigma()*   DAY2SEC*1.0e6*chi);
+      idx, qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
+      apoUt1*DAY2SEC*1.0e3,
+      dUt1  *DAY2SEC*1.0e6,
+      sigUt1*DAY2SEC*1.0e6,
+      sigUt1*DAY2SEC*1.0e6*chi);
     ts << str << "\n";
     idx++;
     isErpAdjusted = true;
     p4erp = p;
-    dUt1  = p->getSolution();
-    sigUt1= p->getSigma();
     //
-    dUt1Value_ = aprUt1 + p->getSolution() + rate;
-    dUt1Correction_ = p->getSolution();
-    dUt1StdDev_ = p->getSigma();
+    dUt1Value_      = apoUt1;
+    dUt1Correction_ = dUt1;
+    dUt1StdDev_     = sigUt1;
     //
   };
   // corrections to UT1 rate:
   p = session_->pUT1Rate();
   if (p && p->isAttr(SgParameter::Attr_IS_SOLVED))
   {
-    dt = p->getTMean() - erpTref_;
-std::cout << " dUT1 rate dt = " << dt << "\n";
+    dt    = p->getTMean() - session_->tRefer();
+    rUt1  = p->getSolution();
     // progs/solve/adjst/a2jst_segeop.f ?
     str.sprintf("%5d. UT1-TAI   1,  %s  %12.4f  ms/d %10.2f micros/d %11.2f micros/d %11.2f micros/d",
-      idx,
-      qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (erp_ut1_1_ + 2.0*erp_ut1_2_*dt + 3.0*erp_ut1_3_*dt*dt + p->getSolution())*DAY2SEC*1.0e3,
-      p->getSolution()*DAY2SEC*1.0e6,
-      p->getSigma()*   DAY2SEC*1.0e6,
-      p->getSigma()*   DAY2SEC*1.0e6*chi
+      idx, qPrintable(p->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
+      (rUt1 + rate) *DAY2SEC*1.0e3,
+      rUt1          *DAY2SEC*1.0e6,
+      p->getSigma() *DAY2SEC*1.0e6,
+      p->getSigma() *DAY2SEC*1.0e6*chi
       );
     ts << str << "\n";
     idx++;
     isErpAdjusted = true;
-    rUt1  = p->getSolution();
     p4erp = p;
   };
   if (isErpAdjusted && p4erp)
   {
-    dt = p4erp->getTMean() - erpTref_;
-std::cout << " ERP dt = " << dt << "\n";
+    dt = p4erp->getTMean() - session_->tRefer();
     ts 
 //    << " EOP with included hi-freq variations  (a-sigmas)  \n"
       << " EOP without included hi-freq variations  (a-sigmas)  \n"
@@ -3369,12 +3368,11 @@ std::cout << " ERP dt = " << dt << "\n";
       << "          XSIG         YSIG         USIG\n"
       << "                       mas           mas            ms   "
       << "        microasec    microasec    microsec\n";
-//  str.sprintf("%s        0.0000         0.0000         0.0000          0.00         0.00         0.00",
     str.sprintf("%s  %12.4f   %12.4f   %12.4f   %11.2f  %11.2f  %11.2f",
       qPrintable(p4erp->getTMean().toString(SgMJD::F_SOLVE_SPLFL_SHORT)),
-      (aprPmx + rPmx*dt + dPmx)*RAD2SEC*1.0e3,
-      (aprPmy + rPmy*dt + dPmy)*RAD2SEC*1.0e3,
-      (aprUt1 + rUt1*dt + dUt1)*DAY2SEC*1.0e3,
+      apoPmx*RAD2SEC*1.0e3,
+      apoPmy*RAD2SEC*1.0e3,
+      apoUt1*DAY2SEC*1.0e3,
       sigPmx*RAD2SEC*1.0e6,
       sigPmy*RAD2SEC*1.0e6,
       sigUt1*DAY2SEC*1.0e6);
@@ -3387,14 +3385,16 @@ std::cout << " ERP dt = " << dt << "\n";
       session_->pNutY() && session_->pNutY()->isAttr(SgParameter::Attr_IS_SOLVED)  )
   {  
     p = session_->pNutX();
-    SgMJD                         epoch(p->getTMean());
+    double                      aprCipX=0.0, aprCipY=0.0;
+    SgMJD                       epoch(p->getTMean());
+
     // conver UTC to TT, cheap'n'angry:
     epoch += (session_->getLeapSeconds() + 32.184)/DAY2SEC;
     //
-    dt = p->getTMean() - erpTref_;
-std::cout << " Cip dt = " << dt << "\n";
-    aprCipX     = eop_cix_0_ + eop_cix_1_*dt + eop_cix_2_*dt*dt + eop_cix_3_*dt*dt*dt;
-    aprCipY     = eop_ciy_0_ + eop_ciy_1_*dt + eop_ciy_2_*dt*dt + eop_ciy_3_*dt*dt*dt;
+    dt = p->getTMean() - session_->tRefer();
+
+    aprCipX = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::CIX_IDX);
+    aprCipY = aprioriErpInterpolator_->spline(p->getTMean().toDouble(), SgExternalEopFile::CIY_IDX);
     //
     double                        dX, dY, dPsi, dEps;
     double                        dX_sigma, dY_sigma, dPsi_sigma, dEps_sigma;
@@ -3490,7 +3490,7 @@ std::cout << " Cip dt = " << dt << "\n";
   };//---------------------------------------------------------------------------------------------------
   
   // Baselines, clocks:
-  if (  parametersDescriptor_->getBlClockMode() != SgParameterCfg::PM_NONE)
+  if (parametersDescriptor_->getBlClockMode() != SgParameterCfg::PM_NONE)
   {
     ts << "\n";
     BaselinesByName_it            it_bl;

@@ -54,10 +54,10 @@ void SgCubicSpline::prepare4Spline()
       if (f >= argument_.getElement(i))
       {
         logger->write(SgLogger::ERR, SgLogger::INTERP, className() + 
-          ": the argument [" + QString().setNum(i) + "] has a wrong order, the table is skipped");
+          "::prepare4Spline(): the argument [" + QString().setNum(i) + "] has a wrong order, the table is skipped");
         for (int k=0; k<numOfRecords_; k++)
           logger->write(SgLogger::ERR, SgLogger::INTERP, className() + 
-            QString().sprintf(": [%04d] = %.6f", k, argument_.getElement(k)));
+            "::prepare4Spline(): " + QString().sprintf("[%04d] = %.6f", k, argument_.getElement(k)));
         return;
       };
       f = argument_.getElement(i);
@@ -105,6 +105,43 @@ void SgCubicSpline::solveSpline(int nCol)
     coeffs_(i, nCol) = aleph.getElement(i+1)*coeffs_.getElement(i+1, nCol) + beth.getElement(i+1);
 
   coeffs_(0, nCol) = 0.0;
+};
+
+
+
+//
+double SgCubicSpline::spline(double arg, int nColumn)
+{
+  double                        d=0.0;
+  if (!isOk_)
+    return d;
+    
+  // get the idx:
+  int                           nIdx=0;
+  if (arg <= argument_.getElement(1))
+    nIdx = 1;
+  else if (argument_.getElement(numOfRecords_-1) <= arg)
+    nIdx = numOfRecords_ - 1;
+  else
+  {
+    int                         i=2;
+    while (i<numOfRecords_ && argument_.getElement(i-1) <= arg) 
+      i++;
+    nIdx = i - 1;
+  };
+  
+  double                        f1, f2, h2;
+  
+  f1 = argument_.getElement(nIdx) - arg; 
+  f2 = arg - argument_.getElement(nIdx-1);
+  h2 = h(nIdx)*h(nIdx);
+  
+  d = ( coeffs_.getElement(nIdx-1, nColumn)*f1*f1*f1/6.0 + 
+        coeffs_.getElement(nIdx,   nColumn)*f2*f2*f2/6.0 +
+        (table_.getElement(nIdx-1, nColumn) - coeffs_.getElement(nIdx-1, nColumn)*h2/6.0)*f1 +
+        (table_.getElement(nIdx,   nColumn) - coeffs_.getElement(nIdx,   nColumn)*h2/6.0)*f2)/h(nIdx);
+       
+  return d;
 };
 
 

@@ -585,7 +585,7 @@ void SgSolutionReporter::synchronizeInfo()
 };
 
 
-
+#ifdef UNDEFINED
 //
 void SgSolutionReporter::evaluateUsedErpApriori_old()
 {
@@ -855,7 +855,7 @@ void SgSolutionReporter::evaluateUsedErpApriori_old()
   delete est_cx;
   delete est_cy;
 };
-
+#endif
 
 
 //

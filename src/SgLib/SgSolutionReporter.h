@@ -196,7 +196,7 @@ private:
   void freeResources();
   void synchronizeInfo();
   void evaluateUsedErpApriori();
-  void evaluateUsedErpApriori_old();
+  //void evaluateUsedErpApriori_old();
   void lookupParameter(SgParameter*);
   void calculateConditionNumber();
 

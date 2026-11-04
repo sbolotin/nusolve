@@ -3965,19 +3965,22 @@ bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileN
   if (p && arcByName_.contains(p->getName()) && (arcPx=arcByName_.find(p->getName()).value()))
     for (int i=0; i<arcPx->getNum(); i++)
       if ((p=arcPx->getPi(i)))
-        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+        parsByEpoch[p->getTLeft().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+//      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
 
   p = session_->pPolusY();
   if (p && arcByName_.contains(p->getName()) && (arcPy=arcByName_.find(p->getName()).value()))
     for (int i=0; i<arcPy->getNum(); i++)
       if ((p=arcPy->getPi(i)))
-        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+        parsByEpoch[p->getTLeft().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+//      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
 
   p = session_->pUT1();
   if (p && arcByName_.contains(p->getName()) && (arcUt1=arcByName_.find(p->getName()).value()))
     for (int i=0; i<arcUt1->getNum(); i++)
       if ((p=arcUt1->getPi(i)))
-        parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+        parsByEpoch[p->getTLeft().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+//      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
 
   if (parsByEpoch.size())
     ts  << "#    ARC parameters\n#\n#  Weighted mean epoch       dPx, mas       sPx, mas          "
@@ -3985,9 +3988,42 @@ bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileN
   for (QMap<QString, QList<SgParameter*> >::iterator it=parsByEpoch.begin(); it!=parsByEpoch.end(); ++it)
   {
     QList<SgParameter*>        &pList=it.value();
-    SgParameter                *p=pList.at(0);
-    SgMJD                       t=p->getTMean();
+    SgParameter                *pPx, *pPy, *pUt1;
+//  SgMJD                       t=p->getTMean();
+    SgMJD                       t=p->getTLeft();
     
+    double                      stepPx, stepPy, stepUt;
+    stepPx = stepPy = stepUt = 0.0;
+    dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
+    pPx = pPy = pUt1 = NULL;
+    
+    for (int i=0; i<pList.size(); i++)
+    {
+      if (pList.at(i)->getName() == session_->pPolusX()->getName())
+      {
+        pPx = pList.at(i);
+        stepPx = pPx->getStep();
+        dPx = arcPx->calcSolution(t)*RAD2MAS;
+        sPx = arcPx->calcSigma(t)*RAD2MAS;
+      }
+      else if (pList.at(i)->getName() == session_->pPolusY()->getName())
+      {
+        pPy = pList.at(i);
+        stepPy = pPy->getStep();
+        dPy = arcPy->calcSolution(t)*RAD2MAS;
+        sPy = arcPy->calcSigma(t)*RAD2MAS;
+      }
+      else if (pList.at(i)->getName() == session_->pUT1()->getName())
+      {
+        pUt1 = pList.at(i);
+        stepUt = pUt1->getStep();
+        dUt1 = arcUt1->calcSolution(t)*DAY2SEC*1000.0;
+        sUt1 = arcUt1->calcSigma(t)*DAY2SEC*1000.0;
+      };
+    };
+    
+  
+  /*  
     dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
    
     if (arcPx)
@@ -4005,7 +4041,7 @@ bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileN
       dUt1 = arcUt1->calcSolution(t)*DAY2SEC*1000.0;
       sUt1 = arcUt1->calcSigma(t)*DAY2SEC*1000.0;
     };
-  
+*/  
     str.sprintf(" %s  %14.6f %14.6f    %14.6f %14.8f    %14.6f %14.6f",
       qPrintable(p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
       dPx, sPx,      dPy, sPy,      dUt1, sUt1);

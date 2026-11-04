@@ -83,6 +83,8 @@ public:
 
   inline SgParameter*   getPOrig();
 
+  inline double getStep() const {return step_;};
+  
   //
   // Functions:
   //

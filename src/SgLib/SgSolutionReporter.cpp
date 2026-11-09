@@ -1062,8 +1062,9 @@ void SgSolutionReporter::report2spoolFile(const QString& path, const QString& pa
     erpTref_ = session_->pUT1Rate()->getTMean();
     hasEop = true;
   };
-  if (hasEop)  
+//  if (hasEop)  
     evaluateUsedErpApriori();
+
 
   //
   //
@@ -3940,17 +3941,30 @@ bool SgSolutionReporter::reportPall(const QString& path, const QString& fileName
 
 
 //
-bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileName)
+bool SgSolutionReporter::reportErpsArc_v2(const QString& path, const QString& fileName)
 {
   QString                       str("");
   QFile                         f(path + "/" + fileName);
   QMap< QString, QList<SgParameter*> >
                                 parsByEpoch;
 
+  if (!aprioriErpInterpolator_)
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErpsArc(): the a priori ERP interpolator is NULL");
+    return false;
+  };
+  if (!aprioriErpInterpolator_->isOk())
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErpsArc(): the a priori ERP interpolator is not Ok");
+    return false;
+  };
+  
   if (!f.open(QIODevice::WriteOnly))
   {
     logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
-      "::reportErps(): error opening output file: " + path + "/" + fileName);
+      "::reportErpsArc(): error opening output file: " + path + "/" + fileName);
     return false;
   };
   QTextStream                   ts(&f);
@@ -3983,8 +3997,17 @@ bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileN
 //      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
 
   if (parsByEpoch.size())
-    ts  << "#    ARC parameters\n#\n#  Weighted mean epoch       dPx, mas       sPx, mas          "
-        << "dPy, mas       sPy, mas           dUT1, ms       sUT1, ms\n#\n";
+    ts  << "#     ARC parameters\n"
+        << "#     Weighted mean       Nominal central      Step    Polar motion, x-coord        "
+        << "Polar motion, y-coord             Weighted mean       Nominal central     "
+        << "Step              dUT1\n#         epoch                 epoch          (hrs)     Value   "
+        << "adjust  std.var      Value   adjust  std.var             epoch                 epoch"
+        << "         (hrs)     Value   adjust  std.var\n#                                          "
+        << "              (mas)    (muas) (muas)       (mas)    (muas) (muas)                       "
+        <<"                                      (ms)        (microsec)\n";
+
+  QString                       strPx(""), strPy(""), strUt("");
+
   for (QMap<QString, QList<SgParameter*> >::iterator it=parsByEpoch.begin(); it!=parsByEpoch.end(); ++it)
   {
     QList<SgParameter*>        &pList=it.value();
@@ -3997,55 +4020,206 @@ bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileN
     dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
     pPx = pPy = pUt1 = NULL;
     
+    strPx = "0000/00/00 00:00:00.0 0000/00/00 00:00:00.0   0.00      0.0000     0.00   0.00";
+    strPy = "     0.0000     0.00   0.00";
+    strUt = "0000/00/00 00:00:00.0 0000/00/00 00:00:00.0   0.00       0.0000     0.00   0.00";
+    
     for (int i=0; i<pList.size(); i++)
     {
-      if (pList.at(i)->getName() == session_->pPolusX()->getName())
+      if (pList.at(i)->getName().contains(session_->pPolusX()->getName()))
       {
         pPx = pList.at(i);
         stepPx = pPx->getStep();
-        dPx = arcPx->calcSolution(t)*RAD2MAS;
-        sPx = arcPx->calcSigma(t)*RAD2MAS;
+        t = pPx->getTLeft() + stepPx/2.0;
+        dPx = arcPx->calcSolution(t);
+        sPx = arcPx->calcSigma(t);
+        strPx.sprintf("%s %s  %5.2f  %10.4f  %7.2f %6.2f",
+          qPrintable(pPx->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepPx*24.0,
+          (aprioriErpInterpolator_->spline(pPx->getTMean().toDouble(), SgExternalEopFile::PMX_IDX) + dPx)*RAD2MAS,
+          dPx*RAD2MAS*1.0e3, sPx*RAD2MAS*1.0e3);
       }
-      else if (pList.at(i)->getName() == session_->pPolusY()->getName())
+      else if (pList.at(i)->getName().contains(session_->pPolusY()->getName()))
       {
         pPy = pList.at(i);
         stepPy = pPy->getStep();
-        dPy = arcPy->calcSolution(t)*RAD2MAS;
-        sPy = arcPy->calcSigma(t)*RAD2MAS;
+        t = pPy->getTLeft() + stepPy/2.0;
+        dPy = arcPy->calcSolution(t);
+        sPy = arcPy->calcSigma(t);
+        strPy.sprintf(" %10.4f  %7.2f %6.2f", 
+//          qPrintable(pPy->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+//          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepPy*24.0,
+          (aprioriErpInterpolator_->spline(pPy->getTMean().toDouble(), SgExternalEopFile::PMY_IDX) + dPy)*RAD2MAS,
+          dPy*RAD2MAS*1.0e3, sPy*RAD2MAS*1.0e3);
+//        strPy.sprintf("%s %s  %5.2f  %10.4f  %7.2f %6.2f", 
+//          qPrintable(pPy->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+//          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepPy*24.0,
+//          (aprioriErpInterpolator_->spline(pPy->getTMean().toDouble(), SgExternalEopFile::PMY_IDX) + dPy)*RAD2MAS,
+//          dPy*RAD2MAS*1.0e3, sPy*RAD2MAS*1.0e3);
       }
-      else if (pList.at(i)->getName() == session_->pUT1()->getName())
+      else if (pList.at(i)->getName().contains(session_->pUT1()->getName()))
       {
         pUt1 = pList.at(i);
         stepUt = pUt1->getStep();
-        dUt1 = arcUt1->calcSolution(t)*DAY2SEC*1000.0;
-        sUt1 = arcUt1->calcSigma(t)*DAY2SEC*1000.0;
+        t = pUt1->getTLeft() + stepUt/2.0;
+        dUt1 = arcUt1->calcSolution(t);
+        sUt1 = arcUt1->calcSigma(t);
+        strUt.sprintf("%s %s  %5.2f  %11.4f  %7.2f %6.2f", 
+          qPrintable(pUt1->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepUt*24.0,
+          (aprioriErpInterpolator_->spline(pUt1->getTMean().toDouble(), SgExternalEopFile::UT1_IDX) + dUt1)*DAY2SEC*1.0e3,
+          dUt1*DAY2SEC*1.0e6, sUt1*DAY2SEC*1.0e6);
       };
     };
-    
-  
-  /*  
-    dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
-   
-    if (arcPx)
-    {
-      dPx = arcPx->calcSolution(t)*RAD2MAS;
-      sPx = arcPx->calcSigma(t)*RAD2MAS;
-    };
-    if (arcPy)
-    {
-      dPy = arcPy->calcSolution(t)*RAD2MAS;
-      sPy = arcPy->calcSigma(t)*RAD2MAS;
-    };
-    if (arcUt1)
-    {
-      dUt1 = arcUt1->calcSolution(t)*DAY2SEC*1000.0;
-      sUt1 = arcUt1->calcSigma(t)*DAY2SEC*1000.0;
-    };
-*/  
-    str.sprintf(" %s  %14.6f %14.6f    %14.6f %14.8f    %14.6f %14.6f",
-      qPrintable(p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
-      dPx, sPx,      dPy, sPy,      dUt1, sUt1);
 
+    str.sprintf(" %s  %s  |  %s",
+      qPrintable(strPx), qPrintable(strPy), qPrintable(strUt));
+    
+    ts << str << "\n";
+  };
+  // close the file:
+  ts.setDevice(NULL);
+  f.close();
+  return true;
+};
+
+
+
+//
+bool SgSolutionReporter::reportErpsArc(const QString& path, const QString& fileName)
+{
+  QString                       str("");
+  QFile                         f(path + "/" + fileName);
+  QMap< QString, QList<SgParameter*> >
+                                parsByEpoch;
+
+  if (!aprioriErpInterpolator_)
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErpsArc(): the a priori ERP interpolator is NULL");
+    return false;
+  };
+  if (!aprioriErpInterpolator_->isOk())
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErpsArc(): the a priori ERP interpolator is not Ok");
+    return false;
+  };
+  
+  if (!f.open(QIODevice::WriteOnly))
+  {
+    logger->write(SgLogger::ERR, SgLogger::REPORT, className() +
+      "::reportErpsArc(): error opening output file: " + path + "/" + fileName);
+    return false;
+  };
+  QTextStream                   ts(&f);
+
+  SgParameter                  *p;
+  SgArcStorage                 *arcPx, *arcPy, *arcUt1;
+  double                        dPx, dPy, dUt1, sPx, sPy, sUt1;
+
+  arcPx = arcPy = arcUt1 = NULL;
+
+  p = session_->pPolusX();
+  if (p && arcByName_.contains(p->getName()) && (arcPx=arcByName_.find(p->getName()).value()))
+    for (int i=0; i<arcPx->getNum(); i++)
+      if ((p=arcPx->getPi(i)))
+        parsByEpoch[p->getTLeft().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+//      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  p = session_->pPolusY();
+  if (p && arcByName_.contains(p->getName()) && (arcPy=arcByName_.find(p->getName()).value()))
+    for (int i=0; i<arcPy->getNum(); i++)
+      if ((p=arcPy->getPi(i)))
+        parsByEpoch[p->getTLeft().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+//      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  p = session_->pUT1();
+  if (p && arcByName_.contains(p->getName()) && (arcUt1=arcByName_.find(p->getName()).value()))
+    for (int i=0; i<arcUt1->getNum(); i++)
+      if ((p=arcUt1->getPi(i)))
+        parsByEpoch[p->getTLeft().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+//      parsByEpoch[p->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)].append(p);
+
+  if (parsByEpoch.size())
+    ts  << "#     ARC parameters\n"
+        << "#     Weighted mean       Nominal central      Step    Polar motion, x-coord        "
+        << "Polar motion, y-coord             Weighted mean       Nominal central     "
+        << "Step              dUT1\n#         epoch                 epoch          (hrs)     Value   "
+        << "adjust  std.var      Value   adjust  std.var             epoch                 epoch"
+        << "         (hrs)     Value   adjust  std.var\n#                                          "
+        << "              (mas)    (muas) (muas)       (mas)    (muas) (muas)                       "
+        <<"                                      (ms)        (microsec)\n";
+
+  QString                       strPx(""), strPy(""), strUt("");
+
+  for (QMap<QString, QList<SgParameter*> >::iterator it=parsByEpoch.begin(); it!=parsByEpoch.end(); ++it)
+  {
+    QList<SgParameter*>        &pList=it.value();
+    SgParameter                *pPx, *pPy, *pUt1;
+//  SgMJD                       t=p->getTMean();
+    SgMJD                       t=p->getTLeft();
+    
+    double                      stepPx, stepPy, stepUt;
+    stepPx = stepPy = stepUt = 0.0;
+    dPx = dPy = dUt1 = sPx = sPy = sUt1 = 0.0;
+    pPx = pPy = pUt1 = NULL;
+    
+    strPx = "0000/00/00 00:00:00.0 0000/00/00 00:00:00.0   0.00      0.0000     0.00   0.00";
+    strPy = "     0.0000     0.00   0.00";
+    strUt = "0000/00/00 00:00:00.0 0000/00/00 00:00:00.0   0.00       0.0000     0.00   0.00";
+    
+    for (int i=0; i<pList.size(); i++)
+    {
+      if (pList.at(i)->getName().contains(session_->pPolusX()->getName()))
+      {
+        pPx = pList.at(i);
+        stepPx = pPx->getStep();
+        t = pPx->getTLeft() + stepPx/2.0;
+        dPx = arcPx->calcSolution(t);
+        sPx = arcPx->calcSigma(t);
+        strPx.sprintf("%s %s  %5.2f  %10.4f  %7.2f %6.2f",
+          qPrintable(pPx->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepPx*24.0,
+          (aprioriErpInterpolator_->spline(pPx->getTMean().toDouble(), SgExternalEopFile::PMX_IDX) + dPx)*RAD2MAS,
+          dPx*RAD2MAS*1.0e3, sPx*RAD2MAS*1.0e3);
+      }
+      else if (pList.at(i)->getName().contains(session_->pPolusY()->getName()))
+      {
+        pPy = pList.at(i);
+        stepPy = pPy->getStep();
+        t = pPy->getTLeft() + stepPy/2.0;
+        dPy = arcPy->calcSolution(t);
+        sPy = arcPy->calcSigma(t);
+        strPy.sprintf(" %10.4f  %7.2f %6.2f", 
+//          qPrintable(pPy->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+//          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepPy*24.0,
+          (aprioriErpInterpolator_->spline(pPy->getTMean().toDouble(), SgExternalEopFile::PMY_IDX) + dPy)*RAD2MAS,
+          dPy*RAD2MAS*1.0e3, sPy*RAD2MAS*1.0e3);
+//        strPy.sprintf("%s %s  %5.2f  %10.4f  %7.2f %6.2f", 
+//          qPrintable(pPy->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+//          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepPy*24.0,
+//          (aprioriErpInterpolator_->spline(pPy->getTMean().toDouble(), SgExternalEopFile::PMY_IDX) + dPy)*RAD2MAS,
+//          dPy*RAD2MAS*1.0e3, sPy*RAD2MAS*1.0e3);
+      }
+      else if (pList.at(i)->getName().contains(session_->pUT1()->getName()))
+      {
+        pUt1 = pList.at(i);
+        stepUt = pUt1->getStep();
+        t = pUt1->getTLeft() + stepUt/2.0;
+        dUt1 = arcUt1->calcSolution(t);
+        sUt1 = arcUt1->calcSigma(t);
+        strUt.sprintf("%s %s  %5.2f  %11.4f  %7.2f %6.2f", 
+          qPrintable(pUt1->getTMean().toString(SgMJD::F_YYYYMMDDHHMMSSSS)), 
+          qPrintable(t.toString(SgMJD::F_YYYYMMDDHHMMSSSS)), stepUt*24.0,
+          (aprioriErpInterpolator_->spline(pUt1->getTMean().toDouble(), SgExternalEopFile::UT1_IDX) + dUt1)*DAY2SEC*1.0e3,
+          dUt1*DAY2SEC*1.0e6, sUt1*DAY2SEC*1.0e6);
+      };
+    };
+
+    str.sprintf(" %s  %s  |  %s",
+      qPrintable(strPx), qPrintable(strPy), qPrintable(strUt));
+    
     ts << str << "\n";
   };
   // close the file:

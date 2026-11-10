@@ -1897,18 +1897,15 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
   SgMJD                         t(tZero);
 
   plotCarrier4Session_->createBranch(numOfScans, "ERP: HF external model");
-  SgPlotBranch                  *branch=plotCarrier4Session_->listOfBranches()->last();
+  SgPlotBranch                  *branchExt=plotCarrier4Session_->listOfBranches()->last();
   plotCarrier4Session_->createBranch(numOfScans, "ERP: HF CALC");
-  SgPlotBranch                  *branchC=plotCarrier4Session_->listOfBranches()->last();
-  plotCarrier4Session_->createBranch(numOfScans, "ERP: estimation ARC");
-  SgPlotBranch                  *branchA=plotCarrier4Session_->listOfBranches()->last();
-  plotCarrier4Session_->createBranch(numOfScans, "ERP: estimation PWL");
-  SgPlotBranch                  *branchP=plotCarrier4Session_->listOfBranches()->last();
-  plotCarrier4Session_->createBranch(numOfScans, "ERP: estimation stochastic");
-  SgPlotBranch                  *branchS=plotCarrier4Session_->listOfBranches()->last();
-
+  SgPlotBranch                  *branchCalc=plotCarrier4Session_->listOfBranches()->last();
+  plotCarrier4Session_->createBranch(numOfScans, "ERP: estimation");
+  SgPlotBranch                  *branchEst=plotCarrier4Session_->listOfBranches()->last();
   plotCarrier4Session_->createBranch(numOfScans, "ERP: a priori");
-  SgPlotBranch                  *branchI=plotCarrier4Session_->listOfBranches()->last();
+  SgPlotBranch                  *branchApri=plotCarrier4Session_->listOfBranches()->last();
+  plotCarrier4Session_->createBranch(numOfScans, "ERP: a posteriori");
+  SgPlotBranch                  *branchApost=plotCarrier4Session_->listOfBranches()->last();
 
   t = tZero;
   idx = 0;
@@ -1921,31 +1918,31 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
     {
       t = scan->observations().at(0)->getMJD();
     
-      branch->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
-      branch->data()->setElement(idx, SNI_EST_UT1, scan->getExtrUt1_Hf()*DAY2SEC*1.0e3);
-      branch->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branch->data()->setElement(idx, SNI_EST_PMX, scan->getExtrPmX_Hf()*RAD2MAS);
-      branch->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branch->data()->setElement(idx, SNI_EST_PMY, scan->getExtrPmY_Hf()*RAD2MAS);
-      branch->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+      branchExt->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchExt->data()->setElement(idx, SNI_EST_UT1, scan->getExtrUt1_Hf()*DAY2SEC*1.0e3);
+      branchExt->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchExt->data()->setElement(idx, SNI_EST_PMX, scan->getExtrPmX_Hf()*RAD2MAS);
+      branchExt->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchExt->data()->setElement(idx, SNI_EST_PMY, scan->getExtrPmY_Hf()*RAD2MAS);
+      branchExt->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
-      branchC->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
-      branchC->data()->setElement(idx, SNI_EST_UT1, scan->getIntrUt1_Hf()*DAY2SEC*1.0e3);
-      branchC->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchC->data()->setElement(idx, SNI_EST_PMX, scan->getIntrPmX_Hf()*RAD2MAS);
-      branchC->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchC->data()->setElement(idx, SNI_EST_PMY, scan->getIntrPmY_Hf()*RAD2MAS);
-      branchC->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+      branchCalc->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchCalc->data()->setElement(idx, SNI_EST_UT1, scan->getIntrUt1_Hf()*DAY2SEC*1.0e3);
+      branchCalc->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchCalc->data()->setElement(idx, SNI_EST_PMX, scan->getIntrPmX_Hf()*RAD2MAS);
+      branchCalc->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchCalc->data()->setElement(idx, SNI_EST_PMY, scan->getIntrPmY_Hf()*RAD2MAS);
+      branchCalc->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
-      branchA->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
-      branchA->data()->setElement(idx, SNI_EST_UT1, 0.0);
-      branchA->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchA->data()->setElement(idx, SNI_EST_PMX, 0.0);
-      branchA->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchA->data()->setElement(idx, SNI_EST_PMY, 0.0);
-      branchA->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-      branchA->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
-
+      branchEst->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchEst->data()->setElement(idx, SNI_EST_UT1, 0.0);
+      branchEst->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchEst->data()->setElement(idx, SNI_EST_PMX, 0.0);
+      branchEst->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchEst->data()->setElement(idx, SNI_EST_PMY, 0.0);
+      branchEst->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+      branchEst->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+/*
       branchP->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
       branchP->data()->setElement(idx, SNI_EST_UT1, 0.0);
       branchP->data()->setElement(idx, SNI_SIG_UT1, 0.0);
@@ -1963,96 +1960,27 @@ QWidget* NsSessionEditDialog::tab4SessionPlot()
       branchS->data()->setElement(idx, SNI_EST_PMY, 0.0);
       branchS->data()->setElement(idx, SNI_SIG_PMY, 0.0);
       branchS->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
-      
-      branchI->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
-      branchI->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*DAY2SEC*1.0e3);
-      branchI->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchI->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*RAD2MAS);
-      branchI->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchI->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*RAD2MAS);
-      branchI->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+*/
+      branchApri->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchApri->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*DAY2SEC*1.0e3);
+      branchApri->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchApri->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*RAD2MAS);
+      branchApri->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchApri->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*RAD2MAS);
+      branchApri->data()->setElement(idx, SNI_SIG_PMY, 0.0);
+
+      branchApost->data()->setElement(idx, SNI_EPOCH,   t.toDouble());
+      branchApost->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*DAY2SEC*1.0e3);
+      branchApost->data()->setElement(idx, SNI_SIG_UT1, 0.0);
+      branchApost->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*RAD2MAS);
+      branchApost->data()->setElement(idx, SNI_SIG_PMX, 0.0);
+      branchApost->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*RAD2MAS);
+      branchApost->data()->setElement(idx, SNI_SIG_PMY, 0.0);
 
       idx++;
     };
   };
 
-/*
-  for (int i=0; i<session_->observations().size(); i++)
-    if (t != session_->observations().at(i)->getMJD())
-    {
-      double                    dPx, dPy;
-      double                    contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy;
-      dPx = dPy = 0.0;
-      contribDel = contribRat = dDel_dPx = dDel_dPy = dRat_dPx = dRat_dPy = 0.0;
-      //
-      SgVlbiObservation        *obs=session_->observations().at(i);
-      t = session_->observations().at(i)->getMJD();
-      branch->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
-      
-      branch->data()->setElement(idx, SNI_EST_UT1, obs->getAprioriUt1HfContrib()*DAY2SEC*1.0e3);
-      branch->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branch->data()->setElement(idx, SNI_EST_PMX, obs->getAprioriPxHfContrib()*RAD2MAS);
-      branch->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branch->data()->setElement(idx, SNI_EST_PMY, obs->getAprioriPyHfContrib()*RAD2MAS);
-      branch->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-
-      // CALC's values:
-      contribDel  = obs->getCalcHiFyPxyDelay();
-      contribRat  = obs->getCalcHiFyPxyRate();
-      dDel_dPx    = obs->getDdel_dPx();
-      dDel_dPy    = obs->getDdel_dPy();
-      dRat_dPx    = obs->getDrat_dPx();
-      dRat_dPy    = obs->getDrat_dPy();
-      dPy = (contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx);
-      dPx = (contribDel - dPy*dDel_dPy)/dDel_dPx;
-
-      branchC->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
-
-      branchC->data()->setElement(idx, SNI_EST_UT1, obs->getCalcHiFyUt1Delay()/obs->getDdel_dUT1() *DAY2SEC*1.0e3);
-      branchC->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchC->data()->setElement(idx, SNI_EST_PMX, dPx*RAD2MAS);
-      branchC->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchC->data()->setElement(idx, SNI_EST_PMY, dPy*RAD2MAS);
-      branchC->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-
-      branchA->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
-      branchA->data()->setElement(idx, SNI_EST_UT1, 0.0);
-      branchA->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchA->data()->setElement(idx, SNI_EST_PMX, 0.0);
-      branchA->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchA->data()->setElement(idx, SNI_EST_PMY, 0.0);
-      branchA->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-      branchA->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
-
-      branchP->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
-      branchP->data()->setElement(idx, SNI_EST_UT1, 0.0);
-      branchP->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchP->data()->setElement(idx, SNI_EST_PMX, 0.0);
-      branchP->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchP->data()->setElement(idx, SNI_EST_PMY, 0.0);
-      branchP->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-      branchP->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
-
-      branchS->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
-      branchS->data()->setElement(idx, SNI_EST_UT1, 0.0);
-      branchS->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchS->data()->setElement(idx, SNI_EST_PMX, 0.0);
-      branchS->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchS->data()->setElement(idx, SNI_EST_PMY, 0.0);
-      branchS->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-      branchS->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
-
-      branchI->data()->setElement(idx, SNI_EPOCH,   obs->toDouble());
-      branchI->data()->setElement(idx, SNI_EST_UT1, obs->aPrioriUt1()*DAY2SEC*1.0e3);
-      branchI->data()->setElement(idx, SNI_SIG_UT1, 0.0);
-      branchI->data()->setElement(idx, SNI_EST_PMX, obs->aPrioriPx()*RAD2MAS);
-      branchI->data()->setElement(idx, SNI_SIG_PMX, 0.0);
-      branchI->data()->setElement(idx, SNI_EST_PMY, obs->aPrioriPy()*RAD2MAS);
-      branchI->data()->setElement(idx, SNI_SIG_PMY, 0.0);
-
-      idx++;
-    };
-*/
 
   // widgets:
   plot4Session_ = new SgPlot(plotCarrier4Session_, setup.path2(setup.getPath2PlotterOutput()), w);
@@ -2416,13 +2344,13 @@ void NsSessionEditDialog::updateSessionWideSolutions()
   const double                  scale4Ut1(parametersDescriptor_->getPolusUT1().getScale());
   const double                  scale4Pm(parametersDescriptor_->getPolusXY().getScale());
   bool                          isTmp;
+  double 												dPmx, dPmy, dUt1, sPmx, sPmy, sUt1, vPmx, vPmy, vUt1;
 
-  SgPlotBranch                 *brArc=carrier->listOfBranches()->at(2);
-  SgPlotBranch                 *brPwl=carrier->listOfBranches()->at(3);
-  SgPlotBranch                 *brStc=carrier->listOfBranches()->at(4);
-  SgPlotBranch                 *brApr=carrier->listOfBranches()->at(5);
+  SgPlotBranch                 *brEst=carrier->listOfBranches()->at(2);
+  SgPlotBranch                 *brApr=carrier->listOfBranches()->at(3);
+  SgPlotBranch                 *brApo=carrier->listOfBranches()->at(4);
 
-  
+ 
   // 4Arc:
   SgArcStorage                 *arcUt1=NULL, *arcPmx=NULL, *arcPmy=NULL;
   // 4PWL:
@@ -2456,148 +2384,197 @@ void NsSessionEditDialog::updateSessionWideSolutions()
     pmxByEpoch = &(*reporter_->stcParByName())[keyPmx];
   if (reporter_->stcParByName()->contains(keyPmy))
     pmyByEpoch = &(*reporter_->stcParByName())[keyPmy];
-  
 
-  for (int i=0; i<session_->scanEpochs().size(); i++)
+
+  int 													idx=0;
+  for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin();
+    it!=session_->scanByKey().end(); ++it)
   {
-    const SgMJD                *pt=session_->scanEpochs().at(i);
-    QString                     timeTag(pt->toString(SgMJD::F_INTERNAL));
+    SgVlbiScan                 *scan=it.value();
+    SgMJD               				t=scan->epoch();
+    QString                     timeTag(t.toString(SgMJD::F_INTERNAL));
+  
+		dPmx = dPmy = dUt1 = sPmx = sPmy = sUt1 = vPmx = vPmy = vUt1 = 0.0;
 
     // ARC:
     isTmp = false;
     if (arcUt1)
     {
-      brArc->data()->setElement(i, SNI_EST_UT1, arcUt1->calcSolution(*pt)*scale4Ut1);
-      brArc->data()->setElement(i, SNI_SIG_UT1, arcUt1->calcSigma(*pt)*scale4Ut1);
-      brArc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dUt1 = arcUt1->calcSolution(t)*scale4Ut1;
+			sUt1 = arcUt1->calcSigma(t)*scale4Ut1;
       isTmp = true;
-    }
-    else
-    {
-      brArc->data()->setElement(i, SNI_EST_UT1, 0.0);
-      brArc->data()->setElement(i, SNI_SIG_UT1, 0.0);
-      brArc->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
     };
     //
     if (arcPmx)
     {
-      brArc->data()->setElement(i, SNI_EST_PMX, arcPmx->calcSolution(*pt)*scale4Pm);
-      brArc->data()->setElement(i, SNI_SIG_PMX, arcPmx->calcSigma(*pt)*scale4Pm);
-      brArc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-    }
-    else
-    {
-      brArc->data()->setElement(i, SNI_EST_PMX, 0.0);
-      brArc->data()->setElement(i, SNI_SIG_PMX, 0.0);
-      brArc->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dPmx = arcPmx->calcSolution(t)*scale4Pm;
+			sPmx = arcPmx->calcSigma(t)*scale4Pm;
+			isTmp = true;
     };
     //
     if (arcPmy)
     {
-      brArc->data()->setElement(i, SNI_EST_PMY, arcPmy->calcSolution(*pt)*scale4Pm);
-      brArc->data()->setElement(i, SNI_SIG_PMY, arcPmy->calcSigma(*pt)*scale4Pm);
-      brArc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-    }
-    else
-    {
-      brArc->data()->setElement(i, SNI_EST_PMY, 0.0);
-      brArc->data()->setElement(i, SNI_SIG_PMY, 0.0);
-      brArc->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dPmy = arcPmy->calcSolution(t)*scale4Pm;
+			sPmy = arcPmy->calcSigma(t)*scale4Pm;
+			isTmp = true;
     };
-    if (isTmp)
-      brArc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-
 
     // PWL:
-    isTmp = false;
     if (pwlUt1)
     {
-      brPwl->data()->setElement(i, SNI_EST_UT1, pwlUt1->calcSolution (*pt)*scale4Ut1);
-      brPwl->data()->setElement(i, SNI_SIG_UT1, pwlUt1->calcRateSigma(*pt)*scale4Ut1);
-      brPwl->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dUt1 += pwlUt1->calcSolution(t)*scale4Ut1;
+			sUt1 += pwlUt1->calcRateSigma(t)*scale4Ut1;
       isTmp = true;
-    }
-    else
-    {
-      brPwl->data()->setElement(i, SNI_EST_UT1, 0.0);
-      brPwl->data()->setElement(i, SNI_SIG_UT1, 0.0);
-      brPwl->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
     };
-    //
     if (pwlPmx)
     {
-      brPwl->data()->setElement(i, SNI_EST_PMX, pwlPmx->calcSolution (*pt)*scale4Pm);
-      brPwl->data()->setElement(i, SNI_SIG_PMX, pwlPmx->calcRateSigma(*pt)*scale4Pm);
-      brPwl->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-    }
-    else
-    {
-      brPwl->data()->setElement(i, SNI_EST_PMX, 0.0);
-      brPwl->data()->setElement(i, SNI_SIG_PMX, 0.0);
-      brPwl->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dPmx += pwlPmx->calcSolution (t)*scale4Pm;
+			sPmx += pwlPmx->calcRateSigma(t)*scale4Pm;
+			isTmp = true;
     };
-    //
     if (pwlPmy)
     {
-      brPwl->data()->setElement(i, SNI_EST_PMY, pwlPmy->calcSolution (*pt)*scale4Pm);
-      brPwl->data()->setElement(i, SNI_SIG_PMY, pwlPmy->calcRateSigma(*pt)*scale4Pm);
-      brPwl->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-    }
-    else
-    {
-      brPwl->data()->setElement(i, SNI_EST_PMY, 0.0);
-      brPwl->data()->setElement(i, SNI_SIG_PMY, 0.0);
-      brPwl->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dPmy += pwlPmy->calcSolution (t)*scale4Pm;
+			sPmy += pwlPmy->calcRateSigma(t)*scale4Pm;
+			isTmp = true;
     };
-    if (isTmp)
-      brPwl->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
 
-
-    // Stoch:
-    isTmp = false;
+    // Stochs:
     if (ut1ByEpoch && ut1ByEpoch->contains(timeTag) && (par=ut1ByEpoch->value(timeTag)))
     {
-      brStc->data()->setElement(i, SNI_EST_UT1, par->getSolution()*scale4Ut1);
-      brStc->data()->setElement(i, SNI_SIG_UT1, par->getSigma()*scale4Ut1);
-      brStc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dUt1 += par->getSolution()*scale4Ut1;
+			sUt1 += par->getSigma()*scale4Ut1;
       isTmp = true;
-    }
-    else
-    {
-      brStc->data()->setElement(i, SNI_EST_UT1, 0.0);
-      brStc->data()->setElement(i, SNI_SIG_UT1, 0.0);
-      brStc->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
     };
-    //
     if (pmxByEpoch && pmxByEpoch->contains(timeTag) && (par=pmxByEpoch->value(timeTag)))
     {
-      brStc->data()->setElement(i, SNI_EST_PMX, par->getSolution()*scale4Pm);
-      brStc->data()->setElement(i, SNI_SIG_PMX, par->getSigma()*scale4Pm);
-      brStc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-    }
-    else
-    {
-      brStc->data()->setElement(i, SNI_EST_PMX, 0.0);
-      brStc->data()->setElement(i, SNI_SIG_PMX, 0.0);
-      brStc->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dPmx += par->getSolution()*scale4Pm;
+			sPmx += par->getSigma()*scale4Pm;
+			isTmp = true;
     };
-    //
     if (pmyByEpoch && pmyByEpoch->contains(timeTag) && (par=pmyByEpoch->value(timeTag)))
     {
-      brStc->data()->setElement(i, SNI_EST_PMY, par->getSolution()*scale4Pm);
-      brStc->data()->setElement(i, SNI_SIG_PMY, par->getSigma()*scale4Pm);
-      brStc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+			dPmy += par->getSolution()*scale4Pm;
+			sPmy += par->getSigma()*scale4Pm;
+			isTmp = true;
+    };
+
+    brEst->data()->setElement(idx, SNI_EST_UT1, dUt1);
+    brEst->data()->setElement(idx, SNI_SIG_UT1, sUt1);
+    brEst->data()->setElement(idx, SNI_EST_PMX, dPmx);
+    brEst->data()->setElement(idx, SNI_SIG_PMX, sPmx);
+    brEst->data()->setElement(idx, SNI_EST_PMY, dPmy);
+    brEst->data()->setElement(idx, SNI_SIG_PMY, sPmy);
+
+		brApr->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*scale4Ut1);
+    brApr->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*scale4Pm);
+    brApr->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*scale4Pm);
+		
+		brApo->data()->setElement(idx, SNI_EST_UT1, scan->getAprioriUt1()*scale4Ut1+ dUt1);
+		brApo->data()->setElement(idx, SNI_SIG_UT1, sUt1);
+    brApo->data()->setElement(idx, SNI_EST_PMX, scan->getAprioriPmX()*scale4Pm + dPmx);
+    brApo->data()->setElement(idx, SNI_SIG_PMX, sPmx);
+    brApo->data()->setElement(idx, SNI_EST_PMY, scan->getAprioriPmY()*scale4Pm + dPmy);
+    brApo->data()->setElement(idx, SNI_SIG_PMY, sPmy);
+
+
+    if (isTmp)
+    {
+      brEst->delDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+      brApo->delDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
     }
     else
     {
-      brStc->data()->setElement(i, SNI_EST_PMY, 0.0);
-      brStc->data()->setElement(i, SNI_SIG_PMY, 0.0);
-      brStc->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-    };
-    if (isTmp)
-      brStc->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
-  };
+			brEst->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+			brApo->addDataAttr(idx, SgPlotCarrier::DA_NONUSABLE);
+		};
+		
+		idx++;
+	};
 
+/*
+  for (int i=0; i<session_->scanEpochs().size(); i++)
+  {
+    const SgMJD                *pt=session_->scanEpochs().at(i);
+    QString                     timeTag(pt->toString(SgMJD::F_INTERNAL));
+		
+		dPmx = dPmy = dUt1 = sPmx = sPmy = sUt1 = vPmx = vPmy = vUt1 = 0.0;
+
+    // ARC:
+    isTmp = false;
+    if (arcUt1)
+    {
+			dUt1 = arcUt1->calcSolution(*pt)*scale4Ut1;
+			sUt1 = arcUt1->calcSigma(*pt)*scale4Ut1;
+      isTmp = true;
+    };
+    //
+    if (arcPmx)
+    {
+			dPmx = arcPmx->calcSolution(*pt)*scale4Pm;
+			sPmx = arcPmx->calcSigma(*pt)*scale4Pm;
+			isTmp = true;
+    };
+    //
+    if (arcPmy)
+    {
+			dPmx = arcPmy->calcSolution(*pt)*scale4Pm;
+			sPmx = arcPmy->calcSigma(*pt)*scale4Pm;
+			isTmp = true;
+    };
+
+    // PWL:
+    if (pwlUt1)
+    {
+			dUt1 += pwlUt1->calcSolution(*pt)*scale4Ut1;
+			sUt1 += pwlUt1->calcSigma(*pt)*scale4Ut1;
+      isTmp = true;
+    };
+    if (pwlPmx)
+    {
+			dPmx += pwlPmx->calcSolution (*pt)*scale4Pm;
+			sPmx += pwlPmx->calcRateSigma(*pt)*scale4Pm;
+			isTmp = true;
+    };
+    if (pwlPmy)
+    {
+			dPmy += pwlPmy->calcSolution (*pt)*scale4Pm;
+			sPmy += pwlPmy->calcRateSigma(*pt)*scale4Pm;
+			isTmp = true;
+    };
+
+    // Stochs:
+    if (ut1ByEpoch && ut1ByEpoch->contains(timeTag) && (par=ut1ByEpoch->value(timeTag)))
+    {
+			dUt1 += par->getSolution()*scale4Ut1;
+			sUt1 += par->getSigma()*scale4Ut1;
+      isTmp = true;
+    };
+    if (pmxByEpoch && pmxByEpoch->contains(timeTag) && (par=pmxByEpoch->value(timeTag)))
+    {
+			dPmx += par->getSolution()*scale4Pm;
+			sPmx += par->getSigma()*scale4Pm;
+			isTmp = true;
+    };
+    if (pmyByEpoch && pmyByEpoch->contains(timeTag) && (par=pmyByEpoch->value(timeTag)))
+    {
+			dPmy += par->getSolution()*scale4Pm;
+			sPmy += par->getSigma()*scale4Pm;
+			isTmp = true;
+    };
+
+    brEst->data()->setElement(i, SNI_EST_UT1, dUt1);
+    brEst->data()->setElement(i, SNI_SIG_UT1, sUt1);
+    brEst->data()->setElement(i, SNI_EST_PMX, dPmx);
+    brEst->data()->setElement(i, SNI_SIG_PMX, sPmx);
+    brEst->data()->setElement(i, SNI_EST_PMY, dPmy);
+    brEst->data()->setElement(i, SNI_SIG_PMY, sPmy);
+
+    if (isTmp)
+      brEst->delDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+    else
+			brEst->addDataAttr(i, SgPlotCarrier::DA_NONUSABLE);
+  };
   int 													idx = 0;
   
   for (QMap<QString, SgVlbiScan*>::iterator it=session_->scanByKey().begin();
@@ -2612,6 +2589,7 @@ void NsSessionEditDialog::updateSessionWideSolutions()
       idx++;
     };
   };
+*/
 
   plot->dataContentChanged();
 };

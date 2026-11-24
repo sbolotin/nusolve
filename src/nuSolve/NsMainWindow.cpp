@@ -594,7 +594,8 @@ void NsMainWindow::openWrapperFile()
   QString                       path2Data(QDir::home().absolutePath() + "/vgosDB/");
   if (!QDir(path2Data).exists())
     path2Data = setup.getPath2VgosDbFiles();
-  fileName = QFileDialog::getOpenFileName(this, tr("Open a wrap file"), path2Data, "*.wrp");
+  fileName = QFileDialog::getOpenFileName(this, tr("Open a wrap file"), 
+    path2Data, "VgodDb wrapper file (*.wrp)");
 
   if (fileName.isEmpty())
     logger->write(SgLogger::DBG, SgLogger::GUI, className() + 

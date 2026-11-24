@@ -553,7 +553,9 @@ std::cout << "    -- no HF calculated\n";
 */
 
     // CALC's values:
-    double                      contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy, dTmp;
+    double                      contribDel, contribRat, dDel_dPx, dDel_dPy, dRat_dPx, dRat_dPy;
+    double                      dPxLibr, dPyLibr, dUtLibr;
+    dPxLibr = dPyLibr = dUtLibr = 0.0;
     contribDel  = obs->getCalcHiFyPxyDelay();
     contribRat  = obs->getCalcHiFyPxyRate();
     dDel_dPx    = obs->getDdel_dPx();
@@ -568,24 +570,28 @@ std::cout << "    -- no HF calculated\n";
     {
       contribDel  = obs->getCalcHiFyPxyLibrationDelay();
       contribRat  = obs->getCalcHiFyPxyLibrationRate();
-      dPy += (dTmp=(contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx));
-      dPx += (contribDel - dTmp*dDel_dPy)/dDel_dPx;
+      dPyLibr = (contribRat*dDel_dPx - contribDel*dRat_dPx)/(dDel_dPx*dRat_dPy - dDel_dPy*dRat_dPx);
+      dPxLibr = (contribDel - dPyLibr*dDel_dPy)/dDel_dPx;
     };
 
     if (config_->getHave2ApplyUt1LibrationContrib())
-      dUt += obs->getCalcHiFyUt1LibrationDelay()/obs->getDdel_dUT1();
+      dUtLibr = obs->getCalcHiFyUt1LibrationDelay()/obs->getDdel_dUT1();
 
-    scan->setIntrPmX_Hf(dPx);
-    scan->setIntrPmY_Hf(dPy);
-    scan->setIntrUt1_Hf(dUt);
+    scan->setIntrPmX_Hf(dPx + dPxLibr);
+    scan->setIntrPmY_Hf(dPy + dPyLibr);
+    scan->setIntrUt1_Hf(dUt + dUtLibr);
 
-    if (config_->getHave2ApplyPxyOceanTideHFContrib())
+    if (!config_->getHave2ApplyPxyOceanTideHFContrib())
     {
-      scan->setActlPmX_Hf(dPx);
-      scan->setActlPmY_Hf(dPy);
+      dPx = 0.0;
+      dPy = 0.0;
     };
-    if (config_->getHave2ApplyUt1OceanTideHFContrib())
-      scan->setActlUt1_Hf(dUt);
+    if (!config_->getHave2ApplyUt1OceanTideHFContrib())
+      dUt = 0.0;
+
+    scan->setActlPmX_Hf(dPx + dPxLibr);
+    scan->setActlPmY_Hf(dPy + dPyLibr);
+    scan->setActlUt1_Hf(dUt + dUtLibr);
 
     //
     // external ERP a priori:

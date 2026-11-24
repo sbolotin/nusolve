@@ -630,6 +630,15 @@ QWidget* NsBrowseObservation::tab4EditingInfo(SgVlbiObservable* o)
   grid->addWidget(label, rowIdx++, 1);
 
   //
+  label = new QLabel("Effective integration time", gbox);
+  label->setMinimumSize(label->sizeHint());
+  grid->addWidget(label, rowIdx, 0);
+
+  label = new QLabel(str.sprintf("%.1f sec", o->getEffIntegrationTime()), gbox);
+  label->setMinimumSize(label->sizeHint());
+  grid->addWidget(label, rowIdx++, 1);
+
+  //
   label = new QLabel("Number of channels:", gbox);
   label->setMinimumSize(label->sizeHint());
   grid->addWidget(label, rowIdx, 0);
